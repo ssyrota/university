@@ -1,0 +1,13 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "lab1b:lib"
+
+    - path: "./app/Main.hs"
+      component: "lab1b:exe:lab1b-exe"
+
+    - path: "./app/Paths_lab1b.hs"
+      component: "lab1b:exe:lab1b-exe"
+
+    - path: "./test"
+      component: "lab1b:test:lab1b-test"
