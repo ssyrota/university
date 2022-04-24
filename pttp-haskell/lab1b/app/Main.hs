@@ -1,6 +1,5 @@
 module Main where
-
-import Lib ( removeRepeatedElements )
+import Lib (getRepeatedTwice)
 
 main :: IO ()
-main = print . removeRepeatedElements $ [] []
+main = print . getRepeatedTwice $ [1,2,3,4]
