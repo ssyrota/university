@@ -118,14 +118,6 @@ func main() {
 		}
 	}
 	go waiter()
-	go waiter()
-	go waiter()
-	go waiter()
-	go waiter()
-	go waiter()
-	go waiter()
-	go waiter()
-	go waiter()
 	for _, v := range philossophers {
 		wgEat.Add(1)
 		go v.eat()
