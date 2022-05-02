@@ -11,19 +11,26 @@ func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
+type Fork struct{ sync.Mutex }
+
 type Philosopher struct {
-	id   int
-	eats int
+	forkL, forkR *Fork
+	id           int
+	eats         int
 }
 
 // Lock forks with some delay for proof of deadlock free
 func (p *Philosopher) takeForks() {
+	p.forkL.Lock()
 	p.folkAction()
+	p.forkR.Lock()
 }
 
 // Unlock forks with some delay
 func (p *Philosopher) leftForks() {
+	p.forkL.Unlock()
 	p.folkAction()
+	p.forkR.Unlock()
 }
 
 // Simulate time operation
@@ -95,14 +102,21 @@ func waiter() {
 			eatingStatuses[id] = false
 		}
 	}
+
 }
 
 func main() {
+	forks := make([]*Fork, count)
 	philossophers := make([]*Philosopher, count)
 	for i := 0; i < count; i++ {
+		forks[i] = &Fork{}
+	}
+	for i := 0; i < count; i++ {
 		philossophers[i] = &Philosopher{
-			id:   i + 1,
-			eats: 0,
+			forkL: forks[i],
+			forkR: forks[(i+1)%count],
+			id:    i + 1,
+			eats:  0,
 		}
 	}
 
