@@ -11,26 +11,19 @@ func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
-type Fork struct{ sync.Mutex }
-
 type Philosopher struct {
-	forkL, forkR *Fork
-	id           int
-	eats         int
+	id   int
+	eats int
 }
 
 // Lock forks with some delay for proof of deadlock free
 func (p *Philosopher) takeForks() {
-	p.forkL.Lock()
 	p.folkAction()
-	p.forkR.Lock()
 }
 
 // Unlock forks with some delay
 func (p *Philosopher) leftForks() {
-	p.forkL.Unlock()
 	p.folkAction()
-	p.forkR.Unlock()
 }
 
 // Simulate time operation
@@ -52,7 +45,6 @@ func (p Philosopher) eat() {
 		if p.eats == 3 {
 			finishEat <- p.id
 			wgEat.Done()
-			fmt.Printf("[%d] left table\n", p.id)
 			return
 		}
 
@@ -70,18 +62,26 @@ func (p Philosopher) eat() {
 var wgEat sync.WaitGroup
 
 // Philossopers amount
-var count = 10
+var count = 5
 
 // Waiter chanels
 var finishEat = make(chan int)
 var startEat = make(chan int)
 var requestEat = make(chan int)
 
+type Statuses struct {
+	sync.Mutex
+	data map[int]bool
+}
+
+var eatingStatuses = &Statuses{data: make(map[int]bool)}
+
 func waiter() {
-	eatingStatuses := make(map[int]bool)
 	for {
 		select {
 		case id := <-requestEat:
+			eatingStatuses.Lock()
+
 			leftId := id - 1
 			if leftId == 0 {
 				leftId = count
@@ -91,35 +91,40 @@ func waiter() {
 				rightId = 1
 			}
 
-			if eatingStatuses[leftId] || eatingStatuses[rightId] {
+			if eatingStatuses.data[leftId] || eatingStatuses.data[rightId] {
+				eatingStatuses.data[id] = false
+				eatingStatuses.Unlock()
 				startEat <- 0
 			} else {
-				eatingStatuses[id] = true
+				eatingStatuses.data[id] = true
+				eatingStatuses.Unlock()
 				startEat <- 1
 			}
 
 		case id := <-finishEat:
-			eatingStatuses[id] = false
+			eatingStatuses.Lock()
+			eatingStatuses.data[id] = false
+			eatingStatuses.Unlock()
 		}
 	}
-
 }
 
 func main() {
-	forks := make([]*Fork, count)
 	philossophers := make([]*Philosopher, count)
 	for i := 0; i < count; i++ {
-		forks[i] = &Fork{}
-	}
-	for i := 0; i < count; i++ {
 		philossophers[i] = &Philosopher{
-			forkL: forks[i],
-			forkR: forks[(i+1)%count],
-			id:    i + 1,
-			eats:  0,
+			id:   i + 1,
+			eats: 0,
 		}
 	}
-
+	go waiter()
+	go waiter()
+	go waiter()
+	go waiter()
+	go waiter()
+	go waiter()
+	go waiter()
+	go waiter()
 	go waiter()
 	for _, v := range philossophers {
 		wgEat.Add(1)
