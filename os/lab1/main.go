@@ -42,12 +42,6 @@ func (p *Philosopher) folkAction() {
 // Run eating action
 func (p Philosopher) eat() {
 	for {
-		if p.eats == 3 {
-			finishEat <- p.id
-			wgEat.Done()
-			return
-		}
-
 		requestEat <- p.id
 		if eat := <-startEat; eat == 1 {
 			p.takeForks()
@@ -92,7 +86,6 @@ func waiter() {
 			}
 
 			if eatingStatuses.data[leftId] || eatingStatuses.data[rightId] {
-				eatingStatuses.data[id] = false
 				eatingStatuses.Unlock()
 				startEat <- 0
 			} else {
