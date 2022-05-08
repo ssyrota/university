@@ -3,4 +3,4 @@ module Main where
 import Lib
 
 main :: IO ()
-main = someFunc
+main = print . fibonacciReverseSubLists $ [[1,2,3],[1,2,3],[1,2,3],[1,2,3],[1,2,3]]

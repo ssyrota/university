@@ -33,4 +33,4 @@ fibonacciReverseSubListsHelper arr step accum
                                         | otherwise = error "fibonacciReverseSubListsHelper error"
 
 
-fibonacciReverseSubLists arr = fibonacciReverseSubListsHelper(reverseList arr) 0 []
+fibonacciReverseSubLists arr = reverseList(fibonacciReverseSubListsHelper(reverseList arr) 0 [])
