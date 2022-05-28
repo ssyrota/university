@@ -16,7 +16,7 @@ func main() {
 	all := []Point{{1, 2, "1"}, {2, 1, "2"}, {4, 3, "3"}, {5, 3, "4"}, {6, 1, "5"}, {7, 4, "6"}, {8, 2, "7"}, {9, 3, "8"}, {10, 3, "9"}}
 
 	// MakePlot(all, all, "2.png")
-	fmt.Print(EnumPossiblePoints(all))
+	fmt.Print(QuickHull(EnumPossiblePoints(all)))
 }
 
 // Plot point
@@ -138,7 +138,15 @@ func QuickHull(points []Point) []Point {
 	rightHull := QuickHullHelper(maxLeft, maxRight, s2)
 
 	// Form result
-	return pie.Unique(concatList([]Point{maxLeft, maxRight}, rightHull, leftHull))
+	return pie.SortStableUsing(pie.Unique(concatList([]Point{maxLeft, maxRight}, rightHull, leftHull)), func(a, b Point) bool {
+		res1, _ := strconv.Atoi(a.Name)
+		res2, _ := strconv.Atoi(b.Name)
+		if res1 < res2 {
+			return true
+		} else {
+			return false
+		}
+	})
 }
 
 // Second and more recursive steps of an algorithm
@@ -205,7 +213,7 @@ func EnumPossiblePoints(points []Point) []Point {
 	})
 
 	for i, rp := range res {
-		rp.p.Name = strconv.FormatInt(int64(i), 10)
+		rp.p.Name = strconv.FormatInt(int64(i+1), 10)
 	}
 	return pie.Map(res, func(rp RelativePosition) Point {
 		return *rp.p
