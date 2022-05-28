@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"math/rand"
 	"strconv"
@@ -14,9 +13,8 @@ import (
 
 func main() {
 	all := []Point{{1, 2, "1"}, {2, 1, "2"}, {4, 3, "3"}, {5, 3, "4"}, {6, 1, "5"}, {7, 4, "6"}, {8, 2, "7"}, {9, 3, "8"}, {10, 3, "9"}}
-
-	// MakePlot(all, all, "2.png")
-	fmt.Print(QuickHull(EnumPossiblePoints(all)))
+	sorted := EnumPossiblePoints(all)
+	MakePlot(sorted, QuickHull(sorted), "2.png")
 }
 
 // Plot point
@@ -51,7 +49,8 @@ func MakePlot(shellAllPoints, shellCornedPoints []Point, output string) error {
 		cornerPoints[0] = append(cornerPoints[0], p.X)
 		cornerPoints[1] = append(cornerPoints[1], p.Y)
 	}
-	fmt.Print(cornerPoints)
+	cornerPoints[0] = append(cornerPoints[0], cornerPoints[0][0])
+	cornerPoints[1] = append(cornerPoints[1], cornerPoints[1][0])
 	plot.AddPointGroup("Corner points", "lines", cornerPoints)
 
 	// Set min and max values for axes
