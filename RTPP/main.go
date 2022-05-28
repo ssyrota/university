@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"math"
+	"math/rand"
+	"strconv"
+	"time"
 
 	"github.com/Arafatk/glot"
 	"github.com/elliotchance/pie/v2"
@@ -13,7 +16,7 @@ func main() {
 	all := []Point{{1, 2, "1"}, {2, 1, "2"}, {4, 3, "3"}, {5, 3, "4"}, {6, 1, "5"}, {7, 4, "6"}, {8, 2, "7"}, {9, 3, "8"}, {10, 3, "9"}}
 
 	// MakePlot(all, all, "2.png")
-	fmt.Print(QuickHull(all))
+	fmt.Print(EnumPossiblePoints(all))
 }
 
 // Plot point
@@ -175,10 +178,51 @@ func TriangleShape(a, b, c Point) float64 {
 	return (1 / 2.0) * math.Abs((b.X-a.X)*(c.Y-a.Y)-(c.X-a.X)*(b.Y-a.Y))
 }
 
+// Helper for concatenating many lists
 func concatList[T any](lists ...[]T) []T {
 	res := []T{}
 	for _, v := range lists {
 		res = append(res, v...)
 	}
 	return res
+}
+
+// Enumerate points by centroid angle
+func EnumPossiblePoints(points []Point) []Point {
+	centroid := defineCentroid(points)
+	type RelativePosition struct {
+		p     *Point
+		angle float64
+	}
+	res := pie.SortStableUsing(pie.Map(points, func(p Point) RelativePosition {
+		return RelativePosition{&p, RadiansFromCentroid(centroid, p)}
+	}), func(a, b RelativePosition) bool {
+		if a.angle < b.angle {
+			return true
+		} else {
+			return false
+		}
+	})
+
+	for i, rp := range res {
+		rp.p.Name = strconv.FormatInt(int64(i), 10)
+	}
+	return pie.Map(res, func(rp RelativePosition) Point {
+		return *rp.p
+	})
+}
+
+// Radians from centroid to point
+func RadiansFromCentroid(centroid, p Point) float64 {
+	return math.Atan2(p.Y-centroid.Y, p.X-centroid.X)
+}
+
+// Get centroid from all points. Named q
+func defineCentroid(points []Point) Point {
+	shuffled := pie.Shuffle(points, rand.New(rand.NewSource(time.Now().UnixNano())))
+	a := pie.Pop(&shuffled)
+	b := pie.Pop(&shuffled)
+	c := pie.Pop(&shuffled)
+
+	return Point{(a.X + b.X + c.X) / 3, (a.Y + b.Y + c.Y) / 3, "centroid"}
 }
