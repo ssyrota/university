@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 	"strconv"
@@ -12,9 +13,19 @@ import (
 )
 
 func main() {
-	all := []Point{{1, 2, "1"}, {2, 1, "2"}, {4, 3, "3"}, {5, 3, "4"}, {6, 1, "5"}, {7, 4, "6"}, {8, 2, "7"}, {9, 3, "8"}, {10, 3, "9"}}
+	all := GeneratePoints(1000)
 	sorted := EnumPossiblePoints(all)
-	MakePlot(sorted, QuickHull(sorted), "2.png")
+	QuickHull(sorted)
+	// MakePlot(sorted, QuickHull(sorted), "2.png")
+}
+
+//Generate points
+func GeneratePoints(n int) []Point {
+	res := make([]Point, n)
+	for i := 0; i < n; i++ {
+		res[i] = Point{rand.Float64() * float64(n), rand.Float64() * float64(n), fmt.Sprint(i)}
+	}
+	return res
 }
 
 // Plot point
@@ -54,10 +65,10 @@ func MakePlot(shellAllPoints, shellCornedPoints []Point, output string) error {
 	plot.AddPointGroup("Corner points", "lines", cornerPoints)
 
 	// Set min and max values for axes
-	minX, maxX := MinMax(allPoints[0])
-	plot.SetXrange(int(minX)-2, int(maxX)+2)
-	minY, maxY := MinMax(allPoints[1])
-	plot.SetYrange(int(minY)-2, int(maxY)+2)
+	_, maxX := MinMax(allPoints[0])
+	plot.SetXrange(-int(maxX*0.1), int(maxX*1.1))
+	_, maxY := MinMax(allPoints[1])
+	plot.SetYrange(-int(maxX*0.1), int(maxY*1.1))
 
 	// Save png
 	err = plot.SavePlot(output)
@@ -127,6 +138,7 @@ func QuickHull(points []Point) []Point {
 	maxLeft := LeftXPoint(points)
 	// Right x point
 	maxRight := RightXPoint(points)
+
 	// Points at left side
 	s1 := pointsAtLeftSide(maxLeft, maxRight, points)
 	// Points at right side
@@ -134,7 +146,7 @@ func QuickHull(points []Point) []Point {
 
 	// Run recursive steps
 	leftHull := QuickHullHelper(maxLeft, maxRight, s1)
-	rightHull := QuickHullHelper(maxLeft, maxRight, s2)
+	rightHull := QuickHullHelper(maxRight, maxLeft, s2)
 
 	// Form result
 	return pie.SortStableUsing(pie.Unique(concatList([]Point{maxLeft, maxRight}, rightHull, leftHull)), func(a, b Point) bool {
@@ -166,7 +178,8 @@ func QuickHullHelper(a, b Point, points []Point) []Point {
 	leftHull := QuickHullHelper(a, h, s1)
 	rightHull := QuickHullHelper(h, b, s2)
 
-	return concatList(rightHull, leftHull, []Point{h})
+	res := concatList(rightHull, leftHull, []Point{h})
+	return res
 }
 
 // Find most distant point related to line
@@ -197,6 +210,7 @@ func concatList[T any](lists ...[]T) []T {
 // Enumerate points by centroid angle
 func EnumPossiblePoints(points []Point) []Point {
 	centroid := defineCentroid(points)
+	fmt.Println(centroid)
 	type RelativePosition struct {
 		p     *Point
 		angle float64
