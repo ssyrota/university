@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/Arafatk/glot"
 	"github.com/elliotchance/pie/v2"
@@ -12,7 +13,7 @@ func main() {
 	all := []Point{{1, 2, "1"}, {2, 1, "2"}, {4, 3, "3"}, {5, 3, "4"}, {6, 1, "5"}, {7, 4, "6"}, {8, 2, "7"}, {9, 3, "8"}, {10, 3, "9"}}
 
 	// MakePlot(all, all, "2.png")
-	fmt.Print(all[2].SideByLine(all[0], all[5]))
+	fmt.Print(QuickHull(all))
 }
 
 // Plot point
@@ -90,6 +91,7 @@ func RightXPoint(points []Point) Point {
 	})[0]
 }
 
+// Available positions for the point related to the line
 type Position int32
 
 const (
@@ -98,6 +100,7 @@ const (
 	Left Position = -1
 )
 
+// Define a position of point related to the line
 func (p *Point) SideByLine(startPoint, endPoint Point) Position {
 	position := (endPoint.X-startPoint.X)*(p.Y-startPoint.Y) - (endPoint.Y-startPoint.Y)*(p.X-startPoint.X)
 	if position > 0 {
@@ -109,12 +112,14 @@ func (p *Point) SideByLine(startPoint, endPoint Point) Position {
 	}
 }
 
+// Filter points only from left side of the line
 func pointsAtLeftSide(a, b Point, points []Point) []Point {
 	return pie.Filter(points, func(p Point) bool {
 		return p.SideByLine(a, b) == Left
 	})
 }
 
+// First step of algorithm
 func QuickHull(points []Point) []Point {
 	// Left x point
 	maxLeft := LeftXPoint(points)
@@ -125,15 +130,55 @@ func QuickHull(points []Point) []Point {
 	// Points at right side
 	s2 := pointsAtLeftSide(maxRight, maxLeft, points)
 
+	// Run recursive steps
 	leftHull := QuickHullHelper(maxLeft, maxRight, s1)
 	rightHull := QuickHullHelper(maxLeft, maxRight, s2)
 
-	res := []Point{maxLeft, maxRight}
-	res = append(res, rightHull...)
-	res = append(res, leftHull...)
-	return pie.Unique(res)
+	// Form result
+	return pie.Unique(concatList([]Point{maxLeft, maxRight}, rightHull, leftHull))
 }
 
+// Second and more recursive steps of an algorithm
 func QuickHullHelper(a, b Point, points []Point) []Point {
+	// Case than triangle variant is one
+	if len(points) <= 1 {
+		return points
+	}
 
+	// Most distant point from ab
+	h := MostDistantPointToLine(a, b, points)
+	// Points at left side
+	s1 := pointsAtLeftSide(a, h, points)
+	// Points at right side
+	s2 := pointsAtLeftSide(h, b, points)
+
+	// Run recursive steps
+	leftHull := QuickHullHelper(a, h, s1)
+	rightHull := QuickHullHelper(h, b, s2)
+
+	return concatList(rightHull, leftHull, []Point{h})
+}
+
+// Find most distant point related to line
+func MostDistantPointToLine(a, b Point, points []Point) Point {
+	return pie.SortStableUsing(points, func(prev, next Point) bool {
+		if TriangleShape(a, b, prev) > TriangleShape(a, b, next) {
+			return true
+		} else {
+			return false
+		}
+	})[0]
+}
+
+// Find triangle shape
+func TriangleShape(a, b, c Point) float64 {
+	return (1 / 2.0) * math.Abs((b.X-a.X)*(c.Y-a.Y)-(c.X-a.X)*(b.Y-a.Y))
+}
+
+func concatList[T any](lists ...[]T) []T {
+	res := []T{}
+	for _, v := range lists {
+		res = append(res, v...)
+	}
+	return res
 }
