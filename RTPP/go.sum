@@ -1,0 +1,8 @@
+github.com/Arafatk/glot v0.0.0-20180312013246-79d5219000f0 h1:buG0FAUZtOwl9c+RdnQo3cfZhTnY2OY24J3t+jpeb9Y=
+github.com/Arafatk/glot v0.0.0-20180312013246-79d5219000f0/go.mod h1:o0O8gFiTfVp4g5QcQJ1iMLw6ROiy9BITaiBbEiwz9h8=
+github.com/elliotchance/pie/v2 v2.0.1 h1:TW6imTMwc8h51AaWNLxjyx0eNUtzAaB6ZCjKzTahYHw=
+github.com/elliotchance/pie/v2 v2.0.1/go.mod h1:18t0dgGFH006g4eVdDtWfgFZPQEgl10IoEO8YWEq3Og=
+github.com/psampaz/slice v0.2.0 h1:QmWgx8ROo3Iz1RuumrKOlObLp2yqahs73pXZ3QsYCME=
+github.com/psampaz/slice v0.2.0/go.mod h1:WzQrs9ppHnGp88hQSh4RjJ7i0bGBv8/nNBPBi5itkYc=
+golang.org/x/exp v0.0.0-20220321173239-a90fa8a75705 h1:ba9YlqfDGTTQ5aZ2fwOoQ1hf32QySyQkR6ODGDzHlnE=
+golang.org/x/exp v0.0.0-20220321173239-a90fa8a75705/go.mod h1:lgLbSvA5ygNOMpwM/9anMpWVlVJ7Z+cHWq/eFuinpGE=
