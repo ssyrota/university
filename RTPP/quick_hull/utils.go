@@ -3,7 +3,6 @@ package quick_hull
 import (
 	"math"
 	"math/rand"
-	"strconv"
 	"time"
 
 	"github.com/elliotchance/pie/v2"
@@ -14,7 +13,7 @@ import (
 type Point struct {
 	X    float64
 	Y    float64
-	Name string
+	Name int
 }
 
 // Find most left on X axe point
@@ -99,7 +98,7 @@ func EnumPossiblePoints(points []Point) []Point {
 	})
 
 	for i, rp := range res {
-		rp.p.Name = strconv.FormatInt(int64(i+1), 10)
+		rp.p.Name = i + 1
 	}
 	return pie.Map(res, func(rp RelativePosition) Point {
 		return *rp.p
@@ -118,7 +117,7 @@ func defineCentroid(points []Point) Point {
 	b := pie.Pop(&shuffled)
 	c := pie.Pop(&shuffled)
 
-	return Point{(a.X + b.X + c.X) / 3, (a.Y + b.Y + c.Y) / 3, "centroid"}
+	return Point{(a.X + b.X + c.X) / 3, (a.Y + b.Y + c.Y) / 3, -1}
 }
 
 // Compare numbers in array

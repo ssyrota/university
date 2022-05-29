@@ -1,15 +1,11 @@
 package quick_hull
 
 import (
-	"strconv"
-
 	"github.com/elliotchance/pie/v2"
 )
 
 // First step of algorithm
-func QuickHull(points []Point) ([]Point, []Point) {
-
-	points = EnumPossiblePoints(points)
+func QuickHullSequential(points []Point) []Point {
 	// Left x point
 	maxLeft := LeftXPoint(points)
 	// Right x point
@@ -26,16 +22,14 @@ func QuickHull(points []Point) ([]Point, []Point) {
 
 	// Form result
 	res := pie.SortStableUsing(pie.Unique(ConcatList([]Point{maxLeft, maxRight}, rightHull, leftHull)), func(a, b Point) bool {
-		res1, _ := strconv.Atoi(a.Name)
-		res2, _ := strconv.Atoi(b.Name)
-		if res1 < res2 {
+		if a.Name < b.Name {
 			return true
 		} else {
 			return false
 		}
 	})
 
-	return res, points
+	return res
 }
 
 // Second and more recursive steps of an algorithm
