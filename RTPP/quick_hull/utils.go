@@ -1,7 +1,6 @@
 package quick_hull
 
 import (
-	"fmt"
 	"math"
 	"math/rand"
 	"strconv"
@@ -85,7 +84,6 @@ func TriangleShape(a, b, c Point) float64 {
 // Enumerate points by centroid angle
 func EnumPossiblePoints(points []Point) []Point {
 	centroid := defineCentroid(points)
-	fmt.Println(centroid)
 	type RelativePosition struct {
 		p     *Point
 		angle float64

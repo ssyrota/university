@@ -8,6 +8,7 @@ import (
 
 // First step of algorithm
 func QuickHull(points []Point) ([]Point, []Point) {
+
 	points = EnumPossiblePoints(points)
 	// Left x point
 	maxLeft := LeftXPoint(points)
@@ -24,7 +25,7 @@ func QuickHull(points []Point) ([]Point, []Point) {
 	rightHull := QuickHullHelper(maxRight, maxLeft, s2)
 
 	// Form result
-	return pie.SortStableUsing(pie.Unique(ConcatList([]Point{maxLeft, maxRight}, rightHull, leftHull)), func(a, b Point) bool {
+	res := pie.SortStableUsing(pie.Unique(ConcatList([]Point{maxLeft, maxRight}, rightHull, leftHull)), func(a, b Point) bool {
 		res1, _ := strconv.Atoi(a.Name)
 		res2, _ := strconv.Atoi(b.Name)
 		if res1 < res2 {
@@ -32,7 +33,9 @@ func QuickHull(points []Point) ([]Point, []Point) {
 		} else {
 			return false
 		}
-	}), points
+	})
+
+	return res, points
 }
 
 // Second and more recursive steps of an algorithm
