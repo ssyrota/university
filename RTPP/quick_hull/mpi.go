@@ -38,13 +38,19 @@ func QuickHullMpi(points []Point) []Point {
 	}()
 
 	// Form result
-	res := pie.SortStableUsing(pie.Unique(ConcatList([]Point{maxLeft, maxRight}, <-rightHullChan, <-leftHullChan)), func(a, b Point) bool {
-		if a.Name < b.Name {
-			return true
-		} else {
-			return false
-		}
-	})
+	res := pie.SortStableUsing(pie.Unique(
+		ConcatList([]Point{
+			maxLeft,
+			maxRight},
+			<-rightHullChan,
+			<-leftHullChan)),
+		func(a, b Point) bool {
+			if a.Name < b.Name {
+				return true
+			} else {
+				return false
+			}
+		})
 
 	return res
 }

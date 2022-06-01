@@ -90,15 +90,17 @@ func runFunctionInThread(ctx context.Context, input int, chanFunction chan bool,
 
 func f(x int) bool {
 	fmt.Println("[started]-f")
-	time.Sleep(time.Second * 2)
-	return true
+	return false
+	for {
+		x = x + x
+	}
 }
 
 func g(x int) bool {
 	fmt.Println("[started]-g")
-	for {
-		x = x + x
-	}
+	time.Sleep(time.Second * 2)
+	return true
+
 }
 
 var alert = `

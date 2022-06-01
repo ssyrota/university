@@ -5,4 +5,3 @@ filterArrByCubeIndexes([_|T], L, SI):- isNotCube(SI), R1 is SI+1, filterArrByCub
 filterArrByCubeIndexes([X|T], [X|L], SI):- R1 is SI+1, filterArrByCubeIndexes(T, L, R1).
 
 isNotCube(X) :- X=\=round(X**(1/3))*round(X**(1/3))*round(X**(1/3)).
-

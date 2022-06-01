@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun May  8 16:31:05 2022
+# Make data base, printed on Wed May 11 17:32:21 2022
 
 # Variables
 
@@ -23,7 +23,7 @@ SNAP_INSTANCE_KEY =
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-418075f4-7c31-4b0b-a368-282ad1fb4092.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-aff128bb-7310-42c7-8a5a-3912f467e988.sock
 # environment
 MANDATORY_PATH = /usr/share/gconf/ubuntu.mandatory.path
 # environment
@@ -49,7 +49,7 @@ GOPATH = /home/sergey/go
 # environment
 SNAP_INSTANCE_NAME = code
 # environment
-GDK_PIXBUF_MODULEDIR = /snap/code/95/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+GDK_PIXBUF_MODULEDIR = /snap/code/96/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -73,7 +73,7 @@ VSCODE_LOG_STACK = false
 # environment
 NVM_INC = /home/sergey/.nvm/versions/node/v16.14.0/include/node
 # environment
-VSCODE_CODE_CACHE_PATH = /home/sergey/.config/Code/CachedData/57fd6d0195bb9b9d1b49f6da5db789060795de47
+VSCODE_CODE_CACHE_PATH = /home/sergey/.config/Code/CachedData/da15b6fd3ef856477bf6f4fb29ba1b7af717770d
 # environment
 XDG_SESSION_PATH = /org/freedesktop/DisplayManager/Session0
 # environment
@@ -119,7 +119,7 @@ ZSH = /home/sergey/.oh-my-zsh
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 145718
+VSCODE_PID = 47844
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -127,7 +127,7 @@ XDG_SESSION_TYPE = x11
 # environment
 BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
 # environment
-SESSION_MANAGER = local/sergey-VivoBook-ASUSLaptop-X570ZD-X570ZD:@/tmp/.ICE-unix/2250,unix/sergey-VivoBook-ASUSLaptop-X570ZD-X570ZD:/tmp/.ICE-unix/2250
+SESSION_MANAGER = local/sergey-VivoBook-ASUSLaptop-X570ZD-X570ZD:@/tmp/.ICE-unix/2240,unix/sergey-VivoBook-ASUSLaptop-X570ZD-X570ZD:/tmp/.ICE-unix/2240
 # automatic
 *F = $(notdir $*)
 # environment
@@ -177,11 +177,11 @@ SNAP_USER_COMMON = /home/sergey/snap/code/common
 # environment
 LC_TIME = uk_UA.UTF-8
 # environment
-SNAP = /snap/code/95
+SNAP = /snap/code/96
 # environment
-INVOCATION_ID = 8b3b914000574f93812e9c5d50ef1e7e
+INVOCATION_ID = 7eeb32dcd5354efa9c304333b0487904
 # environment
-SNAP_REVISION = 95
+SNAP_REVISION = 96
 # environment
 SNAP_REAL_HOME = /home/sergey
 # environment
@@ -217,7 +217,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 2285
+SYSTEMD_EXEC_PID = 2275
 # environment
 DISPLAY = :0
 # environment
@@ -231,19 +231,19 @@ MAKE_VERSION := 4.3
 # environment
 DISABLE_WAYLAND = 1
 # environment
-SNAP_DATA = /var/snap/code/95
+SNAP_DATA = /var/snap/code/96
 # environment
 SNAP_CONTEXT = K64lql9CotcGPnrFS1ZFBM86_Mqc7bGBvJ5Hm9JlKetaz0L8cP4D
 # environment
-MANAGERPID = 1627
+MANAGERPID = 1746
 # environment
 LC_MEASUREMENT = uk_UA.UTF-8
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 145674
+GIO_LAUNCHED_DESKTOP_FILE_PID = 47804
 # environment
 PAGER = less
 # environment
-_ = /snap/code/95/usr/share/code/code
+_ = /snap/code/96/usr/share/code/code
 # environment
 LC_PAPER = uk_UA.UTF-8
 # environment
@@ -255,7 +255,7 @@ GDK_PIXBUF_MODULE_FILE = /home/sergey/snap/code/common/.cache/gdk-pixbuf-loaders
 # environment
 NVM_CD_FLAGS = -q
 # environment
-JOURNAL_STREAM = 8:32494
+JOURNAL_STREAM = 8:33598
 # environment
 GOMODCACHE = /home/sergey/go/pkg/mod
 # environment
@@ -269,11 +269,11 @@ QT_IM_MODULE = ibus
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-9081749b-1.67.0-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-9081749b-1.67.1-main.sock
 # environment
 SNAP_NAME = code
 # environment
-GSETTINGS_SCHEMA_DIR = /snap/code/95/usr/share/glib-2.0/schemas
+GSETTINGS_SCHEMA_DIR = /snap/code/96/usr/share/glib-2.0/schemas
 # environment
 IM_CONFIG_PHASE = 1
 # environment
@@ -283,24 +283,24 @@ GOPROXY = https://proxy.golang.org,direct
 # automatic
 <F = $(notdir $<)
 # environment
-SNAP_VERSION = 57fd6d01
+SNAP_VERSION = da15b6fd
 # default
 SUFFIXES := 
 # environment
 VSCODE_CLI = 1
 # environment
- 
-make: *** No rule to make target 'all'.  Stop.
-
 ELECTRON_NO_ATTACH_CONSOLE = 1
 # environment
 SNAP_COMMON = /var/snap/code/common
 # environment
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 XDG_GREETER_DATA_DIR = /var/lib/lightdm-data/sergey
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
-SNAP_USER_DATA = /home/sergey/snap/code/95
+SNAP_USER_DATA = /home/sergey/snap/code/96
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
@@ -376,6 +376,6 @@ GNUmakefile:
 # strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
 # Load=17/8192=0%, Rehash=0, Collisions=0/20=0%
-# Finished Make data base on Sun May  8 16:31:05 2022
+# Finished Make data base on Wed May 11 17:32:21 2022
 
  

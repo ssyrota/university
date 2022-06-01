@@ -24,9 +24,6 @@ getNElemsAtFirst(I, N, O) :-
     length(O, N),
     append(O, _, I).
 
-
-
-
 fibonacciReverseSubListsHelper([], _, []):-!.
 fibonacciReverseSubListsHelper(IN_ARR, FIB_STEP, [PART_OUT_ARR|OUT_ARR]):- 
     fibonacci(FIB_STEP, FIB_RES),

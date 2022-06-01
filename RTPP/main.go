@@ -11,8 +11,8 @@ import (
 )
 
 func main() {
-	Benchmark(qh.QuickHullSequential, "Sequential")
-	Benchmark(qh.QuickHullMpi, "MPI")
+	// Benchmark(qh.QuickHullSequential, "Sequential")
+	// Benchmark(qh.QuickHullMpi, "MPI")
 	Benchmark(qh.QuickHullOpenMp, "OpenMP")
 }
 

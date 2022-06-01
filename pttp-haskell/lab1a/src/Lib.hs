@@ -1,12 +1,16 @@
 module Lib
-    ( removeElemAtCubeIndex
+    ( mainF
     ) where
 
 
-removeElemAtCubeIndex :: [a] -> [a]
-removeElemAtCubeIndex [] = []
-removeElemAtCubeIndex xs = [y | (x,y) <- addIndex xs, x `notElem` take (sqrtInt x) cubes]
 
-sqrtInt = round . sqrt
-cubes = [x ^ 3 | x <- [1..]]
-addIndex = zip [0..]
+sublistsLength sublistsCount list = length list `div` sublistsCount
+
+mainF sublistsCount list = group(sublistsLength sublistsCount list) list
+
+
+group :: Int -> [a] -> [[a]]
+group _ [] = []
+group n l
+  | n > 0 = take n l : group n (drop n l)
+  | otherwise = error "Negative or zero n"

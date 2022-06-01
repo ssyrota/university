@@ -1,5 +1,5 @@
 module Main where
-import Lib (getRepeatedTwice)
+import Lib (getRepeatedThreeTimes)
 
 main :: IO ()
-main = print . getRepeatedTwice $ [1,2,3,4]
+main = print . getRepeatedThreeTimes $ [1,2,3,4]
