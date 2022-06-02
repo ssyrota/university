@@ -11,8 +11,8 @@ import (
 )
 
 func main() {
-	// Benchmark(qh.QuickHullSequential, "Sequential")
-	// Benchmark(qh.QuickHullMpi, "MPI")
+	Benchmark(qh.QuickHullSequential, "Sequential")
+	Benchmark(qh.QuickHullMpi, "MPI")
 	Benchmark(qh.QuickHullOpenMp, "OpenMP")
 }
 
@@ -31,8 +31,10 @@ func Benchmark(f func(points []qh.Point) []qh.Point, name string) {
 	for _, proc := range procs {
 		for _, point := range pointsSorted {
 			runtime.GOMAXPROCS(proc)
+
+			pointsW := points[point]
 			start := time.Now()
-			f(points[point])
+			f(pointsW)
 			t := time.Now()
 			elapsed := t.Sub(start)
 
