@@ -13,7 +13,7 @@ import (
 type Point struct {
 	X    float64
 	Y    float64
-	Name int
+	Name int32
 }
 
 // Find most left on X axe point
@@ -58,7 +58,7 @@ func (p *Point) SideByLine(startPoint, endPoint Point) Position {
 }
 
 // Filter points only from left side of the line
-func pointsAtLeftSide(a, b Point, points []Point) []Point {
+func PointsAtLeftSide(a, b Point, points []Point) []Point {
 	return pie.Filter(points, func(p Point) bool {
 		return p.SideByLine(a, b) == Left
 	})
@@ -98,7 +98,7 @@ func EnumPossiblePoints(points []Point) []Point {
 	})
 
 	for i, rp := range res {
-		rp.p.Name = i + 1
+		rp.p.Name = int32(i) + 1
 	}
 	return pie.Map(res, func(rp RelativePosition) Point {
 		return *rp.p

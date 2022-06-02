@@ -125,7 +125,7 @@ func pointsAtSides(a, h, b Point, points []Point) ([]Point, []Point) {
 	// Points at left side
 	go func() {
 		defer wg.Done()
-		leftSide := pointsAtLeftSide(a, h, points)
+		leftSide := PointsAtLeftSide(a, h, points)
 		sidePoints.Lock()
 		sidePoints.leftSide = leftSide
 		sidePoints.Unlock()
@@ -133,7 +133,7 @@ func pointsAtSides(a, h, b Point, points []Point) ([]Point, []Point) {
 	// Points at right side
 	go func() {
 		defer wg.Done()
-		rightSide := pointsAtLeftSide(h, b, points)
+		rightSide := PointsAtLeftSide(h, b, points)
 		sidePoints.Lock()
 		sidePoints.rightSide = rightSide
 		sidePoints.Unlock()
@@ -158,7 +158,7 @@ func pointsAtReverseSides(a, b Point, points []Point) ([]Point, []Point) {
 	// Points at left side
 	go func() {
 		defer wg.Done()
-		leftSide := pointsAtLeftSide(a, b, points)
+		leftSide := PointsAtLeftSide(a, b, points)
 		sidePoints.Lock()
 		sidePoints.leftSide = leftSide
 		sidePoints.Unlock()
@@ -166,7 +166,7 @@ func pointsAtReverseSides(a, b Point, points []Point) ([]Point, []Point) {
 	// Points at right side
 	go func() {
 		defer wg.Done()
-		rightSide := pointsAtLeftSide(b, a, points)
+		rightSide := PointsAtLeftSide(b, a, points)
 		sidePoints.Lock()
 		sidePoints.rightSide = rightSide
 		sidePoints.Unlock()

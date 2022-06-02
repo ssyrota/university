@@ -1,100 +1,93 @@
 package quick_hull
 
 import (
+	"fmt"
+
 	"github.com/elliotchance/pie/v2"
+	mpi "github.com/sbromberger/gompi"
 )
 
-// First step of algorithm
-func QuickHullMpi(points []Point) []Point {
-	// Run in two goroutines
-	maxLeftCh := RunInGoroutine(LeftXPoint, points)
-	maxRightCh := RunInGoroutine(RightXPoint, points)
-
-	// Left x point
-	maxLeft := <-maxLeftCh
-	// Right x point
-	maxRight := <-maxRightCh
-
-	// Run in two goroutines
-	// Points at left side
-	s1Chan := make(chan []Point)
-	go func() {
-		s1Chan <- pointsAtLeftSide(maxLeft, maxRight, points)
-	}()
-	// Points at right side
-	s2Chan := make(chan []Point)
-	go func() {
-		s2Chan <- pointsAtLeftSide(maxRight, maxLeft, points)
-	}()
-
-	// Run recursive steps
-	leftHullChan := make(chan []Point)
-	go func() {
-		leftHullChan <- QuickHullMpiHelper(maxLeft, maxRight, <-s1Chan)
-	}()
-	rightHullChan := make(chan []Point)
-	go func() {
-		rightHullChan <- QuickHullMpiHelper(maxRight, maxLeft, <-s2Chan)
-	}()
-
-	// Form result
-	res := pie.SortStableUsing(pie.Unique(
-		ConcatList([]Point{
-			maxLeft,
-			maxRight},
-			<-rightHullChan,
-			<-leftHullChan)),
-		func(a, b Point) bool {
-			if a.Name < b.Name {
-				return true
-			} else {
-				return false
-			}
-		})
-
-	return res
+type PointMI struct {
+	x    int
+	y    int
+	name int
 }
 
-// Second and more recursive steps of an algorithm
-func QuickHullMpiHelper(a, b Point, points []Point) []Point {
-	// Case than triangle variant is one
-	if len(points) <= 1 {
-		return points
-	}
+const (
+	XChanel = iota
+	YChanel
+	NameChanel
+	MaxLeftXChanel
+	MaxLeftYChanel
+	MaxLeftNameChanel
+	MaxRightXChanel
+	MaxRightYChanel
+	MaxRightNameChanel
+	LeftPointsChX
+	LeftPointsChY
+	LeftPointsChName
+	RightPointsChX
+	RightPointsChY
+	RightPointsChName
+)
 
+var MainAlgorithmCh = &PointMI{XChanel, YChanel, NameChanel}
+var MaxRightCh = &PointMI{MaxRightXChanel,
+	MaxRightYChanel,
+	MaxRightNameChanel}
+var MaxLeftCh = &PointMI{MaxLeftXChanel,
+	MaxLeftYChanel,
+	MaxLeftNameChanel}
+var LeftPointsCh = &PointMI{LeftPointsChX, LeftPointsChY, LeftPointsChName}
+var RightPointsCh = &PointMI{RightPointsChX, RightPointsChY, RightPointsChName}
+
+func QuickHullSeparator(a, b Point, points []Point) (Point, []Point, []Point) {
 	// Most distant point from ab
 	h := MostDistantPointToLine(a, b, points)
-
-	// Run in two goroutines
 	// Points at left side
-	s1Chan := make(chan []Point)
-	go func() {
-		s1Chan <- pointsAtLeftSide(a, h, points)
-	}()
+	s1 := PointsAtLeftSide(a, h, points)
 	// Points at right side
-	s2Chan := make(chan []Point)
-	go func() {
-		s2Chan <- pointsAtLeftSide(h, b, points)
-	}()
-
-	// Run recursive steps
-	leftHullChan := make(chan []Point)
-	go func() {
-		leftHullChan <- QuickHullMpiHelper(a, h, <-s1Chan)
-	}()
-	rightHullChan := make(chan []Point)
-	go func() {
-		rightHullChan <- QuickHullMpiHelper(h, b, <-s2Chan)
-	}()
-
-	res := ConcatList(<-rightHullChan, <-leftHullChan, []Point{h})
-	return res
+	s2 := PointsAtLeftSide(h, b, points)
+	return h, s1, s2
 }
 
-func RunInGoroutine[T any, U any](f func(U) T, args U) chan T {
-	ch := make(chan T)
-	go func() {
-		ch <- f(args)
-	}()
-	return ch
+// Receive points by MPI chanel
+func ReceivePoints(worldComm *mpi.Communicator, from int, pointCh *PointMI) []Point {
+	dataX, status := worldComm.RecvFloat64s(from, pointCh.x)
+	if status.GetError() != 0 {
+		fmt.Println(status.GetError())
+	}
+	dataY, status := worldComm.RecvFloat64s(from, pointCh.y)
+	if status.GetError() != 0 {
+		fmt.Println(status.GetError())
+	}
+	names, status := worldComm.RecvInt32s(from, pointCh.name)
+	if status.GetError() != 0 {
+		fmt.Println(status.GetError())
+	}
+
+	var points []Point
+	for i, name := range names {
+		points = append(points, Point{Name: name, X: dataX[i], Y: dataY[i]})
+	}
+	return points
+}
+
+// Send points by MPI chanel
+func SendPoints(points []Point, worldComm *mpi.Communicator, to int, pointCh *PointMI) {
+	dataX := pie.Map(points, func(p Point) float64 { return p.X })
+	dataY := pie.Map(points, func(p Point) float64 { return p.Y })
+	names := pie.Map(points, func(p Point) int32 { return p.Name })
+
+	worldComm.SendFloat64s(dataX, to, pointCh.x)
+	worldComm.SendFloat64s(dataY, to, pointCh.y)
+	worldComm.SendInt32s(names, to, pointCh.name)
+}
+
+func CompareByName(a, b Point) bool {
+	if a.Name < b.Name {
+		return true
+	} else {
+		return false
+	}
 }

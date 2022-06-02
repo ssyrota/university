@@ -12,9 +12,9 @@ func QuickHullSequential(points []Point) []Point {
 	maxRight := RightXPoint(points)
 
 	// Points at left side
-	s1 := pointsAtLeftSide(maxLeft, maxRight, points)
+	s1 := PointsAtLeftSide(maxLeft, maxRight, points)
 	// Points at right side
-	s2 := pointsAtLeftSide(maxRight, maxLeft, points)
+	s2 := PointsAtLeftSide(maxRight, maxLeft, points)
 
 	// Run recursive steps
 	leftHull := QuickHullHelper(maxLeft, maxRight, s1)
@@ -42,9 +42,9 @@ func QuickHullHelper(a, b Point, points []Point) []Point {
 	// Most distant point from ab
 	h := MostDistantPointToLine(a, b, points)
 	// Points at left side
-	s1 := pointsAtLeftSide(a, h, points)
+	s1 := PointsAtLeftSide(a, h, points)
 	// Points at right side
-	s2 := pointsAtLeftSide(h, b, points)
+	s2 := PointsAtLeftSide(h, b, points)
 
 	// Run recursive steps
 	leftHull := QuickHullHelper(a, h, s1)
