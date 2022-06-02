@@ -37,7 +37,7 @@ func mainProcess(worldComm *mpi.Communicator) {
 	worldSize := worldComm.Size()
 	fmt.Printf("Processors: %d\n", worldSize)
 	// Form sorted points
-	points := qh.EnumPossiblePoints(GeneratePoints(5000))
+	points := qh.EnumPossiblePoints(GeneratePoints(5000000))
 
 	start := time.Now()
 
@@ -101,10 +101,10 @@ func distributedQuickHull(maxLeft, maxRight qh.Point, s1, s2 []qh.Point, worldCo
 
 	// 3 workers
 	if len(processes) == 3 {
+		qh.SendPoints(qh.ConcatList([]qh.Point{maxLeft, maxRight}, s2), worldComm, processes[2], qh.MainAlgorithmCh)
 		h, s1part1, s1part2 := qh.QuickHullSeparator(maxLeft, maxRight, s1)
 		qh.SendPoints(qh.ConcatList([]qh.Point{maxLeft, h}, s1part1), worldComm, processes[0], qh.MainAlgorithmCh)
 		qh.SendPoints(qh.ConcatList([]qh.Point{h, maxRight}, s1part2), worldComm, processes[1], qh.MainAlgorithmCh)
-		qh.SendPoints(qh.ConcatList([]qh.Point{maxLeft, maxRight}, s2), worldComm, processes[2], qh.MainAlgorithmCh)
 		return processes, []qh.Point{h}
 	}
 
