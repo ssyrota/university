@@ -68,4 +68,4 @@ var points = map[int][]qh.Point{
 }
 var pointsSorted = []int{1000, 10000, 100000, 5000000}
 
-var procs = []int{1, 2, 4, 8}
+var procs = []int{1, 2, 3}
