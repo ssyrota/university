@@ -11,10 +11,8 @@ class Solver:
         print("Inited")
 
     def solve(self):
-        print("Job Started")
-        print("Workers %d" % len(self.workers))
-
         (n, k) = self.read_input()
+        
         a = 1 << n
         b = 1 << (n + 1)
         step_n = (b - a) / len(self.workers)
@@ -31,8 +29,6 @@ class Solver:
 
         # output
         self.write_output(primes)
-
-        print("Job Finished")
 
     @staticmethod
     @expose
