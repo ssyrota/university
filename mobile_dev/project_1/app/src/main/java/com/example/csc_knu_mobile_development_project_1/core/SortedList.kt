@@ -13,7 +13,12 @@ class SortedList(private val input: List<Double>) {
 			}
 		}
 
-	fun selectionSort(items: MutableList<Double>) {
+	fun defaultSort(): List<Double> {
+		return input.toList().sorted()
+	}
+
+	fun selectionSort() {
+		val items = input.toMutableList()
 		var n = items.count()
 		var temp: Double
 		for (i in 0 until n) {
@@ -30,7 +35,8 @@ class SortedList(private val input: List<Double>) {
 		}
 	}
 
-	fun insertionSort(items: MutableList<Double>): List<Double> {
+	fun insertionSort(): List<Double> {
+		val items = input.toMutableList()
 		if (items.count() < 2) {
 			return items
 		}
@@ -46,7 +52,7 @@ class SortedList(private val input: List<Double>) {
 		return items
 	}
 
-	fun quickSort(items: List<Int>): List<Int> {
+	fun quickSort(items: List<Double> = input.toList()): List<Double> {
 		if (items.count() < 2) {
 			return items
 		}
@@ -57,13 +63,13 @@ class SortedList(private val input: List<Double>) {
 		return quickSort(less) + equal + quickSort(greater)
 	}
 
-	fun mergeSort(list: List<Double>): List<Double> {
-		if (list.size <= 1) {
-			return list
+	fun mergeSort(items: List<Double> = input.toList()): List<Double> {
+		if (items.size <= 1) {
+			return items
 		}
-		val middle = list.size / 2
-		var left = list.subList(0, middle);
-		var right = list.subList(middle, list.size);
+		val middle = items.size / 2
+		var left = items.subList(0, middle);
+		var right = items.subList(middle, items.size);
 		return merge(mergeSort(left), mergeSort(right))
 	}
 
