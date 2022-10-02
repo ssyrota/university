@@ -1,22 +1,6 @@
 package com.example.csc_knu_mobile_development_project_1.core
 
 class SortedList(private val input: List<Double>) {
-	private var resCache: List<Double>? = null
-	val data: List<Double>
-		get() {
-			this.resCache?.let {
-				return it
-			} ?: run {
-				val res = this.data.sorted()
-				this.resCache = res
-				return res
-			}
-		}
-
-	fun defaultSort(): List<Double> {
-		return input.toList().sorted()
-	}
-
 	fun selectionSort() {
 		val items = input.toMutableList()
 		var n = items.count()
@@ -95,5 +79,39 @@ class SortedList(private val input: List<Double>) {
 			indexRight++
 		}
 		return newList;
+	}
+
+
+	fun pancakeSort(items: MutableList<Double> = input.toMutableList()): List<Double> {
+		for (n in items.count() downTo 2) {
+			val maxI = this.indexOfMax(items, n)
+			if (maxI != n - 1) {
+				if (maxI > 0) {
+					pancakeFlipToStart(items, maxI)
+				}
+				pancakeFlipToStart(items, n - 1)
+			}
+		}
+		return items
+	}
+
+	private fun indexOfMax(items: List<Double>, n: Int): Int {
+		var index = 0
+		for (i in 1 until n) {
+			if (items[i] > items[index]) index = i
+		}
+		return index
+	}
+
+	private fun pancakeFlipToStart(items: MutableList<Double>, index: Int) {
+		var i = index
+		var j = 0
+		while (j < i) {
+			val temp = items[j]
+			items[j] = items[i]
+			items[i] = temp
+			j++
+			i--
+		}
 	}
 }
