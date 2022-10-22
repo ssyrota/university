@@ -10,10 +10,10 @@ import (
 )
 
 func main() {
-	timeout := time.Second * 1
-	N := uint(10)   /* 8k */
-	K := uint(1000) /* 512 */
-	P := 0.01       /* 0.01% */
+	timeout := time.Second * 10
+	N := uint(1000000) /* 1M */
+	K := uint(10000)   /* 10k*/
+	P := 0.01          /* 1% */
 
 	safeSimulator := NewCrystal[CrystalSafe](N, K, P)
 	unsafeSimulator := NewCrystal[CrystalUnsafe](N, K, P)
@@ -82,7 +82,7 @@ func (cs *CrystalSafe) BrownianMotionSimulate(timeout time.Duration) {
 		swapping:
 			for {
 				if !shouldMove(cs.p) {
-					continue
+					continue swapping
 				}
 				moveSide := right
 				if rightLeft() {
@@ -136,7 +136,7 @@ func (cs *CrystalUnsafe) BrownianMotionSimulate(timeout time.Duration) {
 		swapping:
 			for {
 				if !shouldMove(cs.p) {
-					continue
+					continue swapping
 				}
 				moveSide := right
 				if rightLeft() {
