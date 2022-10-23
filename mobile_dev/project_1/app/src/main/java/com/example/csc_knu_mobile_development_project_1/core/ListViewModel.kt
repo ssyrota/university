@@ -9,5 +9,4 @@ import kotlinx.coroutines.flow.asStateFlow
 class ListViewModel : ViewModel() {
 	private val _uiState = MutableStateFlow(ListUiState())
 	val uiState: StateFlow<ListUiState> = _uiState.asStateFlow()
-
 }

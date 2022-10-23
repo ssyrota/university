@@ -57,7 +57,11 @@ fun RabbitSorterApp() {
 			modifier = Modifier.padding(innerPadding)
 		) {
 			composable(Screen.Main.name) {
-				MainPage({}, {})
+				MainPage(loadFromFileClick = {
+					navController.navigate(Screen.WriteList.name)
+				}, inputByHandClick = {
+					navController.navigate(Screen.WriteList.name)
+				})
 			}
 			composable(Screen.Author.name) {
 				AuthorPage()
@@ -66,7 +70,7 @@ fun RabbitSorterApp() {
 				SortedListView(list = uiState.list)
 			}
 			composable(Screen.WriteList.name) {
-				SortedListView(list = uiState.list)
+				ListInputView(list = uiState.list)
 			}
 		}
 	}
