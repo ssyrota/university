@@ -1,5 +1,45 @@
 package com.example.csc_knu_mobile_development_project_1.core
 
+var PreviewList = listOf<Double>(
+	8.1,
+	1.2,
+	3.1,
+	-11.0,
+	32.9,
+	8.1,
+	1.2,
+	3.1,
+	-11.0,
+	32.9,
+	8.1,
+	1.2,
+	3.1,
+	-11.0,
+	32.9,
+	8.1,
+	1.2,
+	3.1,
+	-11.0,
+	32.9,
+	8.1,
+	1.2,
+	3.1,
+	-11.0,
+	32.9,
+	32.9,
+	8.1,
+	1.2,
+	3.1,
+	-11.0,
+	32.9,
+	8.1,
+	1.2,
+	3.1,
+	-11.0,
+	32.9,
+	21.0
+)
+
 class SortedList(private val input: List<Double>) {
 	fun selectionSort() {
 		val items = input.toMutableList()
