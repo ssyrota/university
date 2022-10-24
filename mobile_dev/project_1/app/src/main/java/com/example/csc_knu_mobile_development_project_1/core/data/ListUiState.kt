@@ -10,6 +10,7 @@ var PreviewList = mutableListOf<Double>(
 	-11.0,
 )
 
+/*TODO: add cycles count*/
 class SortedList(private val input: List<Double>) {
 	fun selectionSort() {
 		val items = input.toMutableList()

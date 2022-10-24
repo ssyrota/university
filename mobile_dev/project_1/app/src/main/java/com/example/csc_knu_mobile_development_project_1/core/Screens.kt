@@ -59,6 +59,7 @@ fun RabbitSorterApp() {
 		) {
 			composable(Screen.Main.name) {
 				MainPage(loadFromFileClick = {
+					/* TODO: add input by file */
 					navController.navigate(Screen.WriteList.name)
 				}, inputByHandClick = {
 					navController.navigate(Screen.WriteList.name)

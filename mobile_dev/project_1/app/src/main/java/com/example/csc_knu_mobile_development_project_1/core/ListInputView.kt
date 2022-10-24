@@ -43,6 +43,7 @@ fun SortedListView(list: List<Double>) {
 					PreviewNumber(number = item)
 				}
 			}
+			/*TODO: add saving to JSON file*/
 		}
 	}
 }

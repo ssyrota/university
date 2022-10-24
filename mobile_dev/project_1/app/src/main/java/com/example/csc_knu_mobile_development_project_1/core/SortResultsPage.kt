@@ -15,40 +15,29 @@ data class SortResultsPageProps(val sortedList: List<Double>, val viewSortedClic
 @Composable
 fun SortResultsPage(props: SortResultsPageProps) {
 	WithBottomButton(text = "View sorted list", callback = props.viewSortedClick) {
-		Row(
-			modifier = Modifier
-				.fillMaxHeight()
-				.fillMaxWidth()
+		Column(
+			modifier = Modifier.fillMaxSize(),
+			verticalArrangement = Arrangement.Center,
+			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			Column(
-				modifier = Modifier
-					.fillMaxWidth()
-					.fillMaxHeight(),
-				verticalArrangement = Arrangement.Center,
-				horizontalAlignment = Alignment.CenterHorizontally
-			) {
-				if (props.sortedList.isNotEmpty()) {
-					BarGraph(
-						header = {
-							Text(
-								"Sorted values histogram",
-								modifier = Modifier
-									.fillMaxWidth()
-									.padding(PaddingValues(bottom = 10.dp)),
-								textAlign = TextAlign.Center
-							)
-						},
-						dataList = props.sortedList,
-					)
-				} else {
-					Text(
-						"Cannot display histogram, list is empty",
-						modifier = Modifier
-							.fillMaxWidth()
-							.padding(PaddingValues(bottom = 10.dp)),
-						textAlign = TextAlign.Center
-					)
-				}
+			if (props.sortedList.isNotEmpty()) {
+				/* TODO: add sorting stats */
+				BarGraph(
+					header = {
+						Text(
+							"Sorted values histogram",
+							modifier = Modifier
+								.fillMaxWidth()
+								.padding(PaddingValues(bottom = 10.dp)),
+							textAlign = TextAlign.Center
+						)
+					},
+					dataList = props.sortedList,
+				)
+			} else {
+				Text(
+					"Empty list is always sorted :D",
+				)
 			}
 		}
 	}
