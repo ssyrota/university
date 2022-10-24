@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.csc_knu_mobile_development_project_1.core.data.SortedList
 
 enum class Screen(val title: String) {
 	Main(title = "Rabbit search"),
@@ -76,7 +77,7 @@ fun RabbitSorterApp() {
 					saveTempList = { viewModel.saveInputList(it) })
 			}
 			composable(Screen.SortResults.name) {
-				SortResultsPage()
+				SortResultsPage(SortResultsPageProps(SortedList(uiState.list).insertionSort()))
 			}
 		}
 	}

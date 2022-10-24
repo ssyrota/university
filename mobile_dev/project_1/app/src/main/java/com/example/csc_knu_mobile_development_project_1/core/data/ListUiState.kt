@@ -8,8 +8,6 @@ var PreviewList = mutableListOf<Double>(
 	1.2,
 	3.1,
 	-11.0,
-	32.9,
-	21.0
 )
 
 class SortedList(private val input: List<Double>) {
