@@ -3,39 +3,50 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"math/rand"
+	"os"
 	"sync"
 	"sync/atomic"
 	"time"
 )
 
+var timeout = time.Second * 1
+
 func main() {
-	timeout := time.Second * 10
-	N := uint(1000000) /* 1M */
-	K := uint(10000)   /* 10k*/
-	P := 0.01          /* 1% */
+	mod := os.Args[1]
+	if mod != "right" && mod != "wrong" {
+		log.Fatalf("error: %s", "runner type should be passed via args")
+	}
+	N := uint(10) /* 1M */
+	K := uint(10) /* 10k*/
+	P := 0.01     /* 1% */
 
-	safeSimulator := NewCrystal[CrystalSafe](N, K, P)
-	unsafeSimulator := NewCrystal[CrystalUnsafe](N, K, P)
+	if mod == "right" {
+		safeSimulator := NewCrystal[CrystalSafe](N, K, P)
+		var wg sync.WaitGroup
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			safeSimulator.BrownianMotionSimulate(timeout)
+		}()
+		wg.Wait()
+		safeSimulator.PrintTotalAtoms("safe")
+	} else {
+		unsafeSimulator := NewCrystal[CrystalUnsafe](N, K, P)
+		var wg sync.WaitGroup
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			unsafeSimulator.BrownianMotionSimulate(timeout)
+		}()
+		wg.Wait()
 
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		safeSimulator.BrownianMotionSimulate(timeout)
-	}()
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		unsafeSimulator.BrownianMotionSimulate(timeout)
-	}()
-	wg.Wait()
+		unsafeSimulator.PrintTotalAtoms("unsafe")
+	}
 	/*
 		В кінці програми необхідне переобчислити загальну кількість атомів домішки (вона не повинна змінитися) і вивести його на екран.
 	*/
-	safeSimulator.PrintTotalAtoms("safe")
-	unsafeSimulator.PrintTotalAtoms("unsafe")
-
 }
 
 /*
@@ -43,10 +54,10 @@ func main() {
 У кожен момент часу атом може перейти в будь-яку з двох сусідніх кліток з однією і тією ж вірогідністю р
 */
 func NewCrystal[T CrystalUnsafe | CrystalSafe](n uint, k uint, p float64) *T {
-	cells := make([]uint64, n)
+	cells := make([]int32, n)
 
 	// У початковому стані всі атоми домішки зосередженні зліва.
-	cells[0] = uint64(k)
+	cells[0] = int32(k)
 	return &T{
 		Crystal{
 			cells: cells,
@@ -74,7 +85,12 @@ func (cs *CrystalSafe) BrownianMotionSimulate(timeout time.Duration) {
 	defer cancel()
 
 	var wg sync.WaitGroup
-	for i := uint64(0); i < cs.cells[0]; i++ {
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		printSnapshotWithIvl(cs.cells, ctx)
+	}()
+	for i := int32(0); i < cs.cells[0]; i++ {
 		wg.Add(1)
 		go func() {
 			curIdx := defaultAtomIndex
@@ -95,13 +111,13 @@ func (cs *CrystalSafe) BrownianMotionSimulate(timeout time.Duration) {
 				}
 
 				if moveSide == right {
-					atomic.AddUint64(&cs.cells[curIdx], ^uint64(0))
+					atomic.AddInt32(&cs.cells[curIdx], -1)
 					curIdx += 1
-					atomic.AddUint64(&cs.cells[curIdx], 1)
+					atomic.AddInt32(&cs.cells[curIdx], 1)
 				} else {
-					atomic.AddUint64(&cs.cells[curIdx], ^uint64(0))
+					atomic.AddInt32(&cs.cells[curIdx], -1)
 					curIdx -= 1
-					atomic.AddUint64(&cs.cells[curIdx], 1)
+					atomic.AddInt32(&cs.cells[curIdx], 1)
 
 				}
 				select {
@@ -128,7 +144,12 @@ func (cs *CrystalUnsafe) BrownianMotionSimulate(timeout time.Duration) {
 	defer cancel()
 
 	var wg sync.WaitGroup
-	for i := uint64(0); i < cs.cells[0]; i++ {
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		printSnapshotWithIvl(cs.cells, ctx)
+	}()
+	for i := int32(0); i < cs.cells[0]; i++ {
 		wg.Add(1)
 		go func() {
 			curIdx := defaultAtomIndex
@@ -175,12 +196,12 @@ func (cs *CrystalUnsafe) BrownianMotionSimulate(timeout time.Duration) {
 }
 
 type Crystal struct {
-	cells []uint64
+	cells []int32
 	p     float64
 }
 
 func (c *Crystal) PrintTotalAtoms(prefix string) {
-	sum := uint64(0)
+	sum := int32(0)
 	for _, v := range c.cells {
 		sum += v
 	}
@@ -201,3 +222,18 @@ const (
 	right Side = true
 	left  Side = false
 )
+
+var snapShotInterval = time.Millisecond * 100
+
+func printSnapshotWithIvl(state []int32, ctx context.Context) {
+	ticker := time.NewTicker(snapShotInterval)
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			<-ticker.C
+			log.Printf("%v", state)
+		}
+	}
+}
