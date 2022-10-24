@@ -27,18 +27,28 @@ fun SortResultsPage(props: SortResultsPageProps) {
 				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
-				BarGraph(
-					header = {
-						Text(
-							"Sorted values histogram",
-							modifier = Modifier
-								.fillMaxWidth()
-								.padding(PaddingValues(bottom = 10.dp)),
-							textAlign = TextAlign.Center
-						)
-					},
-					dataList = props.sortedList,
-				)
+				if (props.sortedList.size != 0) {
+					BarGraph(
+						header = {
+							Text(
+								"Sorted values histogram",
+								modifier = Modifier
+									.fillMaxWidth()
+									.padding(PaddingValues(bottom = 10.dp)),
+								textAlign = TextAlign.Center
+							)
+						},
+						dataList = props.sortedList,
+					)
+				} else {
+					Text(
+						"Cannot display histogram, list is empty",
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(PaddingValues(bottom = 10.dp)),
+						textAlign = TextAlign.Center
+					)
+				}
 			}
 		}
 	}

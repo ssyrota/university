@@ -19,9 +19,16 @@ import com.example.csc_knu_mobile_development_project_1.core.data.SortedList
 
 @Composable
 fun SortedListView(list: List<Double>) {
-	LazyColumn {
-		items(SortedList(list).insertionSort()) { item ->
-			PreviewNumber(number = item)
+	Column(
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(horizontal = 10.dp)
+			.padding(PaddingValues(bottom = 60.dp))
+	) {
+		LazyColumn {
+			items(SortedList(list).insertionSort()) { item ->
+				PreviewNumber(number = item)
+			}
 		}
 	}
 }
@@ -41,7 +48,7 @@ fun ListInputView(
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(horizontal = 10.dp)
-				.padding(PaddingValues(bottom = 60.dp))
+				.padding(PaddingValues(bottom = 60.dp, top = 10.dp))
 		) {
 			TextField(
 				label = { Text("New value") },
