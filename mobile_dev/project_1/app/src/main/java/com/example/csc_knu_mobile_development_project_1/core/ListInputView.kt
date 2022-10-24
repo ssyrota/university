@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.csc_knu_mobile_development_project_1.core.data.SortedList
 
 
@@ -37,24 +36,7 @@ fun ListInputView(
 	var numStr by remember { mutableStateOf("") }
 	var num = numStr.toDoubleOrNull() ?: 0.0
 
-	Scaffold(bottomBar = {
-		Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-			Button(
-				modifier = Modifier
-					.width(300.dp)
-					.padding(10.dp),
-				onClick = { onClickSort() }, colors = ButtonDefaults.buttonColors(
-					backgroundColor = Color.Black,
-					contentColor = Color.White
-				)
-			) {
-				Text(
-					text = "Sort list!", style = MaterialTheme.typography.button,
-					fontSize = 25.sp
-				)
-			}
-		}
-	}) {
+	WithBottomButton(text = "Sort list!", callback = { onClickSort() }) {
 		Column(
 			modifier = Modifier
 				.fillMaxWidth()

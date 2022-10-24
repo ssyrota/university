@@ -10,35 +10,36 @@ import androidx.compose.ui.unit.dp
 import com.jaikeerthick.composable_graphs.composables.BarGraph
 
 
-data class SortResultsPageProps(val sortedList: List<Double>)
+data class SortResultsPageProps(val sortedList: List<Double>, val viewSortedClick: () -> Unit)
 
 @Composable
 fun SortResultsPage(props: SortResultsPageProps) {
-	Row(
-		modifier = Modifier
-			.fillMaxHeight()
-			.fillMaxWidth()
-	) {
-		Column(
+	WithBottomButton(text = "View sorted list", callback = props.viewSortedClick) {
+		Row(
 			modifier = Modifier
+				.fillMaxHeight()
 				.fillMaxWidth()
-				.fillMaxHeight(),
-			verticalArrangement = Arrangement.Center,
-			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			Text(props.sortedList.toString())
-			BarGraph(
-				header = {
-					Text(
-						"Sorted values histogram",
-						modifier = Modifier
-							.fillMaxWidth()
-							.padding(PaddingValues(bottom = 10.dp)),
-						textAlign = TextAlign.Center
-					)
-				},
-				dataList = props.sortedList,
-			)
+			Column(
+				modifier = Modifier
+					.fillMaxWidth()
+					.fillMaxHeight(),
+				verticalArrangement = Arrangement.Center,
+				horizontalAlignment = Alignment.CenterHorizontally
+			) {
+				BarGraph(
+					header = {
+						Text(
+							"Sorted values histogram",
+							modifier = Modifier
+								.fillMaxWidth()
+								.padding(PaddingValues(bottom = 10.dp)),
+							textAlign = TextAlign.Center
+						)
+					},
+					dataList = props.sortedList,
+				)
+			}
 		}
 	}
 }

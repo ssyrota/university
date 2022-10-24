@@ -77,7 +77,11 @@ fun RabbitSorterApp() {
 					saveTempList = { viewModel.saveInputList(it) })
 			}
 			composable(Screen.SortResults.name) {
-				SortResultsPage(SortResultsPageProps(SortedList(uiState.list).insertionSort()))
+				SortResultsPage(
+					SortResultsPageProps(
+						sortedList = SortedList(uiState.list).insertionSort(),
+						{ navController.navigate(Screen.SortedList.name) })
+				)
 			}
 		}
 	}
