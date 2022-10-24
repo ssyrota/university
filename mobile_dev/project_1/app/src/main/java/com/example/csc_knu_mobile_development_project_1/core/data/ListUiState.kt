@@ -1,42 +1,10 @@
 package com.example.csc_knu_mobile_development_project_1.core.data
 
 data class ListUiState(
-	var list: List<Double> = PreviewList
+	var list: MutableList<Double> = PreviewList
 )
 
-var PreviewList = listOf<Double>(
-	8.1,
-	1.2,
-	3.1,
-	-11.0,
-	32.9,
-	8.1,
-	1.2,
-	3.1,
-	-11.0,
-	32.9,
-	8.1,
-	1.2,
-	3.1,
-	-11.0,
-	32.9,
-	8.1,
-	1.2,
-	3.1,
-	-11.0,
-	32.9,
-	8.1,
-	1.2,
-	3.1,
-	-11.0,
-	32.9,
-	32.9,
-	8.1,
-	1.2,
-	3.1,
-	-11.0,
-	32.9,
-	8.1,
+var PreviewList = mutableListOf<Double>(
 	1.2,
 	3.1,
 	-11.0,

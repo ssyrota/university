@@ -70,7 +70,9 @@ fun RabbitSorterApp() {
 				SortedListView(list = uiState.list)
 			}
 			composable(Screen.WriteList.name) {
-				ListInputView(list = uiState.list)
+				ListInputView(
+					list = uiState.list,
+					onClickSort = { it -> viewModel.setList(it); navController.navigate(Screen.SortResults.name) })
 			}
 		}
 	}

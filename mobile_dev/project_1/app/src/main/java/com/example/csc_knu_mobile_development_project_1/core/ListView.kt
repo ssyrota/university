@@ -1,18 +1,20 @@
 package com.example.csc_knu_mobile_development_project_1.core
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.csc_knu_mobile_development_project_1.core.data.SortedList
 
 
@@ -26,10 +28,59 @@ fun SortedListView(list: List<Double>) {
 }
 
 @Composable
-fun ListInputView(list: List<Double>) {
-	LazyColumn {
-		items(SortedList(list).insertionSort()) { item ->
-			PreviewNumber(number = item)
+fun ListInputView(list: List<Double>, onClickSort: (list: List<Double>) -> Unit) {
+	var inputList by remember { mutableStateOf(listOf<Double>()) }
+	var numStr by remember { mutableStateOf("") }
+	var num = numStr.toDoubleOrNull() ?: 0.0
+
+	Scaffold(bottomBar = {
+		Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+			Button(
+				modifier = Modifier
+					.width(300.dp)
+					.padding(10.dp),
+				onClick = { onClickSort(inputList) }, colors = ButtonDefaults.buttonColors(
+					backgroundColor = Color.Black,
+					contentColor = Color.White
+				)
+			) {
+				Text(
+					text = "Sort list!", style = MaterialTheme.typography.button,
+					fontSize = 25.sp
+				)
+			}
+		}
+	}) {
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(horizontal = 10.dp)
+		) {
+			TextField(
+				label = { Text("New value") },
+				modifier = Modifier.fillMaxWidth(),
+				keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+				singleLine = true,
+				value = numStr,
+				onValueChange = { numStr = it },
+				keyboardActions = KeyboardActions(onDone = {
+					if (numStr != "") {
+						inputList = inputList + listOf(num)
+						numStr = "";
+					}
+				})
+			)
+			LazyColumn {
+				itemsIndexed(inputList) { i, item ->
+					PreviewNumber(
+						number = item,
+						onDelete = {
+							val newList = inputList.toMutableList();
+							newList.removeAt(i);
+							inputList = newList
+						})
+				}
+			}
 		}
 	}
 }
