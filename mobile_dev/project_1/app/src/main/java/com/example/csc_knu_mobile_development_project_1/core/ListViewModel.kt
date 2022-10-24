@@ -11,7 +11,7 @@ class ListViewModel : ViewModel() {
 	private val _uiState = MutableStateFlow(ListUiState())
 	val uiState: StateFlow<ListUiState> = _uiState.asStateFlow()
 
-	fun setList(items: List<Double>) {
+	fun saveInputList(items: List<Double>) {
 		_uiState.update { currentState ->
 			currentState.copy(list = items.toMutableList())
 		}

@@ -28,8 +28,12 @@ fun SortedListView(list: List<Double>) {
 }
 
 @Composable
-fun ListInputView(onClickSort: (list: List<Double>) -> Unit) {
-	var inputList by remember { mutableStateOf(listOf<Double>()) }
+fun ListInputView(
+	inputList: List<Double>,
+	saveTempList: (list: List<Double>) -> Unit,
+	onClickSort: () -> Unit
+) {
+	var inputList by remember { mutableStateOf(inputList) }
 	var numStr by remember { mutableStateOf("") }
 	var num = numStr.toDoubleOrNull() ?: 0.0
 
@@ -39,7 +43,7 @@ fun ListInputView(onClickSort: (list: List<Double>) -> Unit) {
 				modifier = Modifier
 					.width(300.dp)
 					.padding(10.dp),
-				onClick = { onClickSort(inputList) }, colors = ButtonDefaults.buttonColors(
+				onClick = { onClickSort() }, colors = ButtonDefaults.buttonColors(
 					backgroundColor = Color.Black,
 					contentColor = Color.White
 				)
@@ -67,6 +71,7 @@ fun ListInputView(onClickSort: (list: List<Double>) -> Unit) {
 				keyboardActions = KeyboardActions(onDone = {
 					if (numStr != "") {
 						inputList = inputList + listOf(num)
+						saveTempList(inputList)
 						numStr = "";
 					}
 				})
@@ -79,6 +84,7 @@ fun ListInputView(onClickSort: (list: List<Double>) -> Unit) {
 							val newList = inputList.toMutableList();
 							newList.removeAt(i);
 							inputList = newList
+							saveTempList(inputList)
 						})
 				}
 			}

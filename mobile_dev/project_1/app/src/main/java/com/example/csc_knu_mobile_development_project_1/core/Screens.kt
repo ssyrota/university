@@ -71,7 +71,9 @@ fun RabbitSorterApp() {
 			}
 			composable(Screen.WriteList.name) {
 				ListInputView(
-					onClickSort = { viewModel.setList(it); navController.navigate(Screen.SortResults.name) })
+					inputList = uiState.list,
+					onClickSort = { navController.navigate(Screen.SortResults.name) },
+					saveTempList = { viewModel.saveInputList(it) })
 			}
 			composable(Screen.SortResults.name) {
 				SortResultsPage()
