@@ -10,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,15 +20,28 @@ import com.example.csc_knu_mobile_development_project_1.core.data.SortedList
 
 @Composable
 fun SortedListView(list: List<Double>) {
-	Column(
-		modifier = Modifier
-			.fillMaxWidth()
-			.padding(horizontal = 10.dp)
-			.padding(PaddingValues(bottom = 60.dp))
-	) {
-		LazyColumn {
-			items(SortedList(list).insertionSort()) { item ->
-				PreviewNumber(number = item)
+	if (list.isEmpty()) {
+		Column(
+			modifier = Modifier.fillMaxSize(),
+			horizontalAlignment = Alignment.CenterHorizontally,
+			verticalArrangement = Arrangement.Center
+		) {
+			Text(
+				"Empty list",
+			)
+		}
+	} else {
+		Column(
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(horizontal = 10.dp)
+				.padding(PaddingValues(bottom = 60.dp)),
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			LazyColumn {
+				items(SortedList(list).insertionSort()) { item ->
+					PreviewNumber(number = item)
+				}
 			}
 		}
 	}

@@ -27,7 +27,7 @@ fun SortResultsPage(props: SortResultsPageProps) {
 				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
-				if (props.sortedList.size != 0) {
+				if (props.sortedList.isNotEmpty()) {
 					BarGraph(
 						header = {
 							Text(
