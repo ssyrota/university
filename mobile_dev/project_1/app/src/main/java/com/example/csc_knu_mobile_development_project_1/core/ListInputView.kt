@@ -28,7 +28,7 @@ fun SortedListView(list: List<Double>) {
 }
 
 @Composable
-fun ListInputView(list: List<Double>, onClickSort: (list: List<Double>) -> Unit) {
+fun ListInputView(onClickSort: (list: List<Double>) -> Unit) {
 	var inputList by remember { mutableStateOf(listOf<Double>()) }
 	var numStr by remember { mutableStateOf("") }
 	var num = numStr.toDoubleOrNull() ?: 0.0
@@ -55,6 +55,7 @@ fun ListInputView(list: List<Double>, onClickSort: (list: List<Double>) -> Unit)
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(horizontal = 10.dp)
+				.padding(PaddingValues(bottom = 60.dp))
 		) {
 			TextField(
 				label = { Text("New value") },
