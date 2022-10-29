@@ -1,6 +1,7 @@
 package com.example.csc_knu_mobile_development_project_1.core
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,10 +31,11 @@ fun SortResultsPage(props: SortResultsPageProps) {
 				BarGraph(
 					header = {
 						Text(
-							"Sorted values histogram",
+							"Sorted values histogram:",
 							modifier = Modifier
 								.fillMaxWidth()
 								.padding(PaddingValues(bottom = 10.dp)),
+							style = MaterialTheme.typography.h6,
 							textAlign = TextAlign.Center
 						)
 					},
@@ -42,6 +44,7 @@ fun SortResultsPage(props: SortResultsPageProps) {
 			} else {
 				Text(
 					"Empty list is always sorted :D",
+					style = MaterialTheme.typography.h6,
 				)
 			}
 		}
@@ -56,6 +59,7 @@ fun OperationsCount(props: SortOpsCount) {
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(PaddingValues(bottom = 10.dp)),
+			style = MaterialTheme.typography.h6,
 			textAlign = TextAlign.Center
 		)
 	}
