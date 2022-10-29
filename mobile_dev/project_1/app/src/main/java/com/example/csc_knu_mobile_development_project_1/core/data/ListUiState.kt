@@ -1,18 +1,22 @@
 package com.example.csc_knu_mobile_development_project_1.core.data
 
 data class ListUiState(
-	var list: MutableList<Double> = PreviewList,
-)
-
-var PreviewList = mutableListOf<Double>(
-	1.2,
-	3.1,
-	-11.0,
+	var list: MutableList<Double> = mutableListOf(),
 )
 
 /*TODO: add cycles count*/
 class SortedList(private val input: List<Double>) {
-	fun selectionSort() {
+	fun value(): List<Double> {
+		return this.input.sorted()
+	}
+
+	fun sortStats(): SortOpsCount {
+		val stats = HashMap<SortType, Int>()
+		stats.set(SortType.INSERTION, this.insertionSort())
+		return stats
+	}
+
+	private fun selectionSort() {
 		val items = input.toMutableList()
 		var n = items.count()
 		var temp: Double
@@ -30,24 +34,28 @@ class SortedList(private val input: List<Double>) {
 		}
 	}
 
-	fun insertionSort(): List<Double> {
+	private fun insertionSort(): Int {
 		val items = input.toMutableList()
 		if (items.count() < 2) {
-			return items
+			return 2
 		}
+
+		var ops = 0
 		for (count in 1 until items.count()) {
+			ops++
 			val item = items[count]
 			var i = count
 			while (i > 0 && item < items[i - 1]) {
+				ops++
 				items[i] = items[i - 1]
 				i -= 1
 			}
 			items[i] = item
 		}
-		return items
+		return ops
 	}
 
-	fun quickSort(items: List<Double> = input.toList()): List<Double> {
+	private fun quickSort(items: List<Double> = input.toList()): List<Double> {
 		if (items.count() < 2) {
 			return items
 		}
@@ -58,7 +66,7 @@ class SortedList(private val input: List<Double>) {
 		return quickSort(less) + equal + quickSort(greater)
 	}
 
-	fun mergeSort(items: List<Double> = input.toList()): List<Double> {
+	private fun mergeSort(items: List<Double> = input.toList()): List<Double> {
 		if (items.size <= 1) {
 			return items
 		}
@@ -92,8 +100,7 @@ class SortedList(private val input: List<Double>) {
 		return newList;
 	}
 
-
-	fun pancakeSort(items: MutableList<Double> = input.toMutableList()): List<Double> {
+	private fun pancakeSort(items: MutableList<Double> = input.toMutableList()): List<Double> {
 		for (n in items.count() downTo 2) {
 			val maxI = this.indexOfMax(items, n)
 			if (maxI != n - 1) {
@@ -126,3 +133,12 @@ class SortedList(private val input: List<Double>) {
 		}
 	}
 }
+
+enum class SortType(name: String) {
+	PANCAKE("Pancake"),
+	SELECTION("Selection"),
+	INSERTION("Insertion"),
+	QUICK("Quick"),
+	MERGE("Merge")
+}
+typealias SortOpsCount = Map<SortType, Int>

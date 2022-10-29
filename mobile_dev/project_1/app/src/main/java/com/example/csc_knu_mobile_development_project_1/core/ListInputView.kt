@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.csc_knu_mobile_development_project_1.core.data.SortedList
 
 
 @Composable
@@ -39,7 +38,7 @@ fun SortedListView(list: List<Double>) {
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			LazyColumn {
-				items(SortedList(list).insertionSort()) { item ->
+				items(list) { item ->
 					PreviewNumber(number = item)
 				}
 			}

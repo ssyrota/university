@@ -22,8 +22,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.csc_knu_mobile_development_project_1.core.data.SortedList
 
 enum class Screen(val title: String) {
-	Main(title = "Rabbit search"),
+	Main(title = "Rabbit sort"),
 	WriteList(title = "Write list"),
+	InputFileList(title = "Write list from file"),
 	SortResults(title = "Sort results"),
 	Author(title = "Author"),
 	SortedList(title = "Sorted list")
@@ -35,7 +36,6 @@ fun RabbitSorterApp() {
 	val navController = rememberNavController()
 	val viewModel: ListViewModel = viewModel()
 	val backStackEntry by navController.currentBackStackEntryAsState()
-	// Get the name of the current screen
 	val currentScreen = Screen.valueOf(
 		backStackEntry?.destination?.route ?: Screen.Main.name
 	)
@@ -59,8 +59,7 @@ fun RabbitSorterApp() {
 		) {
 			composable(Screen.Main.name) {
 				MainPage(loadFromFileClick = {
-					/* TODO: add input by file */
-					navController.navigate(Screen.WriteList.name)
+					navController.navigate(Screen.InputFileList.name)
 				}, inputByHandClick = {
 					navController.navigate(Screen.WriteList.name)
 				})
@@ -69,7 +68,8 @@ fun RabbitSorterApp() {
 				AuthorPage()
 			}
 			composable(Screen.SortedList.name) {
-				SortedListView(list = uiState.list)
+				val sorted = SortedList(uiState.list)
+				SortedListView(list = sorted.value())
 			}
 			composable(Screen.WriteList.name) {
 				ListInputView(
@@ -78,11 +78,17 @@ fun RabbitSorterApp() {
 					saveTempList = { viewModel.saveInputList(it) })
 			}
 			composable(Screen.SortResults.name) {
+				val sorted = SortedList(uiState.list)
 				SortResultsPage(
 					SortResultsPageProps(
-						sortedList = SortedList(uiState.list).insertionSort(),
-						{ navController.navigate(Screen.SortedList.name) })
+						sortedList = sorted.value(),
+						{ navController.navigate(Screen.SortedList.name) },
+						sortStats = sorted.sortStats()
+					)
 				)
+			}
+			composable(Screen.InputFileList.name) {
+
 			}
 		}
 	}

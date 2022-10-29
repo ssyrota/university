@@ -7,10 +7,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.csc_knu_mobile_development_project_1.core.data.SortOpsCount
 import com.jaikeerthick.composable_graphs.composables.BarGraph
 
 
-data class SortResultsPageProps(val sortedList: List<Double>, val viewSortedClick: () -> Unit)
+data class SortResultsPageProps(
+	val sortedList: List<Double>,
+	val viewSortedClick: () -> Unit,
+	val sortStats: SortOpsCount
+)
 
 @Composable
 fun SortResultsPage(props: SortResultsPageProps) {
@@ -21,7 +26,7 @@ fun SortResultsPage(props: SortResultsPageProps) {
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			if (props.sortedList.isNotEmpty()) {
-				/* TODO: add sorting stats */
+				OperationsCount(props.sortStats)
 				BarGraph(
 					header = {
 						Text(
@@ -40,5 +45,18 @@ fun SortResultsPage(props: SortResultsPageProps) {
 				)
 			}
 		}
+	}
+}
+
+@Composable
+fun OperationsCount(props: SortOpsCount) {
+	props.entries.map {
+		Text(
+			"${it.key.name} sort: ${it.value} ops",
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(PaddingValues(bottom = 10.dp)),
+			textAlign = TextAlign.Center
+		)
 	}
 }
