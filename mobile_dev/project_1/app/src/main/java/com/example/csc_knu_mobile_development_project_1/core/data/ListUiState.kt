@@ -161,11 +161,11 @@ class SortedList(private val input: List<Double>) {
 	}
 }
 
-enum class SortType(name: String) {
-	PANCAKE("Pancake"),
-	SELECTION("Selection"),
-	INSERTION("Insertion"),
-	QUICK("Quick"),
-	MERGE("Merge")
+enum class SortType(val printableName: String) {
+	PANCAKE(printableName = "Pancake"),
+	SELECTION(printableName = "Selection"),
+	INSERTION(printableName = "Insertion"),
+	QUICK(printableName = "Quick"),
+	MERGE(printableName = "Merge")
 }
 typealias SortOpsCount = Map<SortType, Int>

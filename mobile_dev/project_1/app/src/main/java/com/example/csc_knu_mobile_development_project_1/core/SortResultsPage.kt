@@ -50,9 +50,9 @@ fun SortResultsPage(props: SortResultsPageProps) {
 
 @Composable
 fun OperationsCount(props: SortOpsCount) {
-	props.entries.map {
+	props.entries.sortedBy { it.key }.map {
 		Text(
-			"${it.key.name} sort: ${it.value} ops",
+			"${it.key.printableName} sort: ${it.value} ops",
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(PaddingValues(bottom = 10.dp)),
