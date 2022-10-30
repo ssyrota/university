@@ -24,7 +24,6 @@ import com.example.csc_knu_mobile_development_project_1.core.data.SortedList
 enum class Screen(val title: String) {
 	Main(title = "Rabbit sort"),
 	WriteList(title = "Write list"),
-	InputFileList(title = "Write list from file"),
 	SortResults(title = "Sort results"),
 	Author(title = "Author"),
 	SortedList(title = "Sorted list")
@@ -59,17 +58,16 @@ fun RabbitSorterApp() {
 		) {
 			composable(Screen.Main.name) {
 				MainPage(loadFromFileClick = {
-					navController.navigate(Screen.InputFileList.name)
-				}, inputByHandClick = {
-					navController.navigate(Screen.WriteList.name)
-				})
+					viewModel.saveInputList(it)
+					navController.navigate(Screen.SortResults.name)
+				}, inputByHandClick = { navController.navigate(Screen.WriteList.name) }
+				)
 			}
 			composable(Screen.Author.name) {
 				AuthorPage()
 			}
 			composable(Screen.SortedList.name) {
-				val sorted = SortedList(uiState.list)
-				SortedListView(list = sorted.value())
+				SortedListView(list = SortedList(uiState.list).value())
 			}
 			composable(Screen.WriteList.name) {
 				ListInputView(
@@ -86,9 +84,6 @@ fun RabbitSorterApp() {
 						sortStats = sorted.sortStats()
 					)
 				)
-			}
-			composable(Screen.InputFileList.name) {
-				FilePicker()
 			}
 		}
 	}
