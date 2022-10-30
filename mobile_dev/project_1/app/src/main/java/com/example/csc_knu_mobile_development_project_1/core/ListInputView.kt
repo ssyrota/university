@@ -15,9 +15,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toFile
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
+import java.io.OutputStreamWriter
 
 
 @Composable
@@ -116,14 +119,24 @@ fun EmptyList() {
 
 @Composable
 fun ListWithSave(list: List<Double>) {
+	val context = LocalContext.current
+	val contentResolver = context.contentResolver
+
 	var uploadLauncher = rememberLauncherForActivityResult(
 		contract = ActivityResultContracts.CreateDocument("application/json"),
 		onResult = { it ->
 			it?.let {
-				it.toFile().writeText("Good morning Vietnam!")
+				val writer = OutputStreamWriter(contentResolver.openOutputStream(it))
+				writer.write(
+					Json.encodeToString(
+						Json.serializersModule.serializer(),
+						list
+					)
+				)
+				writer.close()
 			}
 		})
-	WithBottomButton(text = "Save sorted list", callback = {
+	WithBottomButton(text = "Save list", callback = {
 		uploadLauncher.launch("sorted.json")
 	}) {
 		Column(
