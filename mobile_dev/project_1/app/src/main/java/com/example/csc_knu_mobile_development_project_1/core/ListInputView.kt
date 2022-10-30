@@ -1,5 +1,7 @@
 package com.example.csc_knu_mobile_development_project_1.core
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,35 +17,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toFile
 
 
 @Composable
 fun SortedListView(list: List<Double>) {
 	if (list.isEmpty()) {
-		Column(
-			modifier = Modifier.fillMaxSize(),
-			horizontalAlignment = Alignment.CenterHorizontally,
-			verticalArrangement = Arrangement.Center
-		) {
-			Text(
-				"Empty list",
-			)
-		}
+		EmptyList()
 	} else {
-		Column(
-			modifier = Modifier
-				.fillMaxSize()
-				.padding(horizontal = 10.dp)
-				.padding(PaddingValues(bottom = 60.dp)),
-			horizontalAlignment = Alignment.CenterHorizontally
-		) {
-			LazyColumn {
-				items(list) { item ->
-					PreviewNumber(number = item)
-				}
-			}
-			/*TODO: add saving to JSON file*/
-		}
+		ListWithSave(list)
 	}
 }
 
@@ -113,6 +95,47 @@ fun PreviewNumber(number: Double, onDelete: (() -> Unit)? = null) {
 					onClick = it,
 				) {
 					Icon(Icons.Outlined.Delete, "delete", tint = Color.Gray)
+				}
+			}
+		}
+	}
+}
+
+@Composable
+fun EmptyList() {
+	Column(
+		modifier = Modifier.fillMaxSize(),
+		horizontalAlignment = Alignment.CenterHorizontally,
+		verticalArrangement = Arrangement.Center
+	) {
+		Text(
+			"Empty list",
+		)
+	}
+}
+
+@Composable
+fun ListWithSave(list: List<Double>) {
+	var uploadLauncher = rememberLauncherForActivityResult(
+		contract = ActivityResultContracts.CreateDocument("application/json"),
+		onResult = { it ->
+			it?.let {
+				it.toFile().writeText("Good morning Vietnam!")
+			}
+		})
+	WithBottomButton(text = "Save sorted list", callback = {
+		uploadLauncher.launch("sorted.json")
+	}) {
+		Column(
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(horizontal = 10.dp)
+				.padding(PaddingValues(bottom = 60.dp)),
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			LazyColumn {
+				items(list) { item ->
+					PreviewNumber(number = item)
 				}
 			}
 		}
