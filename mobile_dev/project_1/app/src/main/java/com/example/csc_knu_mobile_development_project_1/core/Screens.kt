@@ -88,7 +88,7 @@ fun RabbitSorterApp() {
 				)
 			}
 			composable(Screen.InputFileList.name) {
-
+				FilePicker()
 			}
 		}
 	}
