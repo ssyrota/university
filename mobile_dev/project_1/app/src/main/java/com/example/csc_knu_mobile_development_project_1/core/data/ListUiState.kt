@@ -4,7 +4,6 @@ data class ListUiState(
 	var list: MutableList<Double> = mutableListOf(),
 )
 
-/*TODO: add cycles count*/
 class SortedList(private val input: List<Double>) {
 	fun value(): List<Double> {
 		return this.input.sorted()
