@@ -80,7 +80,7 @@ fun AuthorContacts() {
 				SelectionContainer() {
 					Text(
 						style = MaterialTheme.typography.h6,
-						text = "Github: serhii-syrota",
+						text = "Github: ssyrota",
 					)
 				}
 			}

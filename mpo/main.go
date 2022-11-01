@@ -18,9 +18,9 @@ func main() {
 	if mod != "right" && mod != "wrong" {
 		log.Fatalf("error: %s", "runner type should be passed via args")
 	}
-	N := uint(10) /* 1M */
-	K := uint(10) /* 10k*/
-	P := 0.01     /* 1% */
+	N := uint(10)
+	K := uint(10)
+	P := 0.01 /* 1% */
 
 	if mod == "right" {
 		safeSimulator := NewCrystal[CrystalSafe](N, K, P)
@@ -41,8 +41,6 @@ func main() {
 			unsafeSimulator.BrownianMotionSimulate(timeout)
 		}()
 		wg.Wait()
-
-		unsafeSimulator.PrintTotalAtoms("unsafe")
 	}
 	/*
 		В кінці програми необхідне переобчислити загальну кількість атомів домішки (вона не повинна змінитися) і вивести його на екран.
@@ -233,6 +231,11 @@ func printSnapshotWithIvl(state []int32, ctx context.Context) {
 			return
 		default:
 			<-ticker.C
+			sum := int32(0)
+			for _, v := range state {
+				sum += v
+			}
+			fmt.Printf("Sum: %v\n", sum)
 			log.Printf("%v", state)
 		}
 	}
