@@ -18,8 +18,9 @@
 
    - Elements histogram
    - Sorted list
+   - Histogram where x - index, y - value
    - For each sorting algorithm(which count is 5) iterations count
-   - Most effective sorting algorithm from presented
+   - Output to file
 
 3. Developer page contains:
    - photo
