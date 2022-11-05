@@ -1,16 +1,16 @@
-package com.example.project_2.core
+package com.example.project_2.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -23,6 +23,7 @@ enum class Screen(val title: String) {
     Maps(title = "Maps with routes")
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ComposeExamplesApp() {
     val navController = rememberNavController()
@@ -30,7 +31,6 @@ fun ComposeExamplesApp() {
     val currentScreen = Screen.valueOf(
         backStackEntry?.destination?.route ?: Screen.Main.name
     )
-
     Scaffold(topBar = {
         TopBar(
             title = currentScreen.title,
@@ -47,7 +47,7 @@ fun ComposeExamplesApp() {
             composable(Screen.Main.name) {
                 MainPage(
                     MainPageProps(
-                        mapsClick = {},
+                        mapsClick = {/*TODO*/ },
                         contactsClick = {/*TODO*/ },
                         sqliteClick = {/*TODO*/ })
                 )
@@ -59,22 +59,22 @@ fun ComposeExamplesApp() {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     title: String,
     canBack: Boolean,
     backClick: () -> Unit,
 ) {
-    TopAppBar(backgroundColor = Color.Black, contentColor = Color.White,
+    TopAppBar(
         title = {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Text(
                     text = title,
-                    fontSize = 20.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.headlineMedium
                 )
-                Spacer(modifier = Modifier.padding(10.dp))
             }
         }, navigationIcon = {
             if (canBack) {
