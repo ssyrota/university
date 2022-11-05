@@ -16,31 +16,28 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
-
 enum class Screen(val title: String) {
     Main(title = "Compose examples"),
-    Contacts(title = "Contacts filter"),
-    Sqlite(title = "Sqlite"),
-    Maps(title = "Maps"),
+    Contacts(title = "Contacts ends with"),
+    Sqlite(title = "Sqlite usage"),
+    Maps(title = "Maps with routes")
 }
 
-
 @Composable
-fun ComposeUsageApp() {
+fun ComposeExamplesApp() {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = Screen.valueOf(
         backStackEntry?.destination?.route ?: Screen.Main.name
     )
 
-    Scaffold(
-        topBar = {
-            TopBar(
-                title = currentScreen.title,
-                canBack = currentScreen != Screen.Main,
-                backClick = { navController.navigateUp() },
-            )
-        }
+    Scaffold(topBar = {
+        TopBar(
+            title = currentScreen.title,
+            canBack = currentScreen != Screen.Main,
+            backClick = { navController.navigateUp() }
+        )
+    }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -48,17 +45,18 @@ fun ComposeUsageApp() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Main.name) {
-            }
-            composable(Screen.Contacts.name) {
-            }
-            composable(Screen.Sqlite.name) {
-            }
-            composable(Screen.Maps.name) {
+                MainPage(
+                    MainPageProps(
+                        mapsClick = {},
+                        contactsClick = {/*TODO*/ },
+                        sqliteClick = {/*TODO*/ })
+                )
             }
         }
-    }
-}
 
+    }
+
+}
 
 
 @Composable
@@ -76,7 +74,7 @@ fun TopBar(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Spacer(modifier = Modifier.padding(start = 50.dp))
+                Spacer(modifier = Modifier.padding(10.dp))
             }
         }, navigationIcon = {
             if (canBack) {
