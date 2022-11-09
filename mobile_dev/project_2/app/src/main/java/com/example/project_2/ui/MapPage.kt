@@ -52,6 +52,7 @@ fun MapPage() {
                 properties = MapProperties(isMyLocationEnabled = true),
                 modifier = Modifier.height(600.dp)
             ) {
+                
                 Marker(
                     state = MarkerState(position = pickedPosition),
                     title = locationName.value
@@ -95,7 +96,7 @@ fun FindLocation(setLocation: (v: String) -> Unit) {
             .padding(horizontal = 20.dp)
             .height(60.dp),
         singleLine = true,
-        keyboardActions = KeyboardActions { setLocation(place.value); focusManager.clearFocus() }
+        keyboardActions = KeyboardActions { setLocation(place.value); focusManager.clearFocus() },
     )
 }
 
