@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import com.example.project_2.data.NetworkRouteRepo
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationRequest
@@ -22,17 +23,31 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 const val SECOND_IN_MILLISECOND: Long = 1000
 
+typealias UpdateRoute = (from: LatLng, to: LatLng) -> Unit
+
 @Composable
 fun MapPage() {
-    MapScreen(listOf())
+    val coroutineScope = rememberCoroutineScope()
+    var route by remember { mutableStateOf(mutableListOf<LatLng>()) }
+    val updateRoute: UpdateRoute = { from, to ->
+        coroutineScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = NetworkRouteRepo.instance.getRoute(from, to)
+                route = result as MutableList<LatLng>
+            }
+        }
+    }
+    MapScreen(route, updateRoute)
 }
 
-
 @Composable
-fun MapScreen(routes: List<LatLng>) {
+fun MapScreen(routes: List<LatLng>, updateRoute: UpdateRoute) {
     val locationName = remember {
         mutableStateOf("")
     }
@@ -68,9 +83,14 @@ fun MapScreen(routes: List<LatLng>) {
                 pickedPosition =
                     coordinatesByName(locationName.value, context)
                 cameraPositionState.position = CameraPosition.fromLatLngZoom(pickedPosition, 11f)
+                updateRoute(currentLocation.latLng(), pickedPosition)
             })
         }
     }
+}
+
+fun Location.latLng(): LatLng {
+    return LatLng(this.latitude, this.longitude)
 }
 
 fun coordinatesByName(locationName: String, context: Context): LatLng {
