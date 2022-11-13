@@ -11,7 +11,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -24,16 +23,22 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 
-val SECOND_IN_MILI: Long = 1000
+const val SECOND_IN_MILLISECOND: Long = 1000
 
 @Composable
 fun MapPage() {
+    MapScreen(listOf())
+}
+
+
+@Composable
+fun MapScreen(routes: List<LatLng>) {
     val locationName = remember {
         mutableStateOf("")
     }
     var currentLocation by remember { mutableStateOf(Location(null)) }
     val context = LocalContext.current
-    MonitorLocation(context) {
+    monitorLocation(context) {
         currentLocation = it
     }
     var pickedPosition by remember {
@@ -52,7 +57,7 @@ fun MapPage() {
                 properties = MapProperties(isMyLocationEnabled = true),
                 modifier = Modifier.height(600.dp)
             ) {
-                
+                Polyline(points = routes)
                 Marker(
                     state = MarkerState(position = pickedPosition),
                     title = locationName.value
@@ -61,14 +66,14 @@ fun MapPage() {
             FindLocation(setLocation = {
                 locationName.value = it;
                 pickedPosition =
-                    CoordinatesByName(locationName.value, context)
+                    coordinatesByName(locationName.value, context)
                 cameraPositionState.position = CameraPosition.fromLatLngZoom(pickedPosition, 11f)
             })
         }
     }
 }
 
-fun CoordinatesByName(locationName: String, context: Context): LatLng {
+fun coordinatesByName(locationName: String, context: Context): LatLng {
     try {
         Geocoder(context).getFromLocationName(locationName, 1).let {
             return LatLng(it?.get(0)?.latitude ?: 0.0, it?.get(0)?.longitude ?: 0.0)
@@ -79,7 +84,7 @@ fun CoordinatesByName(locationName: String, context: Context): LatLng {
     return LatLng(0.0, 0.0)
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FindLocation(setLocation: (v: String) -> Unit) {
     val place = remember {
@@ -113,9 +118,7 @@ private fun WithLocation(Child: @Composable () -> Unit) {
         Child()
     } else {
         Column {
-            val textToShow =
-                "Location permission required for this feature to be available. Please grant the Manifest.permission"
-            Text(textToShow)
+            Text("Location permission required for this feature to be available. Please grant the Manifest.permission")
             Button(onClick = { locationPermissionState.launchMultiplePermissionRequest() }) {
                 Text("Request permission")
             }
@@ -123,10 +126,10 @@ private fun WithLocation(Child: @Composable () -> Unit) {
     }
 }
 
-fun MonitorLocation(context: Context, callback: (l: Location) -> Unit) {
+fun monitorLocation(context: Context, callback: (l: Location) -> Unit) {
     LocationServices.getFusedLocationProviderClient(context)
         .requestLocationUpdates(
-            LocationRequest.Builder(SECOND_IN_MILI).build(),
+            LocationRequest.Builder(SECOND_IN_MILLISECOND).build(),
             callback,
             Looper.getMainLooper()
         )
