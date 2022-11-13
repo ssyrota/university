@@ -6,7 +6,6 @@ import android.location.Location
 import android.os.Looper
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -16,8 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.example.project_2.data.NetworkRouteRepo
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
@@ -125,24 +122,15 @@ fun FindLocation(setLocation: (v: String) -> Unit) {
     )
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun WithLocation(Child: @Composable () -> Unit) {
-    val locationPermissionState = rememberMultiplePermissionsState(
+    WithPermissions(
         listOf(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.ACCESS_FINE_LOCATION
         )
-    )
-    if (locationPermissionState.allPermissionsGranted) {
+    ) {
         Child()
-    } else {
-        Column {
-            Text("Location permission required for this feature to be available. Please grant the Manifest.permission")
-            Button(onClick = { locationPermissionState.launchMultiplePermissionRequest() }) {
-                Text("Request permission")
-            }
-        }
     }
 }
 

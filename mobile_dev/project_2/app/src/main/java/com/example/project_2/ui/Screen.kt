@@ -16,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 
 enum class Screen(val title: String) {
     Main(title = "Compose examples"),
-    Contacts(title = "Contacts ends with"),
+    Contacts(title = "Contacts ends with 7"),
     Sqlite(title = "Sqlite usage"),
     Maps(title = "Maps with routes")
 }
