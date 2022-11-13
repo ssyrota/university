@@ -46,12 +46,15 @@ fun ComposeExamplesApp() {
                 MainPage(
                     MainPageProps(
                         mapsClick = { navController.navigate(Screen.Maps.name) },
-                        contactsClick = {/*TODO*/ },
+                        contactsClick = { navController.navigate(Screen.Contacts.name) },
                         sqliteClick = {/*TODO*/ })
                 )
             }
             composable(Screen.Maps.name) {
                 MapPage()
+            }
+            composable(Screen.Contacts.name) {
+                ContactsEndWith()
             }
         }
 
