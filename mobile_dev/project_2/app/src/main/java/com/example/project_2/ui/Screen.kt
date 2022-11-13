@@ -3,6 +3,7 @@ package com.example.project_2.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +19,8 @@ enum class Screen(val title: String) {
     Main(title = "Compose examples"),
     Contacts(title = "Contacts ends with 7"),
     Sqlite(title = "Sqlite usage"),
-    Maps(title = "Maps with routes")
+    Maps(title = "Maps with routes"),
+    Author(title = "Author"),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +35,9 @@ fun ComposeExamplesApp() {
         TopBar(
             title = currentScreen.title,
             canBack = currentScreen != Screen.Main,
-            backClick = { navController.navigateUp() }
+            backClick = { navController.navigateUp() },
+            canAuthor = currentScreen != Screen.Author,
+            authorClick = { navController.navigate(Screen.Author.name) },
         )
     }
     ) { innerPadding ->
@@ -42,6 +46,9 @@ fun ComposeExamplesApp() {
             startDestination = Screen.Main.name,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.Author.name) {
+                AuthorPage()
+            }
             composable(Screen.Main.name) {
                 MainPage(
                     MainPageProps(
@@ -69,6 +76,8 @@ fun TopBar(
     title: String,
     canBack: Boolean,
     backClick: () -> Unit,
+    canAuthor: Boolean = true,
+    authorClick: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -90,6 +99,16 @@ fun TopBar(
                 ) {
                     Icon(Icons.Default.ArrowBack, "back")
                 }
+            }
+        }, actions = {
+            if (canAuthor) {
+                IconButton(
+                    onClick = authorClick,
+                ) {
+                    Icon(Icons.Default.Info, "info")
+                }
+            } else {
+                Spacer(modifier = Modifier.padding(25.dp))
             }
         })
 }

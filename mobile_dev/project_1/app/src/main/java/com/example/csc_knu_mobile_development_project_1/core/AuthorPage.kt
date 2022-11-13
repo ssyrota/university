@@ -103,8 +103,6 @@ fun AuthorContacts() {
 	}
 }
 
-
-// TODO: add back button and header
 @Composable
 fun AuthorPage() {
 	Column() {
