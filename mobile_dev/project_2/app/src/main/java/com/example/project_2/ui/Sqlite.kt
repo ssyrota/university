@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.project_2.data.MainViewModel
 import kotlinx.coroutines.launch
@@ -19,7 +20,6 @@ fun SqliteExample(viewModel: MainViewModel) {
     var engineVolumeAvg by remember { mutableStateOf(viewModel.engineVolumeAvg.value) }
     var redUniversal by remember { mutableStateOf(viewModel.redUniversalResult.value) }
     coroutineScope.launch {
-//        loadStub(viewModel)
         viewModel.updateEngineAvg()
         viewModel.updateRedUniversal()
         engineVolumeAvg = viewModel.engineVolumeAvg.value ?: 0.0
@@ -27,7 +27,11 @@ fun SqliteExample(viewModel: MainViewModel) {
     }
 
     Column {
-        Text(text = "Engine loud average: ${engineVolumeAvg}")
+        Text(
+            text = "Engine loud average: ${"%.2f".format(engineVolumeAvg)}",
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
         LazyColumn(
             Modifier
                 .fillMaxSize()
@@ -71,12 +75,3 @@ fun RowScope.TableCell(
             .padding(8.dp)
     )
 }
-//
-//fun loadStub(viewModel: MainViewModel) {
-//    viewModel.insertCar(Vehicle("toyota", "sedan", "blue", 1.0, 1992))
-//    viewModel.insertCar(Vehicle("toyota", "sedan", "blue", 1.0, 1992))
-//    viewModel.insertCar(Vehicle("toyota", "sedan", "blue", 1.0, 1992))
-//    viewModel.insertCar(Vehicle("lexus", "universal", "red", 12.0, 2000))
-//    viewModel.insertCar(Vehicle("lexus", "universal", "blue", 1.0, 2000))
-//    viewModel.insertCar(Vehicle("lexus", "sedan", "red", 12.0, 2000))
-//}

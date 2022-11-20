@@ -15,6 +15,13 @@ class MainViewModel(application: Application) : ViewModel() {
         repository = VehicleRepo(vehicleDao)
         redUniversalResult = repository.redUniversal
         engineVolumeAvg = repository.engineAvg
+
+        this.insertCar(Vehicle("toyota", "sedan", "blue", 1.0, 1992))
+        this.insertCar(Vehicle("toyota", "sedan", "blue", 1.0, 1992))
+        this.insertCar(Vehicle("toyota", "sedan", "blue", 1.0, 1992))
+        this.insertCar(Vehicle("lexus", "universal", "red", 12.0, 2000))
+        this.insertCar(Vehicle("lexus", "universal", "blue", 1.0, 2000))
+        this.insertCar(Vehicle("lexus", "sedan", "red", 12.0, 2000))
     }
 
 

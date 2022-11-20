@@ -79,8 +79,8 @@ fun MapScreen(routes: List<LatLng>, updateRoute: UpdateRoute) {
                 locationName.value = it;
                 pickedPosition =
                     coordinatesByName(locationName.value, context)
-                cameraPositionState.position = CameraPosition.fromLatLngZoom(pickedPosition, 11f)
                 updateRoute(currentLocation.latLng(), pickedPosition)
+                cameraPositionState.position = CameraPosition.fromLatLngZoom(pickedPosition, 11f)
             })
         }
     }
@@ -118,7 +118,7 @@ fun FindLocation(setLocation: (v: String) -> Unit) {
             .padding(horizontal = 20.dp)
             .height(60.dp),
         singleLine = true,
-        keyboardActions = KeyboardActions { setLocation(place.value); focusManager.clearFocus() },
+        keyboardActions = KeyboardActions { focusManager.clearFocus(); setLocation(place.value); },
     )
 }
 

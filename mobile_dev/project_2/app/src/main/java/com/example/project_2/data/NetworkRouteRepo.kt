@@ -1,5 +1,6 @@
 package com.example.project_2.data
 
+import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import decodePolyline
 
@@ -12,9 +13,18 @@ class NetworkRouteRepository(
     private val mapsApiService: ApiServices
 ) : RouteRepository {
     override suspend fun getRoute(from: LatLng, to: LatLng): List<LatLng> {
-        val polyline = mapsApiService.getDirection(from.toMapsString(), to.toMapsString()).execute()
-            .body()?.routes?.get(0)?.overviewPolyline?.points ?: ""
-        return decodePolyline(polyline).map { LatLng(it.latitude, it.longitude) }
+        try {
+            val routes =
+                mapsApiService.getDirection(from.toMapsString(), to.toMapsString()).execute()
+                    .body()?.routes ?: listOf()
+            Log.d("ERR", routes.joinToString { e -> e.toString() })
+            val polyline =
+                if (routes.size > 0) routes.get(0)?.overviewPolyline?.points ?: "" else ""
+            return decodePolyline(polyline).map { LatLng(it.latitude, it.longitude) }
+        } catch (e: Exception) {
+            Log.e("ERR", e.toString())
+            return listOf()
+        }
     }
 }
 
