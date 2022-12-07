@@ -20,7 +20,8 @@ func main() {
 	}
 	N := uint(10)
 	K := uint(10)
-	P := 0.01 /* 1% */
+	// Lower - left, higher - right
+	P := 0.9 /* 1% */
 
 	if mod == "right" {
 		safeSimulator := NewCrystal[CrystalSafe](N, K, P)
@@ -95,12 +96,12 @@ func (cs *CrystalSafe) BrownianMotionSimulate(timeout time.Duration) {
 			defer wg.Done()
 		swapping:
 			for {
+				// if !shouldMove(cs.p) {
+				// 	continue swapping
+				// }
+				moveSide := left
 				if !shouldMove(cs.p) {
-					continue swapping
-				}
-				moveSide := right
-				if rightLeft() {
-					moveSide = left
+					moveSide = right
 				}
 				if curIdx == defaultAtomIndex {
 					moveSide = right
