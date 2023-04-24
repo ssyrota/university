@@ -174,7 +174,9 @@ GI(Q4 = 0)                  | GI(Q4 = 1)                  | AVG GI              
 --------------------------- | --------------------------- | ----------------------- | ---------
 1 - (3/6)^2 - (3/6)^2 = 0.5 | 1 - (2/4)^2 - (2/4)^2 = 0.5 | (6/10 + 4/10)*0.5 = 0.5 | 0
 
-By maximizing the Gini Gain, we choose first node - Q3
+By maximizing the Gini Gain, we've get the first node - Q3 ![](./1.png)
+
+Let's recalculate Gini Gain for Q3 = 0 and Q3 = 1 for other features
 
 # KNN
 
