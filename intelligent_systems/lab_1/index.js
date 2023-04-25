@@ -12,8 +12,8 @@ const aStar = ({ r, c }, baseCell) => {
   }
   baseCell.cost = 0;
   while (openList.length > 0) {
-    openList.sort((x, y) => y.f - x.f);
-    currentCell = openList.pop();
+    openList.sort((x, y) => x.f - y.f);
+    currentCell = openList.shift();
 
     if (currentCell == goalCell) {
       break;
@@ -36,12 +36,11 @@ const aStar = ({ r, c }, baseCell) => {
       n.f = n.cost + n.heuristic;
     }
   }
-
   while (currentCell) {
     path.unshift(currentCell);
     currentCell = currentCell.parent;
   }
-  return path;
+  return { path, closedList };
 };
 const greedySearch = ({ r, c }, baseCell) => {
   const openList = [baseCell];
@@ -82,7 +81,7 @@ const greedySearch = ({ r, c }, baseCell) => {
     path.unshift(currentCell);
     currentCell = currentCell.parent;
   }
-  return path;
+  return { path, closedList };
 };
 
 function Enemy(r, c) {
@@ -199,7 +198,17 @@ function removeWalls(a, b) {
   }
 }
 
-function showPath(path) {
+function showPath(path, closedList) {
+  // strokeWeight(size / 8);
+  // stroke(theme.path);
+  // beginShape();
+  // noFill();
+  // for (const cell of closedList) {
+  //   vertex(cell.c * size + size / 2, cell.r * size + size / 2);
+  // }
+  // endShape();
+  // noLoop();
+
   strokeWeight(size / 8);
   stroke(theme.path);
   beginShape();
@@ -422,9 +431,13 @@ function draw() {
   greedyEnemy.step();
   greedyEnemy.show1();
 
+  let closedList1 = [];
+  let closedList2 = [];
   if (frameCount % updateFrequency == 0) {
-    path = aStarEnemy.findPath(goal.r, goal.c, search);
-    path1 = greedyEnemy.findPath(goal.r, goal.c, geeedy);
+    path = aStarEnemy.findPath(goal.r, goal.c, search).path;
+    path1 = greedyEnemy.findPath(goal.r, goal.c, geeedy).path;
+    closedList1 = aStarEnemy.findPath(goal.r, goal.c, search).closedList;
+    closedList2 = greedyEnemy.findPath(goal.r, goal.c, geeedy).closedList;
 
     let newCell = path[1];
     let newCell1 = path1[1];
@@ -448,11 +461,14 @@ function draw() {
   }
   frameCount = (frameCount + 1) % framerate;
 
-  showPath(path);
-  showPath(path1);
+  showPath(path, closedList1);
+  showPath(path1, []);
 }
 
 keyPressed = function () {
+  if (keyCode === ENTER) {
+    loop();
+  }
   if (keyCode === ESCAPE) {
     noLoop();
   } else {
