@@ -1,3 +1,45 @@
+const greedySearch = ({ r, c }, baseCell) => {
+  const openList = [baseCell];
+  const closedList = [];
+  const goalCell = grid[getIndex(r, c)];
+  const path = [];
+  let currentCell;
+
+  for (const i in grid) {
+    grid[i].heuristic = manhattanDistance(grid[i], goalCell);
+    grid[i].parent = undefined;
+    grid[i].cost = 0;
+  }
+  while (openList.length > 0) {
+    openList.sort((x, y) => x.heuristic - y.heuristic);
+    currentCell = openList.shift();
+
+    if (currentCell == goalCell) {
+      break;
+    }
+
+    closedList.push(currentCell);
+    for (const n of currentCell.neighbors) {
+      if (closedList.includes(n)) continue;
+
+      const recalculatedCellCost = currentCell.cost + 1;
+      if (!openList.includes(n)) {
+        openList.push(n);
+      } else if (recalculatedCellCost >= n.cost) {
+        continue;
+      }
+      n.parent = currentCell;
+      n.cost = recalculatedCellCost;
+      n.heuristic = manhattanDistance(n, goalCell);
+    }
+  }
+  while (currentCell) {
+    path.unshift(currentCell);
+    currentCell = currentCell.parent;
+  }
+  return path;
+};
+
 function Enemy(r, c) {
   this.r = r;
   this.c = c;
@@ -23,18 +65,15 @@ function Enemy(r, c) {
   };
 
   this.step = function () {
-    if (this.dir) {
-      this.x = this.x + (this.dir.x * size) / updateFrequency;
-      this.y = this.y + (this.dir.y * size) / updateFrequency;
-    }
+    this.x = this.x + (this.dir.x * size) / updateFrequency;
+    this.y = this.y + (this.dir.y * size) / updateFrequency;
   };
 
   this.findPath = function (r, c, algorithm) {
-    answer = this[algorithm](r, c);
-    return answer;
+    return this[algorithm](r, c);
   };
 
-  this.AStar = function (r, c) {
+  this.AStar = (r, c) => {
     let openList = [this.cell];
     let closedList = [];
     let goalCell = grid[getIndex(r, c)];
@@ -78,62 +117,22 @@ function Enemy(r, c) {
       path.unshift(currentCell);
       currentCell = currentCell.parent;
     }
-    exploredCells = closedList;
     return path;
   };
 
-  this.greedySearch = function (r, c) {
-    let openList = [this.cell];
-    let closedList = [];
-    let goalCell = grid[getIndex(r, c)];
-    let currentCell;
-    let path = [];
-    let visited = [];
-    for (const i in grid) {
-      visited.push(false);
-      grid[i].heuristic = manhattanDistance(grid[i], goalCell);
-      grid[i].parent = undefined;
-    }
-    while (openList.length > 0) {
-      openList.sort((x, y) => x.heuristic - y.heuristic);
-      currentCell = openList.shift();
-
-      if (currentCell == goalCell) {
-        break;
-      }
-
-      closedList.push(currentCell);
-      for (const n of currentCell.neighbors) {
-        if (closedList.includes(n)) continue;
-
-        let newCost = currentCell.cost + 1;
-
-        if (!openList.includes(n)) {
-          openList.push(n);
-        } else if (newCost >= n.cost) {
-          continue;
-        }
-        n.parent = currentCell;
-        n.cost = newCost;
-        n.heuristic = manhattanDistance(n, goalCell);
-      }
-    }
-    while (currentCell) {
-      path.unshift(currentCell);
-      currentCell = currentCell.parent;
-    }
-    exploredCells = closedList;
-    return path;
+  this.greedySearch = (r, c) => {
+    return greedySearch({ r, c }, this.cell);
   };
 
-  const showEnemy = (enemyTheme) => {
-    fill(enemyTheme);
+  const showEnemy = (aStarEnemyTheme, enemyName) => {
+    fill(aStarEnemyTheme);
+    textSize(32);
+    text(enemyName, this.x, this.y);
     noStroke();
     ellipse(this.x + size / 2, this.y + size / 2, size * 0.5);
   };
-  this.show = () => showEnemy(theme.enemy);
-  this.show1 = () => showEnemy(theme.enemy1);
-  this.show2 = () => showEnemy(theme.enemy2);
+  this.show = () => showEnemy(theme.aStarEnemy, "AStar");
+  this.show1 = () => showEnemy(theme.greedyEnemy, "Greedy");
 }
 
 function showCoins() {
@@ -157,25 +156,8 @@ function randomMap() {
   }
 }
 
-function maze(instant) {
-  if (instant) {
-    while (true) {
-      current.visited = true;
-      let next = current.checkNeighbors();
-      if (next) {
-        stack.push(current);
-        removeWalls(current, next);
-        current = next;
-      } else if (stack.length > 0) {
-        current = stack.pop();
-      } else {
-        for (const cell of grid) {
-          cell.visited = false;
-        }
-        break;
-      }
-    }
-  } else {
+function maze() {
+  while (true) {
     current.visited = true;
     let next = current.checkNeighbors();
     if (next) {
@@ -188,6 +170,7 @@ function maze(instant) {
       for (const cell of grid) {
         cell.visited = false;
       }
+      break;
     }
   }
 }
@@ -367,7 +350,7 @@ function Player() {
   };
 }
 
-let cols, rows, path1, path2, path, scoreStr, current, goal, theme, player;
+let cols, rows, path1, path, scoreStr, current, goal, theme, player;
 let size = 30;
 let grid = [];
 let stack = [];
@@ -378,7 +361,6 @@ let framerate = 60;
 let frameCount = 0;
 let updateFrequency = 15;
 let exploredCells = [];
-let mazeMap = false;
 
 let search = "AStar";
 let geeedy = "greedySearch";
@@ -394,9 +376,8 @@ function setup() {
     goal: color(255, 255, 0),
     player: color(255, 255, 0),
     path: color(255, 184, 222, 120),
-    enemy: color(255, 184, 222),
-    enemy1: color(255, 14, 22),
-    enemy2: color(200, 100, 50),
+    aStarEnemy: color(255, 184, 222),
+    greedyEnemy: color(255, 14, 22),
   };
 
   for (let r = 0; r < rows; r++) {
@@ -408,14 +389,11 @@ function setup() {
 
   current = grid[0];
   goal = grid[grid.length - 1];
-  maze(true);
-  if (!mazeMap) {
-    randomMap(true);
-  }
+  maze();
+  randomMap(true);
 
-  enemy = new Enemy(0, 0);
-  enemy1 = new Enemy(10, 0);
-  enemy2 = new Enemy(0, 10);
+  aStarEnemy = new Enemy(0, 0);
+  greedyEnemy = new Enemy(0, 0);
 
   player = new Player();
   scoreStr = createP("Score: " + score);
@@ -437,26 +415,21 @@ function draw() {
     cell.show(size / 4 - 2, theme.background);
   }
 
-  enemy.step();
-  enemy.show();
-  enemy1.step();
-  enemy1.show1();
-  enemy2.step();
-  enemy2.show2();
+  aStarEnemy.step();
+  aStarEnemy.show();
+  greedyEnemy.step();
+  greedyEnemy.show1();
 
   if (frameCount % updateFrequency == 0) {
-    path = enemy.findPath(goal.r, goal.c, search);
-    path1 = enemy1.findPath(goal.r, goal.c, geeedy);
-    path2 = enemy2.findPath(goal.r, goal.c, geeedy);
+    path = aStarEnemy.findPath(goal.r, goal.c, search);
+    path1 = greedyEnemy.findPath(goal.r, goal.c, geeedy);
 
     let newCell = path[1];
     let newCell1 = path1[1];
-    let newCell2 = path2[1];
 
-    if (newCell && newCell1 && newCell2) {
-      enemy.update(newCell);
-      enemy1.update(newCell1);
-      enemy2.update(newCell2);
+    if (newCell && newCell1) {
+      aStarEnemy.update(newCell);
+      greedyEnemy.update(newCell1);
     } else {
       alert("Game over, your score is: " + score + "\nTry again!");
       window.location.reload();
@@ -475,7 +448,6 @@ function draw() {
 
   showPath(path);
   showPath(path1);
-  showPath(path2);
 }
 
 keyPressed = function () {
