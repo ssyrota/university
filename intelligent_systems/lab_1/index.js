@@ -1,3 +1,48 @@
+const aStar = ({ r, c }, baseCell) => {
+  const openList = [baseCell];
+  const closedList = [];
+  const goalCell = grid[getIndex(r, c)];
+  let currentCell;
+  const path = [];
+
+  for (const i in grid) {
+    grid[i].cost = Infinity;
+    grid[i].heuristic = 0;
+    grid[i].parent = undefined;
+  }
+  baseCell.cost = 0;
+  while (openList.length > 0) {
+    openList.sort((x, y) => y.f - x.f);
+    currentCell = openList.pop();
+
+    if (currentCell == goalCell) {
+      break;
+    }
+
+    closedList.push(currentCell);
+    for (const n of currentCell.neighbors) {
+      if (closedList.includes(n)) continue;
+
+      n.heuristic = manhattanDistance(n, goalCell);
+      const recalculatedCellCost = currentCell.cost + 1;
+
+      if (!openList.includes(n)) {
+        openList.push(n);
+      } else if (recalculatedCellCost >= n.cost) {
+        continue;
+      }
+      n.parent = currentCell;
+      n.cost = recalculatedCellCost;
+      n.f = n.cost + n.heuristic;
+    }
+  }
+
+  while (currentCell) {
+    path.unshift(currentCell);
+    currentCell = currentCell.parent;
+  }
+  return path;
+};
 const greedySearch = ({ r, c }, baseCell) => {
   const openList = [baseCell];
   const closedList = [];
@@ -74,50 +119,7 @@ function Enemy(r, c) {
   };
 
   this.AStar = (r, c) => {
-    let openList = [this.cell];
-    let closedList = [];
-    let goalCell = grid[getIndex(r, c)];
-    let currentCell;
-    let path = [];
-    let visited = [];
-    for (const i in grid) {
-      visited.push(false);
-      grid[i].cost = Infinity;
-      grid[i].heuristic = Infinity;
-      grid[i].parent = undefined;
-    }
-    this.cell.cost = 0;
-    while (openList.length > 0) {
-      openList.sort((x, y) => y.f - x.f);
-      currentCell = openList.pop();
-
-      if (currentCell == goalCell) {
-        break;
-      }
-
-      closedList.push(currentCell);
-      for (const n of currentCell.neighbors) {
-        if (closedList.includes(n)) continue;
-
-        n.heuristic = manhattanDistance(n, goalCell);
-        let newCost = currentCell.cost + 1;
-
-        if (!openList.includes(n)) {
-          openList.push(n);
-        } else if (newCost >= n.cost) {
-          continue;
-        }
-        n.parent = currentCell;
-        n.cost = newCost;
-        n.f = n.cost + n.heuristic;
-      }
-    }
-
-    while (currentCell) {
-      path.unshift(currentCell);
-      currentCell = currentCell.parent;
-    }
-    return path;
+    return aStar({ r, c }, this.cell);
   };
 
   this.greedySearch = (r, c) => {
