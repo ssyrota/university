@@ -205,7 +205,11 @@ Q3 | Q4 | S(0) | S(1) | GI
 
 **`AVG GI(Q3=0 && Q4)= 3/5*0.44 = 0.264`**
 
-Stop splitting count in Q4, add the new node (Q3=0 && Q4) ![](./3.png)
+Stop splitting count in Q4, add the new node (Q3=0 && Q4)
+
+![](./3.png)
+
+**S(10) = 1**
 
 # KNN
 
