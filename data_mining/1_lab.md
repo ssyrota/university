@@ -128,7 +128,7 @@ Lets use CART algorithm and Gini impurity to split the dataset into a decision t
 
 Stopping criteria: to utilize a minimum amount of the training data allocated to every leaf node. If the count is smaller than the specified threshold, the split is rejected and also the node is considered the last leaf node.
 
-**Stop splitting count: 2.**
+**Stop splitting count: 3.**
 
 **Original Gini impurity = 0.5**
 
@@ -191,6 +191,22 @@ Let's stop splitting Q1=1 add the new node (Q3=1 && Q1)
 
 ![](./2.png)
 
+Q2 | Q3 | S(0) | S(1) | GI
+-- | -- | ---- | ---- | ----------------------------
+1  | 0  | 2    | 0    | 0
+0  | 0  | 2    | 1    | 1 - (1/3)^2 - (2/3)^2 = 0.44
+
+**`AVG GI(Q3=0 && Q2)= 3/5*0.44 = 0.264`**
+
+Q3 | Q4 | S(0) | S(1) | GI
+-- | -- | ---- | ---- | ----------------------------
+0  | 0  | 2    | 1    | 1 - (1/3)^2 - (2/3)^2 = 0.44
+0  | 1  | 2    | 0    | 0
+
+**`AVG GI(Q3=0 && Q4)= 3/5*0.44 = 0.264`**
+
+Stop splitting count in Q4, add the new node (Q3=0 && Q4) ![](./3.png)
+
 # KNN
 
 Q1 | Q2 | Q3 | Q4 | S
@@ -224,10 +240,12 @@ Plant UML decision tree:
 ```
 @startuml
 (*) --> "Q3"
- Q3 -->[1] "?"
- Q3 -->[0] "Q1"
+ Q3 -->[0] "Q4"
+ Q3 -->[1] "Q1"
  Q1 -->[0] "1"
  Q1 -->[1] "0"
+ Q4 -->[0] " 1 "
+ Q4 -->[1] " 0 "
 
 @enduml
 ```
