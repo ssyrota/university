@@ -4,7 +4,7 @@
     "moduleResolution": "nodenext",
   },
   "exclude": ["node_modules"],
-  "include": ["index.mts"],
+  "include": ["*.mts"],
   "typeRoots": [ "./node_modules/@types/"],
   "extends":[ "@tsconfig/recommended/tsconfig.json", "@tsconfig/esm/tsconfig.json"]
 }
