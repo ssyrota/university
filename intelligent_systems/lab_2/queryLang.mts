@@ -19,7 +19,7 @@ export class Predicate {
     relation: string;
     terms: Term[];
   };
-  constructor(private readonly raw: string) {
+  constructor(raw: string) {
     this.parsed = {
       relation: raw.split(" ")[0],
       terms: raw
@@ -42,13 +42,11 @@ export class Predicate {
   }
 
   public bindSubstitution(substitution: Substitution): Predicate {
-    const predicate = this.mapTerms((t) => {
+    return this.mapTerms((t) => {
       return t instanceof Variable && t.parsed in substitution.data
         ? substitution.data[t.parsed]
         : t;
     });
-    console.log(predicate, "here");
-    return predicate;
   }
 }
 

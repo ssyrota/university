@@ -12,4 +12,4 @@ const knowledgeBase = new KnowledgeBase(inferenceEngine);
   "Child ?child ?parent & Child ?parent ?grandparent => Grandparent ?child ?grandparent",
 ].map((e) => knowledgeBase.addRule(e));
 
-console.log(knowledgeBase.query("Child ?child ?parent"));
+console.log(knowledgeBase.query("Child ?child grandpa"));
