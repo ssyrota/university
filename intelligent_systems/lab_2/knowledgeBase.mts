@@ -5,13 +5,15 @@ export class KnowledgeBase {
   rules = new Set<Rule>();
   constructor(private readonly inferenceEngine: InferenceEngine) {}
   query(q: string) {
-    return this.inferenceEngine
-      .performQuery(this.facts, new Predicate(q))
-      .values();
+    const predicate = new Predicate(q);
+    const res = this.inferenceEngine.performQuery(this.facts, predicate);
+    return [...res].map((substitution) => {
+      return predicate.bindSubstitution(substitution);
+    });
   }
   addFact(f: string) {
     for (const fact of this.facts) {
-      if (fact.t === f) {
+      if (fact.toString() === f) {
         return;
       }
     }

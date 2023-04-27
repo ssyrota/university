@@ -1,7 +1,7 @@
 export class Value {
   parsed: string;
-  constructor(private readonly t: string) {
-    this.parsed = t;
+  constructor(readonly raw: string) {
+    this.parsed = raw;
   }
 }
 export class Variable {
@@ -9,8 +9,8 @@ export class Variable {
     return t.startsWith("?");
   }
   parsed: string;
-  constructor(readonly t: string) {
-    this.parsed = t.replace("?", "");
+  constructor(readonly raw: string) {
+    this.parsed = raw.replace("?", "");
   }
 }
 export type Term = Variable | Value;
@@ -19,36 +19,36 @@ export class Predicate {
     relation: string;
     terms: Term[];
   };
-  constructor(readonly t: string) {
+  constructor(private readonly raw: string) {
     this.parsed = {
-      relation: t.split(" ")[0],
-      terms: t
+      relation: raw.split(" ")[0],
+      terms: raw
         .split(" ")
         .slice(1)
         .map((e) => (Variable.is(e) ? new Variable(e) : new Value(e))),
     };
   }
 
-  private toString() {
+  toString() {
     return (
-      this.parsed.relation +
-      " " +
-      this.parsed.terms.map((e) => e.parsed).join(" ")
+      this.parsed.relation + " " + this.parsed.terms.map((e) => e.raw).join(" ")
     );
   }
 
   private mapTerms(f: (t: Term) => Term): Predicate {
     const predicate = new Predicate(this.toString());
     predicate.parsed.terms = predicate.parsed.terms.map((t) => f(t));
-    return predicate;
+    return new Predicate(predicate.toString());
   }
 
-  public bindAssignment(assignments: Substitution): Predicate {
-    return this.mapTerms((t) => {
-      return t instanceof Variable && t.parsed in assignments.data
-        ? assignments.data[t.parsed]
+  public bindSubstitution(substitution: Substitution): Predicate {
+    const predicate = this.mapTerms((t) => {
+      return t instanceof Variable && t.parsed in substitution.data
+        ? substitution.data[t.parsed]
         : t;
     });
+    console.log(predicate, "here");
+    return predicate;
   }
 }
 
