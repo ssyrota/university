@@ -1,0 +1,24 @@
+{
+  "name": "lab-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.mjs",
+    "build": "tsc -P ./tsconfig.json",
+    "dev": "npx nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "@tsconfig/esm": "^1.0.3",
+    "@tsconfig/node-lts": "^18.12.1",
+    "@tsconfig/node18": "^2.0.0",
+    "@tsconfig/recommended": "^1.0.2"
+  }
+}
