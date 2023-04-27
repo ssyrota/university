@@ -12,27 +12,39 @@ export class KnowledgeBase {
     });
   }
   addFact(f: string) {
-    for (const fact of this.facts) {
-      if (fact.toString() === f) {
-        return;
-      }
+    if ([...this.facts].some((e) => e.toString() === f)) {
+      return;
     }
     const fact = new Predicate(f);
     this.facts.add(fact);
+    // TODO: implement forward chaining when adding fact
   }
   addRule(t: string) {
-    for (const rule of this.rules) {
-      if (rule.text === t) {
-        return;
-      }
+    if ([...this.rules].some((e) => e.toString() === t)) {
+      return;
     }
-    console.log(t);
     const rule = new Rule(t);
     this.rules = this.rules.add(rule);
-    this.facts.forEach((fact) => {
-      // 1 match rule and return variables
-      // 2 map predicate to fact and save it
-    });
+    const matches = rule.predicates.reduce(
+      (substitutions, predicate) => {
+        return substitutions.flatMap((s) =>
+          [
+            ...this.inferenceEngine.performQuery(
+              this.facts,
+              predicate.bindSubstitution(s)
+            ),
+          ].map(
+            (e) =>
+              new Substitution({
+                ...s.data,
+                ...e.data,
+              })
+          )
+        );
+      },
+      [new Substitution({})] as Substitution[]
+    );
+    matches.map((e) => this.addFact(rule.res.bindSubstitution(e).toString()));
   }
 }
 

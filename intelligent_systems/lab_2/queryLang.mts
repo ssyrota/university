@@ -57,7 +57,7 @@ export class Substitution {
 export class Rule {
   predicates: Predicate[];
   res: Predicate;
-  constructor(readonly text: string) {
+  constructor(text: string) {
     this.predicates = text
       .split("=>")[0]
       .split("&")
@@ -65,5 +65,12 @@ export class Rule {
       .map((e) => new Predicate(e));
 
     this.res = new Predicate(text.split("=>")[1].trim());
+  }
+  toString() {
+    return (
+      this.predicates.map((e) => e.toString()).join(" & ") +
+      " => " +
+      this.res.toString()
+    );
   }
 }

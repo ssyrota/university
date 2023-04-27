@@ -9,7 +9,16 @@ const knowledgeBase = new KnowledgeBase(inferenceEngine);
 [
   "Child ?child ?parent => Parent ?parent ?child",
   "Parent ?parent ?child => Child ?child ?parent",
-  "Child ?child ?parent & Child ?parent ?grandparent => Grandparent ?child ?grandparent",
+  "Child ?child ?parent & Child ?parent ?grandparent => Grandparent ?grandparent ?child",
 ].map((e) => knowledgeBase.addRule(e));
 
-console.log(knowledgeBase.query("Child ?child grandpa"));
+console.table(
+  [
+    "Child ?child grandpa",
+    "Grandparent grandpa ?descendent",
+    "Parent ?parent ?child",
+    "Child son son",
+  ].reduce((acc, q) => {
+    return { ...acc, [q]: knowledgeBase.query(q).join(", ") };
+  }, {})
+);
