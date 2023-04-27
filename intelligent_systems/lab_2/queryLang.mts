@@ -28,20 +28,44 @@ export class Predicate {
         .map((e) => (Variable.is(e) ? new Variable(e) : new Value(e))),
     };
   }
+
+  private toString() {
+    return (
+      this.parsed.relation +
+      " " +
+      this.parsed.terms.map((e) => e.parsed).join(" ")
+    );
+  }
+
+  private mapTerms(f: (t: Term) => Term): Predicate {
+    const predicate = new Predicate(this.toString());
+    predicate.parsed.terms = predicate.parsed.terms.map((t) => f(t));
+    return predicate;
+  }
+
+  public bindAssignment(assignments: Substitution): Predicate {
+    return this.mapTerms((t) => {
+      return t instanceof Variable && t.parsed in assignments.data
+        ? assignments.data[t.parsed]
+        : t;
+    });
+  }
 }
+
+export class Substitution {
+  constructor(public readonly data: Record<string, Value>) {}
+}
+
 export class Rule {
-  parsed: {
-    l: Predicate[];
-    r: Predicate;
-  };
+  predicates: Predicate[];
+  res: Predicate;
   constructor(readonly text: string) {
-    this.parsed = {
-      l: text
-        .split("=>")[0]
-        .split("&")
-        .map((e) => e.trim())
-        .map((e) => new Predicate(e)),
-      r: new Predicate(text.split("=>")[1].trim()),
-    };
+    this.predicates = text
+      .split("=>")[0]
+      .split("&")
+      .map((e) => e.trim())
+      .map((e) => new Predicate(e));
+
+    this.res = new Predicate(text.split("=>")[1].trim());
   }
 }
