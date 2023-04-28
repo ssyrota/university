@@ -14,4 +14,20 @@ export class TimeTable {
     });
     return 1 / (conflicts + 1);
   }
+
+  print() {
+    console.table(
+      this.schedule.map((e) => {
+        return {
+          auditory: e.auditory.name,
+          science: e.science,
+          timing: e.timing.time,
+          lecturer: e.lecturer.name,
+          type: e.type,
+          group: e.group,
+          day: e.day.name,
+        };
+      })
+    );
+  }
 }

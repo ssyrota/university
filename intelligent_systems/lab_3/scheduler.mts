@@ -17,7 +17,7 @@ export class Scheduler {
     let terminationMatch: TimeTable[] = [];
 
     let i = 0;
-    while (i < 10e6) {
+    while (i < 10e5) {
       terminationMatch = basePopulation.filter((e) =>
         this.terminationF(e.calculateFitness())
       );
@@ -31,15 +31,12 @@ export class Scheduler {
         basePopulation
       ).slice(0, -2);
 
-      console.log(`generation step:${step}`);
-      console.log(fitnessSortedPopulation[0]);
+      if (step % 10000 === 0) {
+        console.log(`generation step:${step}`);
+        console.log(fitnessSortedPopulation[0].calculateFitness());
+      }
 
-      basePopulation = [
-        ...basePopulation.filter((_, i) =>
-          fitnessSortedPopulation.map((e) => e.baseIdx).includes(i)
-        ),
-        ...offspring,
-      ];
+      basePopulation = [...fitnessSortedPopulation, ...offspring];
       step += 1;
     }
 
@@ -48,16 +45,13 @@ export class Scheduler {
 
   private performSelection(timeTables: TimeTable[]): [TimeTable, TimeTable] {
     const topSortedIndividuals = this.makeSortedPopulation(timeTables);
-    return [
-      timeTables[topSortedIndividuals[0].baseIdx],
-      timeTables[topSortedIndividuals[1].baseIdx],
-    ];
+    return [topSortedIndividuals[0], topSortedIndividuals[1]];
   }
 
   private makeSortedPopulation(timeTables: TimeTable[]) {
-    return [
-      ...timeTables.map((e, i) => ({ rate: e.calculateFitness(), baseIdx: i })),
-    ].sort((a, b) => b.rate - a.rate);
+    return timeTables.sort(
+      (a, b) => b.calculateFitness() - a.calculateFitness()
+    );
   }
 
   private crossover(parents: [TimeTable, TimeTable]): Offspring {

@@ -12,4 +12,4 @@ const scheduler = new Scheduler(
   makeInitialPopulation
 );
 
-console.log(scheduler.composeSchedule());
+scheduler.composeSchedule()?.print();
