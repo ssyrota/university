@@ -11,12 +11,36 @@ const getRandomItem = <T extends any>(list: T[]): T => {
 
 const auditoriesRaw = [
   {
-    name: "102",
-    capacity: 150,
+    name: "235",
+    capacity: 45,
   },
   {
     name: "304",
     capacity: 30,
+  },
+  {
+    name: "306",
+    capacity: 120,
+  },
+  {
+    name: "705",
+    capacity: 30,
+  },
+  {
+    name: "1",
+    capacity: 120,
+  },
+  {
+    name: "232",
+    capacity: 45,
+  },
+  {
+    name: "212",
+    capacity: 25,
+  },
+  {
+    name: "317",
+    capacity: 45,
   },
 ];
 
@@ -243,5 +267,6 @@ const initializeLection = (e: {
     e.lecturer,
     e.type,
     e.group,
-    getRandomItem(days)
+    getRandomItem(days),
+    e.maxStudents
   );

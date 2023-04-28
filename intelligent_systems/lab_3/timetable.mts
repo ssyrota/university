@@ -6,6 +6,7 @@ export class TimeTable {
   calculateFitness(): number {
     let conflicts = 0;
     this.schedule.forEach((lesson) => {
+      conflicts += lesson.auditoryMismatch();
       conflicts += this.schedule.reduce(
         (acc, pretender) => acc + lesson.conflicts(pretender),
         0

@@ -11,8 +11,13 @@ export class Lecture {
     public readonly lecturer: Lecturer,
     public readonly type: "lecture" | "lab",
     public readonly group: string,
-    public readonly day: Day
+    public readonly day: Day,
+    public readonly maxStudents: number
   ) {}
+
+  auditoryMismatch(): number {
+    return this.maxStudents > this.auditory.capacity ? 1 : 0;
+  }
 
   conflicts(p: Lecture): number {
     if (!(p.day === this.day && p.timing === this.timing)) {
