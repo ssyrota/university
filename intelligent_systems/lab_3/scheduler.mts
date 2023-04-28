@@ -2,6 +2,7 @@ import { makeInitialPopulation } from "./initialPopulation.mjs";
 import { TimeTable } from "./timetable.mjs";
 
 const POPULATION_SIZE = 100;
+const MUTATION_CHANCE_PERCENTAGES = 0.1;
 export const selection = (timeTables: TimeTable[]): [TimeTable, TimeTable] => {
   const topIndividuals = [
     ...timeTables.map((e, i) => ({ rate: e.calculateFitness(), baseIdx: i })),
@@ -23,9 +24,25 @@ const crossover = (parents: [TimeTable, TimeTable]): Offspring => {
   });
   return [offspring1, offspring2];
 };
+const mutation = (t: TimeTable, chance: number): TimeTable => {
+  const scheduleMutatedFully = makeInitialPopulation(1)[0].schedule;
+  if (Math.random() > chance) {
+    return t;
+  }
+  const halfMutatedSchedule = t.schedule.map((e, i) => {
+    return Math.random() > 0.5 ? e : scheduleMutatedFully[i];
+  });
+  return new TimeTable(halfMutatedSchedule);
+};
 
 const basePopulation = makeInitialPopulation(POPULATION_SIZE);
 console.log(selection(basePopulation).map((e) => e.calculateFitness()));
 console.log(
   crossover(selection(basePopulation)).map((e) => e.calculateFitness())
+);
+console.log(
+  mutation(
+    crossover(selection(basePopulation))[0],
+    MUTATION_CHANCE_PERCENTAGES * 1000
+  ).calculateFitness()
 );

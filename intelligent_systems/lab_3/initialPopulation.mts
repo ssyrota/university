@@ -208,28 +208,40 @@ const weeklyLecturesPlan = [
   maxStudents: number;
 }[];
 
-export const makeInitialPopulation = (count = 20) => {
-  const timings = timeSlotsRaw.map((e) => new TimeSlot(e));
-  const days = daysRaw.map((e) => new Day(e));
-  const auditories = auditoriesRaw.map((e) => new Auditory(e.name, e.capacity));
-  const lecturers = lecturersRaw.map((e) => new Lecturer(e));
+const timings = timeSlotsRaw.map((e) => new TimeSlot(e));
+const days = daysRaw.map((e) => new Day(e));
+const auditories = auditoriesRaw.map((e) => new Auditory(e.name, e.capacity));
+const lecturers = lecturersRaw.map((e) => new Lecturer(e));
 
+export const makeInitialPopulation = (count = 20) => {
   return [...new Array(count)].map(() => {
     const lections = weeklyLecturesPlan.map((e) => {
       const lecturer = lecturers.filter((l) => l.name === e.lecturer).at(0);
       if (!lecturer) {
         throw new Error(`unknown lecturer in ${JSON.stringify(e, null, 2)}`);
       }
-      return new Lecture(
-        e.science,
-        getRandomItem(timings),
-        getRandomItem(auditories),
+      return initializeLection({
+        ...e,
         lecturer,
-        e.type,
-        e.group,
-        getRandomItem(days)
-      );
+      });
     });
     return new TimeTable(lections);
   });
 };
+
+const initializeLection = (e: {
+  science: string;
+  group: string;
+  type: "lecture" | "lab";
+  lecturer: Lecturer;
+  maxStudents: number;
+}) =>
+  new Lecture(
+    e.science,
+    getRandomItem(timings),
+    getRandomItem(auditories),
+    e.lecturer,
+    e.type,
+    e.group,
+    getRandomItem(days)
+  );
