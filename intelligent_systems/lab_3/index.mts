@@ -1,3 +1,1 @@
-import { makeInitialPopulation } from "./scheduler.mjs";
-
-makeInitialPopulation();
+import "./scheduler.mjs";
