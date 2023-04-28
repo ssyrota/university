@@ -9,7 +9,8 @@ const scheduler = new Scheduler(
   POPULATION_SIZE,
   MUTATION_RATE,
   (f) => f > 0.5,
-  makeInitialPopulation
+  makeInitialPopulation,
+  6
 );
 
 scheduler.composeSchedule()?.print();

@@ -8,7 +8,8 @@ export class Scheduler {
     private readonly populationSize: number,
     private readonly mutationChance: number,
     private readonly terminationF: (f: number) => boolean,
-    private readonly populationGenerator: (count: number) => TimeTable[]
+    private readonly populationGenerator: (count: number) => TimeTable[],
+    private readonly offspring: number
   ) {}
 
   composeSchedule(): TimeTable | null {
@@ -25,9 +26,9 @@ export class Scheduler {
         break;
       }
       const selection = this.performSelection(basePopulation);
-      const offspring = [...Array(basePopulation.length - 6).fill(0)].map((_) =>
-        this.mutate(this.crossover(selection))
-      );
+      const offspring = [
+        ...Array(basePopulation.length - this.offspring).fill(0),
+      ].map((_) => this.mutate(this.crossover(selection)));
       const fitnessSortedPopulation = this.makeSortedPopulation(
         basePopulation
       ).slice(0, -offspring.length);
@@ -41,11 +42,12 @@ export class Scheduler {
       step += 1;
     }
 
+    console.log("steps: ", step);
     return terminationMatch.at(0) || null;
   }
 
   private performSelection(timeTables: TimeTable[]): TimeTable[] {
-    return this.makeSortedPopulation(timeTables).slice(0, 6);
+    return this.makeSortedPopulation(timeTables).slice(0, this.offspring);
   }
 
   private makeSortedPopulation(timeTables: TimeTable[]) {
