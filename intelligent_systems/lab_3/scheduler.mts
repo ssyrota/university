@@ -26,19 +26,14 @@ export class Scheduler {
         break;
       }
       const selection = this.performSelection(basePopulation);
-      const offspring = [
-        ...Array(basePopulation.length - this.offspring).fill(0),
-      ].map((_) => this.mutate(this.crossover(selection)));
-      const fitnessSortedPopulation = this.makeSortedPopulation(
-        basePopulation
-      ).slice(0, -offspring.length);
-
+      const offspring = [...Array(this.offspring).fill(0)].map((_) =>
+        this.mutate(this.crossover(selection))
+      );
       if (step % 10000 === 0) {
         console.log(`generation step:${step}`);
-        console.log(fitnessSortedPopulation[0].calculateFitness());
+        console.log(selection[0].calculateFitness());
       }
-
-      basePopulation = [...fitnessSortedPopulation, ...offspring];
+      basePopulation = [...selection, ...offspring];
       step += 1;
     }
 
@@ -47,7 +42,10 @@ export class Scheduler {
   }
 
   private performSelection(timeTables: TimeTable[]): TimeTable[] {
-    return this.makeSortedPopulation(timeTables).slice(0, this.offspring);
+    return this.makeSortedPopulation(timeTables).slice(
+      0,
+      timeTables.length - this.offspring
+    );
   }
 
   private makeSortedPopulation(timeTables: TimeTable[]) {
