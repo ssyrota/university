@@ -71,11 +71,8 @@ export class Scheduler {
 
   private mutate(t: TimeTable): TimeTable {
     const scheduleMutatedFully = makeInitialPopulation(1)[0].schedule;
-    if (Math.random() < this.mutationChance) {
-      return t;
-    }
     const halfMutatedSchedule = t.schedule.map((e, i) => {
-      return Math.random() > 0.5 ? e : scheduleMutatedFully[i];
+      return Math.random() > this.mutationChance ? e : scheduleMutatedFully[i];
     });
     return new TimeTable(halfMutatedSchedule);
   }
