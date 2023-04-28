@@ -1,7 +1,7 @@
 import { makeInitialPopulation } from "./initialPopulation.mjs";
 import { TimeTable } from "./timetable.mjs";
 
-type Offspring = [TimeTable, TimeTable];
+type Offspring = TimeTable;
 
 export class Scheduler {
   constructor(
@@ -24,12 +24,13 @@ export class Scheduler {
       if (terminationMatch.length > 0) {
         break;
       }
-      const offspring = this.crossover(
-        this.performSelection(basePopulation)
-      ).map((e) => this.mutate(e));
+      const selection = this.performSelection(basePopulation);
+      const offspring = [...Array(basePopulation.length - 6).fill(0)].map((_) =>
+        this.mutate(this.crossover(selection))
+      );
       const fitnessSortedPopulation = this.makeSortedPopulation(
         basePopulation
-      ).slice(0, -2);
+      ).slice(0, -offspring.length);
 
       if (step % 10000 === 0) {
         console.log(`generation step:${step}`);
@@ -43,9 +44,8 @@ export class Scheduler {
     return terminationMatch.at(0) || null;
   }
 
-  private performSelection(timeTables: TimeTable[]): [TimeTable, TimeTable] {
-    const topSortedIndividuals = this.makeSortedPopulation(timeTables);
-    return [topSortedIndividuals[0], topSortedIndividuals[1]];
+  private performSelection(timeTables: TimeTable[]): TimeTable[] {
+    return this.makeSortedPopulation(timeTables).slice(0, 6);
   }
 
   private makeSortedPopulation(timeTables: TimeTable[]) {
@@ -54,22 +54,24 @@ export class Scheduler {
     );
   }
 
-  private crossover(parents: [TimeTable, TimeTable]): Offspring {
+  private crossover(parents: TimeTable[]): Offspring {
     const crossoverPoint = Math.floor(
       Math.random() * parents[0].schedule.length
     );
-    const offspring1 = new TimeTable([...parents[0].schedule]);
-    const offspring2 = new TimeTable([...parents[1].schedule]);
+    const offspring = new TimeTable([...parents[0].schedule]);
     [...new Array(crossoverPoint)].forEach((_, i) => {
-      offspring1.schedule[i] = parents[1].schedule[i];
-      offspring2.schedule[i] = parents[0].schedule[i];
+      if (Math.random() > 0.5) {
+        offspring.schedule[i] = parents[1].schedule[i];
+      } else {
+        offspring.schedule[i] = parents[0].schedule[i];
+      }
     });
-    return [offspring1, offspring2];
+    return offspring;
   }
 
   private mutate(t: TimeTable): TimeTable {
     const scheduleMutatedFully = makeInitialPopulation(1)[0].schedule;
-    if (Math.random() > this.mutationChance) {
+    if (Math.random() < this.mutationChance) {
       return t;
     }
     const halfMutatedSchedule = t.schedule.map((e, i) => {

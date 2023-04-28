@@ -264,7 +264,7 @@ const initializeLection = (e: {
     e.science,
     getRandomItem(timings),
     getRandomItem(auditories),
-    e.lecturer,
+    getRandomItem(lecturers),
     e.type,
     e.group,
     getRandomItem(days),
