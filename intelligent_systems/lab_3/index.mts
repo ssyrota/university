@@ -3,7 +3,7 @@ import "./scheduler.mjs";
 import { Scheduler } from "./scheduler.mjs";
 
 const POPULATION_SIZE = 15;
-const MUTATION_RATE = 0.1;
+const MUTATION_RATE = 0.001;
 
 const scheduler = new Scheduler(
   POPULATION_SIZE,
