@@ -1,0 +1,85 @@
+@startuml
+
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+entity "product sales" as product_sales {
+  price : int
+  freight_price : int
+  --
+  seller_location_id : id <<FK>>
+  customer_location_id : id <<FK>>
+  payment_type_id : id <<FK>>
+  product_category_id : id <<FK>>
+  purchase_time_id : id <<FK>>
+  delivery_time_id : id <<FK>>
+  product_photos_quality_id : id <<FK>>
+}
+
+
+entity "product photos quality" as product_photos_quality {
+  ppq_id : number <<PK>>
+  --
+  quality : int
+}
+
+entity "delivery time" as delivery_time {
+  dt_id : number <<PK>>
+  --
+  time : text
+  day : int
+  week_month : int
+  month : int
+  quartile: int
+  year : int
+  timestamp : int 
+}
+entity "purchase time" as purchase_time {
+  pt_id : number <<PK>>
+  --
+  time : text
+  day : int
+  week_month : int
+  month : int
+  quartile: int
+  year : int
+  timestamp : int 
+}
+
+entity "product_category" as product_category {
+  p_id : number <<PK>>
+  --
+  name : text
+}
+entity "seller location" as seller_location {
+  sl_id : number <<PK>>
+  --
+  state : text
+  city : text
+}
+
+entity "customer location" as customer_location {
+  cl_id : number <<PK>>
+  --
+  state : text
+  city : text
+}
+
+entity "payment type" as payment_type {
+  pt_id : number <<PK>>
+  --
+  type : text
+}
+
+
+product_sales }|..|| seller_location
+product_sales }|..|| customer_location
+product_sales }|..|| payment_type
+product_sales }|..|| product_category
+product_sales }|..|| product_photos_quality
+product_sales }|..|| purchase_time
+product_sales }|..|| delivery_time
+@enduml
