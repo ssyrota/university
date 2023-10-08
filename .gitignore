@@ -2,3 +2,5 @@ node_modules
 dist
 assignments
 .DS_Store
+diploma
+*.pdf
