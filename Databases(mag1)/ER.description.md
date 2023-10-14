@@ -12,17 +12,15 @@ _Simple cloud native application ontology._
 
 - Service - is an Application, designed to run as a server. **Can** use oltp store.
 
-- ETL job - is an Application, designed to run as a daemon to process data(streaming or batching). **Must** extract data from oltp storage, process it and upload to data warehouse.
+- ETL job - is an Application, designed to run as a daemon to process data(streaming or batching). **Must** extract data from one oltp storage, process it and upload to data warehouse.
 
-- OLTP storage - generic type of OLTP storage.
-
-- OLTP db - represents any oltp database(cockroachDB, postgreSQL, etc.) which should be used for instant domain operations.
-
-- Message broker - represents any message broker(kafka, nats, rabbitMQ, etc.).
+- OLTP storage - generic type of OLTP storage, can have type of:
+  1. database(cockroachDB, postgreSQL, etc.) which should be used for instant domain operations
+  2. message broker(kafka, nats, rabbitMQ, etc.).
 
 ### Code management
 
-- Git repository - entity where application code is located.
+- Git repository - entity where application code is located, one repository must have only one application - it's a rule to control complexity.
 
 - CI/CD pipeline - job, triggered by interval or changes in Git repository. Pipeline can trigger other pipelines, even in different repo's(so has relationship with itself).
   > CI/CD pipeline is weak entity, it primary key is composite and contains repo_id.
@@ -40,7 +38,7 @@ _Simple cloud native application ontology._
 
 ### Tracing
 
-- Trace - is a distributed log of data, produced by multiple containers at multiple environments, connected by trace_id.
+- Trace - is a distributed log of data, produced by multiple containers at multiple environments, connected by trace_id. Multiple containers
 
 > Trace is a weak entity, because primary key consist of external app_container_id and environment_id and internal trace_id.
 
