@@ -1,7 +1,0 @@
-{
-  "makefile.extensionOutputFolder": "./.vscode",
-  "files.associations": {
-    "omp.h": "c"
-  },
-  "C_Cpp.errorSquiggles": "Enabled"
-}
