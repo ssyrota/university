@@ -14,6 +14,14 @@
 
 = Introduction
 
+/ ML: process of training a piece of software, called model, to make useful predictions or to generate content from data.
+
+Types:
+- Supervised learning(two most common use cases - regression and classification)
+- Unsupervised learning(clusterization common)
+- Reinforcement learning(penalties and rewards->generated policy)
+- Generative AI(generate something from input)
+
 / $Y$: - the variable that we predict.
 
 / Feature($x$): the variable in the data vector. Types:
@@ -139,6 +147,21 @@ Dataset should be divided minimum for train(60), validation(20) and final test(2
 Cross validation - method, which on small dataset find conceptual ML model that possibly solves task.
 TODO
 
+== Underfitting and overfitting
+
+/ Underfitting: model performs poorly
+Causes: Model is too weak
+How to beat: Make model more complex
+
+/ Overfitting: model performs well on training data, but not in evaluation
+Causes: To complex model, too few data
+How to beat: Simplify model, add data
+
+Problem is: Bias vs variance tradeoff.
+
+/ Regulaization: technique of discouraging learning a more complex or flexible model, so as to avoid the risk of overfitting.
+
+//  bias reduces, but variance increases.?
+
 = Lib
 - https://www.statlect.com/
-
