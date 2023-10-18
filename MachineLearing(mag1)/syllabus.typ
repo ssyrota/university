@@ -122,9 +122,6 @@ Theta_i arrow.long "gradient" arrow.long Theta_i^T
 $
 
 
-== Regularization
-_TODO_
-
 == Linear regression
 When we have not linear plot, to solve this linear regression problem we can add additional polynomial($x^2$) or functional($sin(x)$, $sqrt(x)$) features.
 
@@ -161,7 +158,15 @@ Problem is: Bias vs variance tradeoff.
 
 / Regulaization: technique of discouraging learning a more complex or flexible model, so as to avoid the risk of overfitting.
 
-//  bias reduces, but variance increases.?
+/ bias:
+/ variance:
+
+Regularization formula L2(makes features balance):
+$ L = 1/(2N) sum_(j=1)^(n)(y(x_i)-y_i)^2 + Lambda sum_(i=1)^(m) (Theta_i^2) arrow.long min_Theta $
+
+Regularization formula L1(makes feature selection):
+$ L = 1/(2N) sum_(j=1)^(n)(y(x_i)-y_i)^2 + Lambda sum_(i=1)^(m) (|Theta|) arrow.long min_Theta $
+
 
 = Lib
 - https://www.statlect.com/
