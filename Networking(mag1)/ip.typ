@@ -64,6 +64,10 @@ All hosts in the same subnet have the same network.
 
 Task: 172.16.0.0 - make 120 subnets with 180 hosts, write mask.
 
+== Private vs public subnet in aws
+
+/ Private subnet: can have outgress to Internet, but to ingress to Internet. Can have ingress rules only for other subnets/VPCs.
+/ Public subnet: instances from this type can be accessible From the Intenet, public IPs are auto assigned from aws pool.
 
 == Public, private addresses and CIDR
 To determine local network vs global network used separation.
@@ -84,11 +88,6 @@ Other:
 / Multicast: send one IP datagram to many recievers, actually sent one, but routers and switches duplicate.
 
 
-// private vs public subnet in aws
-// classless inter-domain routing vs classful, what's purpose of divide by classless
-
-// how device determines that one is in the local network/subnet
-// switches
 
 192.168.1.0/24
 1. Подсеть на 120 адресов.
@@ -139,3 +138,8 @@ Multicast - 192.168.1.151
 Pull is - 192.168.1.25 - 192.168.1.150
 
 Mask - 255.255.255.(256-128) = 255.255.255.128
+
+
+// classless inter-domain routing vs classful, what's purpose of divide by classless
+// switches
+// VPC routing tables
