@@ -38,11 +38,8 @@ _Simple cloud native application ontology._
 
 ### Tracing
 
-- Trace - is a distributed log of data, produced by multiple containers at multiple environments, connected by trace_id. Multiple containers
-
-> Trace is a weak entity, because primary key consist of external app_container_id and environment_id and internal trace_id.
-
-It's necessary to accurately determine from which container and environment trace comes.
+- Trace - is a distributed log of data, produced by multiple containers at multiple environments, connected by trace_id.
+  It's necessary to accurately determine from which container and environment trace comes.
 
 Since there are no mapping from "App container" to "Container environment" and one trace can engage "App containers" from different "Container environments" - Trace has ternary relation with both "App containers" and "Container environments".
 `(container_id, env_id, trace_id)`
