@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  dev:
+    links:
+      - "db:db"
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM golang:1.21-bookworm
+        WORKDIR /app
+        COPY . .
+        RUN go install github.com/pressly/goose/v3/cmd/goose@latest
+    command: sleep 100h
+    environment:
+      - GOOSE_DRIVER=postgres
+      - GOOSE_DBSTRING=host=db user=postgres password=not_so_secret dbname=postgres sslmode=disable
+    volumes:
+      - .:/app
+      - vscode-go-dev:/go/bin
+
+  db:
+    image: postgres:16
+    restart: always
+    logging:
+      driver: none
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: not_so_secret
+      PGDATA: /var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    volumes:
+      - databases-db-data:/var/lib/postgresql/data/
+
+volumes:
+  vscode-go-dev:
+  databases-db-data:

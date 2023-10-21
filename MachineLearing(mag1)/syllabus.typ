@@ -168,5 +168,8 @@ Regularization formula L1(makes feature selection):
 $ L = 1/(2N) sum_(j=1)^(n)(y(x_i)-y_i)^2 + Lambda sum_(i=1)^(m) (|Theta|) arrow.long min_Theta $
 
 
+= Classification
+$y in {1,2,3,..,k}$
+
 = Lib
 - https://www.statlect.com/
