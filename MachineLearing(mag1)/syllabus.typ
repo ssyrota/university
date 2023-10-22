@@ -196,8 +196,9 @@ Firstly, we will solve binary classification task{0, 1}. Model will have 1 outpu
 
 === Formula
 Logistic regression is a S-shaped curve:
-$ y = 1/(1+ e^(- sum_(i=0)^m Theta_i X_i)) $
+$ y = 1/(1+ e^(- sum_(i=1)^m Theta_i X_i + Theta_0)) $
 
+=== Loss function
 / BCE(Binary cross entropy) loss function: $ cases(
   - log(p_i) "," y_i = 1,
   - log(1 - p_i) "," y_i=0
@@ -221,17 +222,41 @@ $
 $
 
 
-=== Comparison to linear regression
-
-
 == Metrics
 To define success of model *metrics* are used. $A=(N_("correct")/N) 100%$
 
 / Precision: TP/(TP+FP)
 / Recall: TF/(TF+FN)
 
+
+
+= Regressions comparison
+#table(
+  columns: (auto, auto, auto),
+  inset: 10pt,
+  align: horizon,
+  [*Criteria*], [*Linear regression*], [*Logistic*],
+  [Regression plot dependency], [Straight line], [S-shaped curve],
+  [Output type], [Continuous], [Probability (0,1) of the value \
+                                from the finite category],
+  [Target], [Give a most precise number], [Give a probability of belonging to category],
+  [Usecase], [Predict house prise], [Define type of a tumor, is price > 500k\$],
+  [Distribution type], [Normal], [Binomial]
+)
+Linear examples:
+- Predicting the height of an adult based on the mother’s and father’s height
+- Predicting pumpkin sales volume based on the price, time of year, and store location
+
+Logistic examples:
+- Predicting if a person will get a disease based on status, salary, genetics
+- Prediction if a person will quit a job based on meetings, pull requests, office time.
+- Predicting the marriage of a person based by car, salary, outlook, office time, education, country.
+
 = Lib
 - https://www.statlect.com/
 - https://towardsdatascience.com/
 - https://towardsdatascience.com/logistic-regression-detailed-overview-46c4da4303bc
 - https://en.wikipedia.org/wiki/Logistic_regression
+- file:///Users/s.syrota/Downloads/Fundamentals%20of%20probability%20and%20statistics%20for%20engineers%20(T.%20T.%20Soong)%20(Z-Library).pdf
+- file:///Users/s.syrota/Downloads/Essential%20Math%20for%20Data%20Science%20(Fifth%20Early%20Release)%20(Thomas%20Nield)%20(Z-Library).pdf
+299 page
