@@ -128,7 +128,8 @@ CREATE TABLE app_container (
     image_id UUID NOT NULL,
     FOREIGN KEY (image_id) REFERENCES image (id) 
         ON DELETE RESTRICT
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE,
+    UNIQUE(image_id)
 );
 CREATE TABLE container_env (
     name TEXT PRIMARY KEY
