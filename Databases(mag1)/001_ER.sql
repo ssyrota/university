@@ -19,20 +19,25 @@ CREATE TABLE ci_cd_pipeline (
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     UNIQUE (name, git_repo_id),
-    command TEXT NOT NULL
-);
-
-CREATE TABLE ci_cd_pipeline_chain (
-   child_id UUID PRIMARY KEY, 
-   FOREIGN KEY (child_id) REFERENCES ci_cd_pipeline (id) 
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-
-   parent_id UUID NOT NULL, 
-   FOREIGN KEY (parent_id) REFERENCES ci_cd_pipeline (id) 
+    command TEXT NOT NULL,
+    
+    parent_id UUID, 
+    FOREIGN KEY (parent_id) REFERENCES ci_cd_pipeline (id) 
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+-- CREATE TABLE ci_cd_pipeline_chain (
+--    child_id UUID PRIMARY KEY, 
+--    FOREIGN KEY (child_id) REFERENCES ci_cd_pipeline (id) 
+--         ON DELETE CASCADE
+--         ON UPDATE CASCADE,
+
+--    parent_id UUID NOT NULL, 
+--    FOREIGN KEY (parent_id) REFERENCES ci_cd_pipeline (id) 
+--         ON DELETE CASCADE
+--         ON UPDATE CASCADE
+-- );
 
 
 CREATE TABLE app (
@@ -49,7 +54,13 @@ CREATE TABLE oltp_store (
     id UUID PRIMARY KEY,
     provider TEXT NOT NULL,
     auth JSONB NOT NULL,
-    type oltp_store_type_t NOT NULL
+    type oltp_store_type_t NOT NULL,
+
+    service_name TEXT NOT NULL,
+    FOREIGN KEY (service_name) REFERENCES service (name) 
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    UNIQUE(service_name)
 );
 
 CREATE TABLE data_warehouse (
@@ -66,17 +77,17 @@ CREATE TABLE service (
         ON UPDATE CASCADE
 );
 
-CREATE TABLE service_oltp_store_operation (
-    oltp_store_id UUID PRIMARY KEY,
-    FOREIGN KEY (oltp_store_id) REFERENCES oltp_store (id) 
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
+-- CREATE TABLE service_oltp_store_operation (
+--     oltp_store_id UUID PRIMARY KEY,
+--     FOREIGN KEY (oltp_store_id) REFERENCES oltp_store (id) 
+--         ON DELETE CASCADE
+--         ON UPDATE CASCADE,
 
-    service_name TEXT NOT NULL,
-    FOREIGN KEY (service_name) REFERENCES service (name) 
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
+--     service_name TEXT NOT NULL,
+--     FOREIGN KEY (service_name) REFERENCES service (name) 
+--         ON DELETE CASCADE
+--         ON UPDATE CASCADE
+-- );
 
 CREATE TABLE etl_job (
     name TEXT PRIMARY KEY,
@@ -106,7 +117,7 @@ CREATE TABLE image (
     FOREIGN KEY (built_by_ci_id) REFERENCES ci_cd_pipeline (id) 
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
-    UNIQUE (name, built_by_ci_id)
+    UNIQUE (built_by_ci_id)
 );
 CREATE TABLE app_container (
     name TEXT PRIMARY KEY,
