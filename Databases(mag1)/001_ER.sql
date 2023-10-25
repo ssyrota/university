@@ -23,7 +23,7 @@ CREATE TABLE ci_cd_pipeline (
     
     parent_id UUID, 
     FOREIGN KEY (parent_id) REFERENCES ci_cd_pipeline (id) 
-        ON DELETE CASCADE
+        ON DELETE RESTRICT
         ON UPDATE CASCADE
 );
 
