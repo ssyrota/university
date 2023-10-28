@@ -49,43 +49,33 @@ Operation for example is a multiplication.
 4. Inverse existence $a*b=1$
 
 A group is commutative if $a*b = b*a$
+A group is cyclic if there is generator g $ g in G, forall x in G, exists n: g^n=x $
 
-A group is cyclic if $ g in G, forall x in G, exists n: g^n=x $
-
-
+\
+\
+\
+== How to choose or check that $a$ is a generator?
+/ Theorem: $g in Z^(*)_p$ is a generator of $Z^(*)_p$ if and only if $g^((p-1)/q) not eq.triple 1 mod p $ for all primes $q$ such that $q|(p-1)$
 
 = Diffie-hellman
+Protocol:
+1. Choose large prime $p$ and large generator $a$ in $Z_p^*$, choose $x_1$, where $0 < x_1 < p-1$
+
+
 == Discrete logarithm problem
 
 Problem - find the y, where g and x are provided, $g^y=x$.
 
-== Core Equation
-$ y_1=(a^(x_1) mod p)^(x_2) mod p = a^(x_1 x_2)  mod p $
+G is generator in group. g^x is uniformly distributed in group.
 
-Some modular arithmetics to proof:
-$ y_1=(a^(x_1) mod p)^(x_2) mod p = ((a mod p)^(x_1) mod p)^(x_2) mod p = $
+The problem is that y's can have many values, and we need to try each value.
 
-Reduce extra modulo due to modulo properties:
-$ (a mod p)^(x_1) mod p = a^(x_1) mod p $ 
+== Factorization problem
 
-Continue:
+For example RSA relies on difficulty of factoring the product of two large prime numbers.
 
-$ = (a mod p)^(x_1 x_2)  mod p $
-$ = a^(x_1 x_2) mod p $
+But for this need to determine or find large prime number.
 
-== Modular arithmetics
-
-$ (a b) mod m = [(a mod m)(b mod m)]mod m $
-
-
-// = Golang map
-// / Golang map: is a hashmap, which passed to function by pointer(not reference).
-
-// TODO: pointer vs reference
-
-
-// / Hash map: 
-// Hmap in golang contains:
-// 1. Buckets count
-// 2. Hash seed
-// 3. Pointers to buckets
+Determine if number is prime:
+1. Simple methods(advanced brute force, without 2,3 and maybe some memoization,etc)
+2. Probabilistic tests(all primes + some non primes - never FN, but sometimes FP)
