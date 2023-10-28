@@ -17,8 +17,8 @@ Public key cryptography - is a method of encrypting, which allows individuals to
 
 // public vs asymmetric
 
-= Rsa
-Asymmetric encryption.
+
+= Asymmetric encryption.
 
 Trapdoor one way function - function that can be easily computed in one way, and hard in the inverse without special(secret) information(trapdoor).
 In this case forward -> encrypt. Inverse -> decrypt.
@@ -62,20 +62,29 @@ Protocol:
 1. Choose large prime $p$ and large generator $a$ in $Z_p^*$, choose $x_1$, where $0 < x_1 < p-1$
 
 
-== Discrete logarithm problem
+= Rsa
+Public key can encrypt.
 
-Problem - find the y, where g and x are provided, $g^y=x$.
+Private key can decrypt.
 
-G is generator in group. g^x is uniformly distributed in group.
+X represents a number in $Z_n^(*)$, binary value of X must be less than n.(also n and x are coprime, can just check that $not x|e$)
 
-The problem is that y's can have many values, and we need to try each value.
+Public key is a pair of (n, e)
 
-== Factorization problem
+Y is a ciphertext. $Y=(x^e mod n)$
 
-For example RSA relies on difficulty of factoring the product of two large prime numbers.
+Decryption: the private key is $d$. $y^d mod n = x$
 
-But for this need to determine or find large prime number.
+$x^(e d) mod n = x mod n$
 
-Determine if number is prime:
-1. Simple methods(advanced brute force, without 2,3 and maybe some memoization,etc)
-2. Probabilistic tests(all primes + some non primes - never FN, but sometimes FP)
+$ x^(e d - 1) mod n = 1 mod n $
+It's possible only when:
+
+$ e d - 1 = k phi(n)$
+
+$ x^(k phi(n) + 1) mod n = 1 x mod n $
+
+First, choose p and q, count n=p*q, count $phi(n) = (p-1)(q-1)$
+
+Second, choose $e$ coprime to n. Solve equation $e d = 1 mod phi(n)$. 
+$ d = e^(-1) mod phi(n)$
