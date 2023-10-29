@@ -171,3 +171,60 @@ But for this need to determine or find large prime number.
 Determine if number is prime:
 1. Simple methods(advanced brute force, without 2,3 and maybe some memoization,etc)
 2. Probabilistic tests(all primes + some non primes - never FN, but sometimes FP)
+
+
+== Modular multiplicative inverse
+/ Algorithm: Modular Inverse using Extended Euclidean Algorithm
+
+*check why it works*
+
+If a is coprime to n
+
+Problem: $a x eq.triple 1 mod n$
+
+$ a x+m y="gcd"(a,m)$
+
+$ x_0 = 1, x_1=0, y_0=0, y_1=1 $
+
+While a > 1:
+$ q = [a/n] $
+$ (a, n) = (n, a mod n) $
+$ (x_0, x_1) = (x_1, x_0-q x_1) $
+$ (y_0, y_1) = (y_1, y_0-q y_1) "(may be omitted when find modular multiplicative inverse)" $
+
+Next: if $x_0 < 0$, then $x_0 = x_0 + n$
+
+
+== Bezout identity
+
+$ a x + b y = "gcd"(a, b) $
+Example:
+$ 3 = 15 × (−9) + 69 × 2 $
+
+= Find gcd
+GCD - greatest common divisor
+== Euclidean algorithm
+
+Based on the principle $ gcd(a, b) = gcd(a-b, b), "if a > b" $
+Example: 
+$ gcd(112,256) = gcd(112, 144) = gcd(32, 112) = gcd(32, 80) $
+$ = gcd(48, 32) = gcd(16, 32) = gcd(16, 16) = 16 $
+
+/ Proof: let's assume: 
+$ exists m: a = d*m $
+$ exists n: b = d*n $
+
+$ a-b = d(m-n) arrow.long a-b eq.triple d $
+
+A more efficient way is to use modulo operation for bigger element by smaller.
+/ Proof: let's assume: 
+$ exists m: a = d*m $
+$ exists n: b = d*n $
+
+$ gcd(a, b) = gcd (b k + a mod b, b ) $
+
+As we know $gcd(a, b) = gcd(a-b,b)$, applying recursively we obtain equation:
+
+$ gcd(a, b) = gcd(a-(k b), b) = gcd (a mod b, b) $
+
+$ = gcd(a mod b, b) = gcd(a, b) $

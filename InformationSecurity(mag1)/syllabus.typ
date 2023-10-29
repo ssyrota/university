@@ -86,5 +86,9 @@ $ x^(k phi(n) + 1) mod n = 1 x mod n $
 
 First, choose p and q, count n=p*q, count $phi(n) = (p-1)(q-1)$
 
-Second, choose $e$ coprime to n. Solve equation $e d = 1 mod phi(n)$. 
+Second, choose $e$ coprime to $phi(n)$. Solve equation $e d = 1 mod phi(n)$. 
 $ d = e^(-1) mod phi(n)$
+
+x, y, n, d are large numbers(1024 bits or more)
+
+e, d
