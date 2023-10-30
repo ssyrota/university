@@ -230,7 +230,8 @@ $ "Having" a, b "with " gcd(a,b)=d " and " a x + b y = d$
 $ "Prove that x, y exists and " a x + b y = d , " d is min positive integer of this combination " $
 
 / Proof: Suppose that we have set $S$ with smallest element $d$.
-1. Prove that $d$ is a divisor of a,b and 2. for any common divisor c $c<=d$
+1. Prove that $d$ is a divisor of a,b and 
+2. for any common divisor c $c<=d$
 
 1. Let's divide a on d: $a=d q + r, 0<=r<d$
 $ r = a - d q $
@@ -242,9 +243,13 @@ This implies that $r in S, S:{ a x + b y = d; exists x,y in Z }$
 Now we have $ 0<=r<d; r in S; d "is min in "S $ Contradiction.
 Min element d from $S$ is divisor of $a,b$ (b by analog proof).
 
+2. For any common divisor c $c<=d$
+Let $c$ be divisor of $a,b$ -> $a x + b y = d$
+a = c k
+b = c l
 
-// / Proof: $ a = g k; b = g l; -> g( k x) + g( l y ) = min $
-//  $ "if" "min_positive"(k x + l y) = 1 -> g( k x) + g( l y ) = g $
+$ c x k + c y l = d $
+$ c(x K + y l) = d; (x K + y l) >= 1 -> d>=c -> d "is" "the greatest divisor" $
 
 
 = Find gcd
