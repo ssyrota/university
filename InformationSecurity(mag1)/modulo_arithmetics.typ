@@ -281,6 +281,17 @@ $ gcd(a, b) = gcd(a-(k b), b) = gcd (a mod b, b) $
 
 $ = gcd(a mod b, b) = gcd(a, b) $
 
+But that's not enough.
+Need to proof:
+1. $r_(n-1)$ is a common divisor of a,b
+2. $r_(n-1)$ is a gcd
+
+Proof:
+1. Is proved above. $r_(n-1)=c; c<=gcd -> r_(n-1)<=gcd$
+
+2. Suppose we have common divisor c, which divides a, b; a -b = $k c -l c$ -> c divides a-b, divides each $r_n$.
+Thus $r_(n) = (k-l)c$. Therefore $forall c, c|a; c|b: c|r_n$(c<=r_n) -> $r_n$ is $gcd$
+
 == Extended euclidean algorithm
 
 a is coprime to b
