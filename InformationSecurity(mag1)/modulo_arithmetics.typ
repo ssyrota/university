@@ -195,14 +195,61 @@ $ (y_0, y_1) = (y_1, y_0-q y_1) "(may be omitted when find modular multiplicativ
 Next: if $x_0 < 0$, then $x_0 = x_0 + n$
 
 
-== Bezout identity
+== Bezout equality
 
+$ exists m, n in Z: m d + n d = d $
+$ (m+n) = 1 $
+$ exists gcd(a, b) = d arrow.long exists x,y: m d = a x; n d = b y; $
+
+*Why x and y do exist?*
 $ a x + b y = "gcd"(a, b) $
-Example:
-$ 3 = 15 × (−9) + 69 × 2 $
+$ exists k,l: a = k d, b = l d $
+
+Let's divide equation by d:
+$ k d x + l d y = d arrow.long k x + l y = 1 $
+we know k and l 
+$ k = a/d; l = b/d; $
+$ k x + l y = 1 arrow.long y = (1 - k x) / l $
+$ l !=0; k,x in Z: k x in Z arrow.long y "can be solved" $
+
+In the end we have endless count of solutions with formula:
+$ y (b/d) = (1 - (a/d) x); a x + b y = gcd(a, b) $
+
+If one pair of (x,y) was found:
+$ (x - k (b/d), y + k (a/d)) $
+
+For case of gcd = 1:
+$ a x + b y = 1 $
+
+== Proof of gcd equality
+$ S not emptyset -> exists min(n) in S $
+
+x, y - are Bezout's coefficients
+
+$ "Having" a, b "with " gcd(a,b)=d " and " a x + b y = d$
+$ "Prove that x, y exists and " a x + b y = d , " d is min positive integer of this combination " $
+
+/ Proof: Suppose that we have set $S$ with smallest element $d$.
+1. Prove that $d$ is a divisor of a,b and 2. for any common divisor c $c<=d$
+
+1. Let's divide a on d: $a=d q + r, 0<=r<d$
+$ r = a - d q $
+$ r = a - (a x + b y)q $
+$ r = a(1 -x) - b (y q) $
+Thus: $ r = a n + b m, "where: " n = 1 - x, m = -(y q) $
+This implies that $r in S, S:{ a x + b y = d; exists x,y in Z }$
+
+Now we have $ 0<=r<d; r in S; d "is min in "S $ Contradiction.
+Min element d from $S$ is divisor of $a,b$ (b by analog proof).
+
+
+// / Proof: $ a = g k; b = g l; -> g( k x) + g( l y ) = min $
+//  $ "if" "min_positive"(k x + l y) = 1 -> g( k x) + g( l y ) = g $
+
 
 = Find gcd
 GCD - greatest common divisor
+
 == Euclidean algorithm
 
 Based on the principle $ gcd(a, b) = gcd(a-b, b), "if a > b" $
@@ -228,3 +275,25 @@ As we know $gcd(a, b) = gcd(a-b,b)$, applying recursively we obtain equation:
 $ gcd(a, b) = gcd(a-(k b), b) = gcd (a mod b, b) $
 
 $ = gcd(a mod b, b) = gcd(a, b) $
+
+== Extended euclidean algorithm
+
+a is coprime to b
+
+$ a x + b y = gcd(a, b) $
+
+Why a and b should have gcd = 1;
+Because if not: a cannot have inverse.
+
+Suppose that gcd is not 1:
+$ a b eq.triple 1 mod m $
+$ a b - 1 eq.triple 0 mod m $
+$ a = g k; m = g l; $
+$ (g k) b  eq.triple 1 mod (g l) $
+$ k b eq.triple 1/g mod l $
+$ 1/g not in Z *. =>  not exists b $
+
+
+= Other
+=== Division theorem
+For every natural number m and positive natural number n, there exists a unique pair of integers q and r such that $q >= 0, 0 <= r < n$, and $m = q · n + r$
