@@ -22,6 +22,8 @@ Types:
 - Reinforcement learning(penalties and rewards->generated policy)
 - Generative AI(generate something from input)
 
+Online and batch learning.
+
 / $Y$: - the variable that we predict.
 
 / Feature($x$): the variable in the data vector. Types:
@@ -31,6 +33,9 @@ Types:
   - Nominal
 
 / Hyperparam: meta parameter for model. Model do not learn it.
+
+== Data mining
+/ Data mining: applying ML techniques to dig into large amounts of data can help discover factors, that are not immediately apparent.
 
 == Supervised
 Solves regression and classification tasks.
@@ -45,7 +50,7 @@ $ X arrow.long F arrow.long X' $
 
 == Reinforement learning
 
-_TODO_
+The learning system, called agent can observe the environment, select and perform actions, and get rewards or penalties. It must learn then by itself what is the best strategy, called a policy to get the most reward over the time.
 
 = Optimisation and loss function
 
@@ -225,8 +230,8 @@ $
 == Metrics
 To define success of model *metrics* are used. $A=(N_("correct")/N) 100%$
 
-/ Precision: TP/(TP+FP)
-/ Recall: TF/(TF+FN)
+/ Precision: TP/(TP+FP). How model is confident for class a.
+/ Recall: TF/(TF+FN). Which coverage for class a.
 
 
 
@@ -251,6 +256,10 @@ Logistic examples:
 - Predicting if a person will get a disease based on status, salary, genetics
 - Prediction if a person will quit a job based on meetings, pull requests, office time.
 - Predicting the marriage of a person based by car, salary, outlook, office time, education, country.
+
+
+= Removing correlated features
+Before train model it may be worth to perform "dimensionality reduction" to save space, without loosing too much information
 
 = Lib
 - https://www.statlect.com/

@@ -25,7 +25,14 @@ Where p is prime number from factorization n.
 _Example_
 $ phi(54) = phi(2 * 3^3) = phi(2) * phi(3^3) $
 
-/ Euler's theorem: If $a "and" p$ is coprime, than $a^(phi(n)) eq.triple 1 mod n$.
+
+= Euler theorem
+a, n are coprime
+
+$ alpha^(phi(n)) eq.triple 1 mod n $
+
+x coprime with n, a coprime wuth n -> x a coprime with n (there no gcd>1)
+
 
 = Modular arithmetics
 
@@ -313,3 +320,7 @@ $ 1/g not in Z *. =>  not exists b $
 = Other
 === Division theorem
 For every natural number m and positive natural number n, there exists a unique pair of integers q and r such that $q >= 0, 0 <= r < n$, and $m = q · n + r$
+
+== Fundamental arithmetics theorem
+
+$ N = p_1^(e_1) p_2^(e_2) ... p_n^(e_n) $

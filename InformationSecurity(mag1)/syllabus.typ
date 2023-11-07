@@ -13,18 +13,28 @@
 )
 
 = Into
-Public key cryptography - is a method of encrypting, which allows individuals to securely communicate without sharing the secret key.
 
 // public vs asymmetric
 
+= Symmetric crypto
+/ Symmetric crypto: relies on the fact, that two sides know the same key, which they obtain by another secure channel. The same key used for encryption and decryption. 
+
+Issues:
+1. Key distribution problem
+2. Number of keys on N users is n(n-1)/2
+3. No protection against cheating between Alice and Bob
+
 
 = Asymmetric encryption.
+Public key cryptography - is a method of encrypting, which allows individuals to securely communicate without sharing the secret key.
+
 
 Trapdoor one way function - function that can be easily computed in one way, and hard in the inverse without special(secret) information(trapdoor).
 In this case forward -> encrypt. Inverse -> decrypt.
 
 Private key - is key to decrypt message.
 Public key - is key to encrypt message.
+Or vice versa
 
 For signatures private key enables to sign and public to verify this sign validity.
 
@@ -34,6 +44,16 @@ Arithmetic functions, that considered as a one way(not proofed)
 3. x^y mod n = z => find x
 4. x^2 mod n. n - not prime, jacobi(z/n)=1 => find x
 5. g^ab mod p => find a
+
+Also use cases:
+1. Key exchange
+2. Identification
+3. Signature to cannot deny having sent/received a message
+
+= Prime numbers
+/ Prime number: an integer P which has exactly two positive divisors(1 and P).
+
+= Alternative problems
 
 = Group
 
@@ -59,13 +79,22 @@ A group is cyclic if there is generator g $ g in G, forall x in G, exists n: g^n
 
 = Diffie-hellman
 Protocol:
-1. Choose large prime $p$ and large generator $a$ in $Z_p^*$, choose $x_1$, where $0 < x_1 < p-1$
-
+#figure(
+  image("./img/DH.png", width: 70%),
+)
 
 = Rsa
+Target: send information from A to B securely.
+
 Public key can encrypt.
 
 Private key can decrypt.
+
+1. Choose 2 prime int p,q
+2. Count n = p*q
+3. Count Euler function $phi(n)=(p-1)(q-1)$
+4. Count $e: gcd(e, phi(n))=1$
+5. Solve $e x= 1 mod phi(n)$, find x = d
 
 X represents a number in $Z_n^(*)$, binary value of X must be less than n.(also n and x are coprime, can just check that $not x|e$)
 
@@ -73,7 +102,7 @@ Public key is a pair of (n, e)
 
 Y is a ciphertext. $Y=(x^e mod n)$
 
-Decryption: the private key is $d$. $y^d mod n = x$
+Decryption: the private key is $d$. $ y^d mod n = x $
 
 $x^(e d) mod n = x mod n$
 
@@ -92,3 +121,39 @@ $ d = e^(-1) mod phi(n)$
 x, y, n, d are large numbers(1024 bits or more)
 
 e, d
+
+== Rsa also vulnerable to man in the middle attack
+Example: https://security.stackexchange.com/questions/189468/why-can-a-man-in-the-middle-attack-not-happen-with-rsa
+
+= Elgamal encryption scheme
+1. Perform DH
+2. Use Key as a mask for the message modulo p
+
+== Elgamal protocol
+1. Set up phase
+
+Done only once.
+Bob makes $p, alpha, b$. Compute  $B =alpha^b mod p$
+$ k_"pub" = (p, alpha, B) $
+
+Bob publishes keys.
+
+2. The encryption phase
+
+Executed every time
+
+Alice chooses ephemeral key $K_E == alpha^a mod p$
+Alice computes the "shared key"(private) $K = B^a mod p$
+$ y - x K mod p $
+
+And sends $K_E$ and y to Bob
+
+3. The decryption phase
+
+Executed every time
+
+$ X = Y K^(-1) mod p $
+
+= Hash functions
+
+= Lampart algorithm
