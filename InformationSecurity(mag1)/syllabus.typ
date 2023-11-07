@@ -154,6 +154,26 @@ Executed every time
 
 $ X = Y K^(-1) mod p $
 
+$ m = K^(-1) Y mod p $
+
+$ K = g^(a b) mod p $
+
+By fundamental theorem of arithmetic
+$ gcd(g, p) = 1 -> gcd(g^n, p) = 1 $
+
+
+by fermat's little theorem:
+$ K_E^(p - 1) eq.triple 1 mod p $
+
+$ (g^b)^(p - 1) eq.triple 1 mod p $
+$ (g^b)^(p - 1) eq.triple 1 mod p $
+
+$ (g^b)^(p - 1) eq.triple 1 mod p $
+$ (g^b)^(p - 1) eq.triple (g^b)^(p - 1 - a) g^(a b) eq.triple 1 mod p $
+
+$ g^(a b) = K $
+$ K_(-1) = (g^b)^(p - 1 - a) mod p$
+
 = Hash functions
 
 = Lampart algorithm
