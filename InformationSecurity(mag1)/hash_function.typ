@@ -82,9 +82,42 @@ $ n=23 -> P_0~50% $
 
 $ C_n^k = (n!)/((n-k)!k!) $
 
-== Birthday attack
-
 = Based on block ciphers
+- MD4
+- MD5
+- SHA-1
+- SHA-2
+
+== Block cipher
+/ Block cipher: function that operates on fixed bits length input. Input n, key k. Output n size message.
+
+Standard block cipher: AES, DES.
+// TODO: how it works https://www.youtube.com/playlist?list=PL1xkDS1G9As4Yz_te20j1A9evIjt5Z06e.
+
+=== AES
+Symmetric cipher.
+Key size 128/192/256. N = 128
+
+Rounds will depend of the key size.
+DES has fixed 16 rounds.
+
+Each round is dirived into layers
+First round turns into two sub keys and 4 layers.
+Rest of the rounds, one key per time, 3 layers.
+
+3 types of layers.
+1. Key addition layer.(XOR with key)
+2. Byte substitution layer(S-box): perform substitution using "lookup tables". Provide confusion
+3. Diffusion layer:
+- ShiftRows: permutes the data on the byte level
+- MixColumn: another matrix permutation
+
+// Why use hmac, bcrypt and just sha256
+
+=== XOR
+Usage justification: it's better randomizes encryption, since it output is 0/1 50%
+
+= Merkle–Damgård construction
 
 == Use cases
 
