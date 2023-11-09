@@ -174,6 +174,17 @@ $ (g^b)^(p - 1) eq.triple (g^b)^(p - 1 - a) g^(a b) eq.triple 1 mod p $
 $ g^(a b) = K $
 $ K_(-1) = (g^b)^(p - 1 - a) mod p$
 
-= Hash functions
+= Coin flipping
+
+Using DLP
+Given two generators a, b
+
+Bob chooses one(f.e. a) and pow it to x, sending $a^x$ to alice.
+Alice chooses a or b and sends it to bob.
+Bob sends x to Alice. 
+Alice checks $a^x$.
+
+Note: there are possibility that $a^x==b^x$
+
 
 = Lampart algorithm
