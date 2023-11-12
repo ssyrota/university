@@ -118,6 +118,15 @@ Rest of the rounds, one key per time, 3 layers.
 Usage justification: it's better randomizes encryption, since it output is 0/1 50%
 
 = Merkle–Damgård construction
+/ Def: a method of building collision-resistant cryptographic hash functions from collision-resistant one-way compression functions.
+Sequential compression of blocks(like blockchain) if end is not full length, add padding. 
+
+It's possible to process as a tree - therefore scales infinitely (called merkle tree). 
+
+== Blockchain
+Sequential growing data structure, intended to provide complete data integrity.
+
+Mining problem = for H function and fixed k, find x that H(x) starts with k nulls.
 
 == Use cases
 
