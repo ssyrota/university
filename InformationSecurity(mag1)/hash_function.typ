@@ -24,7 +24,17 @@ Requirements:
 2. weak collision resistance(first kind). Computational infeasible to find x_2 from y=h(x_1)=h(x_2)
 3. strong collision resistance(second kind). Computational infeasible to find and x_1, x_2 from y=h(x_1)=h(x_2)
 
-Main target: malicious adversary cannot replace or modify data without changing it digest. Function should have behavior like random function.
+Main target: infeasible to find collision.
+
+*The key $s$ generally not keep secret*, nevertheless, $H_s$ must be resistant to collisions.
+
+
+= Formal definition
+
+A hash function $H_s$ with fixed-length output $l(n)$ is a pair of probabilistic polynomial time algorithms ($"Gen",H$) satisfying the following:
+
+Gen is a probabilistic algorithm that takes as input a security parameter $1^n$(1111...$1_n$) and outputs a key $s$.
+
 
 == Difficult or Computational infeasible
 Not solvable in asymptotic polynomial time.
@@ -117,12 +127,6 @@ Rest of the rounds, one key per time, 3 layers.
 === XOR
 Usage justification: it's better randomizes encryption, since it output is 0/1 50%
 
-= Merkle–Damgård construction
-/ Def: a method of building collision-resistant cryptographic hash functions from collision-resistant one-way compression functions.
-Sequential compression of blocks(like blockchain) if end is not full length, add padding. 
-
-It's possible to process as a tree - therefore scales infinitely (called merkle tree). 
-
 == Blockchain
 Sequential growing data structure, intended to provide complete data integrity.
 
@@ -133,3 +137,18 @@ Mining problem = for H function and fixed k, find x that H(x) starts with k null
 - Hash table(often used non-cryptographic hash functions) and indexing
 - Fingerprinting and verifying the integrity of data
 - Identifier
+
+
+= Merkle–Damgård construction
+domain extension method
+
+/ Def: a method of building collision-resistant cryptographic hash functions from collision-resistant one-way compression functions.(uses AES(state, message))
+
+If compression F is resistant to collisions -> construction is resistant too.
+
+Sequential compression of blocks(like blockchain) if end is not full length, add padding. 
+
+It's possible to process as a tree - therefore scales infinitely (called merkle tree). 
+
+== Other ciphers
+/ Stream cipher: encrypts data bit by bit. Useful for real time data processing.
