@@ -43,6 +43,5 @@ $ x eq.triple a_k mod n_k $
 
 Then exists $x eq.triple n_1*n_2*...*n_k$
 
-= Rabin algorithm
+= Hidden subgroup problem
 
-= Quantum attack

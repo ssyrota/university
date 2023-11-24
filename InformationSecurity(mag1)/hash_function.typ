@@ -152,3 +152,20 @@ It's possible to process as a tree - therefore scales infinitely (called merkle 
 
 == Other ciphers
 / Stream cipher: encrypts data bit by bit. Useful for real time data processing.
+
+= Sha2. SHA256
+Output is 256 bit value.
+
+1. Split message for 512 blocks. If last is not 512, use padding.
+
+2. To provide random and non zero starting point algorithm has 8 initial hash values - $i in {2,3,5,7,11,13,17,19}: {sqrt(i) mod 1}$. 8 because each value should consistently influence the output.
+
+3. Each of 512-length blocks processed in a loop.
+
+
+= Sha1
+Output 160 bit
+Based on MD2, MD4, MD5, but uses larger output.
+
+= MD2
+Inputs are 128 bit.
