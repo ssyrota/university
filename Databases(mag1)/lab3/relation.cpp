@@ -1,4 +1,5 @@
 #include </app/file.h>
+#include </app/strings.cpp>
 #include <vector>
 #include <fstream>
 #include <string>
@@ -30,10 +31,10 @@ struct Relation
         record.name = line;
         break;
       case 2:
-        record.attributes = Relation::splitString(line, ',');
+        record.attributes = Strings::split(line, ',');
         break;
       default:
-        record.rows.push_back(Relation::splitString(line, ','));
+        record.rows.push_back(Strings::split(line, ','));
         break;
       }
     }
@@ -45,11 +46,11 @@ private:
   {
     stringstream stringBuilder;
     stringBuilder << name << "\n";
-    stringBuilder << Relation::join_string(attributes, ",");
+    stringBuilder << Strings::join(attributes, ",");
     stringBuilder << "\n";
     for (auto row : rows)
     {
-      stringBuilder << Relation::join_string(row, ",");
+      stringBuilder << Strings::join(row, ",");
       stringBuilder << "\n";
     }
     return stringBuilder.str();
@@ -59,31 +60,5 @@ public:
   void to_file()
   {
     write_file("./" + name + ".txt", to_string());
-  }
-
-  static Tuple splitString(string str, char by)
-  {
-    Tuple result;
-    istringstream iss(str);
-    string token;
-    while (getline(iss, token, by))
-    {
-      result.push_back(token);
-    }
-    return result;
-  }
-
-  static string join_string(vector<string> vec, string delim)
-  {
-    string result;
-    for (size_t i = 0; i < vec.size(); ++i)
-    {
-      result += vec[i];
-      if (i < vec.size() - 1)
-      {
-        result += delim;
-      }
-    }
-    return result;
   }
 };
