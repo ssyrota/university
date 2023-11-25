@@ -23,9 +23,6 @@ struct Relation
     int lineNumber = 0;
     while (getline(linesStream, line, '\n'))
     {
-      cout << "line\n";
-      cout << line;
-      cout << "line\n";
       lineNumber++;
       switch (lineNumber)
       {
@@ -47,20 +44,18 @@ struct Relation
   {
     stringstream stringBuilder;
     stringBuilder << name << "\n";
-    for (auto attribute : attributes)
-    {
-      stringBuilder << attribute << ",";
-    }
+    stringBuilder << Relation::join_string(attributes, ",");
     stringBuilder << "\n";
     for (auto row : rows)
     {
-      for (auto value : row)
-      {
-        stringBuilder << value << ",";
-      }
+      stringBuilder << Relation::join_string(row, ",");
       stringBuilder << "\n";
     }
     return stringBuilder.str();
+  }
+  void to_file()
+  {
+    write_file(to_string(), "./" + name + ".txt")
   }
 
   static Tuple splitString(string str, char by)
@@ -71,6 +66,20 @@ struct Relation
     while (getline(iss, token, by))
     {
       result.push_back(token);
+    }
+    return result;
+  }
+
+  static string join_string(vector<string> vec, string delim)
+  {
+    string result;
+    for (size_t i = 0; i < vec.size(); ++i)
+    {
+      result += vec[i];
+      if (i < vec.size() - 1)
+      {
+        result += delim;
+      }
     }
     return result;
   }
