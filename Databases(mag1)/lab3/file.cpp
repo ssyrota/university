@@ -8,13 +8,10 @@ string read_file(string file_name)
   string contents;
   string line;
   ifstream file(file_name);
-  cout << "start\n";
-  cout << file.good();
   while (getline(file, line))
   {
-    contents += line;
+    contents += line + '\n';
   }
-  cout << "end\n";
   file.close();
   return contents;
 }

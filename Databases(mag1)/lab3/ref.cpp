@@ -103,7 +103,7 @@ struct DS : public Relation
     {
       ss << ',' << attr;
     }
-    ss << '\n';
+    ss << "\n";
     for (int i = 0; i < id_pairs.size(); i++)
     {
       ss << id_pairs[i].first << "," << id_pairs[i].second;
@@ -111,7 +111,7 @@ struct DS : public Relation
       {
         ss << "," << value;
       }
-      ss << '\n';
+      ss << "\n";
     }
     return ss.str();
   }

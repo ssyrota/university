@@ -18,12 +18,14 @@ struct Relation
   {
     string file = read_file(file_name);
     Relation record;
-
-    istringstream iss(file);
+    istringstream linesStream(file);
     string line;
     int lineNumber = 0;
-    while (getline(iss, line))
+    while (getline(linesStream, line, '\n'))
     {
+      cout << "line\n";
+      cout << line;
+      cout << "line\n";
       lineNumber++;
       switch (lineNumber)
       {
@@ -44,19 +46,19 @@ struct Relation
   string to_string()
   {
     stringstream stringBuilder;
-    stringBuilder << name;
+    stringBuilder << name << "\n";
     for (auto attribute : attributes)
     {
       stringBuilder << attribute << ",";
     }
-    stringBuilder << '\n';
+    stringBuilder << "\n";
     for (auto row : rows)
     {
       for (auto value : row)
       {
         stringBuilder << value << ",";
       }
-      stringBuilder << '\n';
+      stringBuilder << "\n";
     }
     return stringBuilder.str();
   }
