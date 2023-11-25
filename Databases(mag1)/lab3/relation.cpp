@@ -40,6 +40,7 @@ struct Relation
     return record;
   }
 
+private:
   string to_string()
   {
     stringstream stringBuilder;
@@ -53,9 +54,11 @@ struct Relation
     }
     return stringBuilder.str();
   }
+
+public:
   void to_file()
   {
-    write_file(to_string(), "./" + name + ".txt")
+    write_file("./" + name + ".txt", to_string());
   }
 
   static Tuple splitString(string str, char by)
