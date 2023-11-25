@@ -55,10 +55,4 @@ private:
     }
     return stringBuilder.str();
   }
-
-public:
-  void to_file()
-  {
-    write_file("./" + name + ".txt", to_string());
-  }
 };

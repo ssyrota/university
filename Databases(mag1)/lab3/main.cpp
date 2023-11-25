@@ -8,6 +8,7 @@ int main()
     Relation A = Relation::make_from_file("A.txt");
     Relation B = Relation::make_from_file("B.txt");
     DataSource A_B = DataSource::new_default(A, B);
+    cout << A_B.to_string();
     A_B.to_file();
     return 0;
 }

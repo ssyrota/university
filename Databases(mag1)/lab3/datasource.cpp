@@ -9,7 +9,7 @@ using namespace std;
 // owner, member, ds row
 using Predicate = function<bool(vector<string>, vector<string>, vector<string>)>;
 
-struct DataSource : public Relation
+struct DataSource : Relation
 {
   Relation *owner;
   Relation *member;
@@ -79,5 +79,11 @@ struct DataSource : public Relation
     }
 
     return result;
+  }
+
+public:
+  void to_file()
+  {
+    write_file("./" + name + ".txt", to_string());
   }
 };
