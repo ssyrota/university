@@ -41,7 +41,7 @@ struct Relation
     return record;
   }
 
-private:
+public:
   string to_string()
   {
     stringstream stringBuilder;

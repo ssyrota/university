@@ -11,8 +11,8 @@ using Predicate = function<bool(vector<string>, vector<string>, vector<string>)>
 
 struct DataSource : Relation
 {
-  Relation *owner;
-  Relation *member;
+  Relation owner;
+  Relation member;
   bool single_owner;
   bool single_member;
   vector<pair<int, int>> id_pairs;
@@ -20,11 +20,11 @@ struct DataSource : Relation
   static DataSource new_default(Relation a, Relation b)
   {
     DataSource a_b = {
-        .owner = &a,
-        .member = &b,
+        .owner = a,
+        .member = b,
         .single_owner = false,
         .single_member = false,
-        .id_pairs = {{1, 1}, {1, 2}, {2, 3}, {1, 3}, {3, 4}},
+        .id_pairs = {{1, 1}, {1, 2}, {2, 3}, {1, 3}},
     };
     a_b.name = "a_b";
     a_b.attributes = {"date"};
@@ -42,7 +42,7 @@ struct DataSource : Relation
   {
     stringstream ss;
     ss << name << '\n';
-    ss << owner->name << "," << member->name << "," << single_owner << "," << single_member;
+    ss << owner.name << "," << member.name << "," << single_owner << "," << single_member;
 
     for (auto attr : attributes)
     {
@@ -63,22 +63,34 @@ struct DataSource : Relation
 
   DataSource filter_beta(Predicate p)
   {
-    DataSource result = *this;
-    result.rows.clear();
-    result.id_pairs.clear();
-
+    DataSource result = {
+        .owner = this->owner,
+        .member = this->member,
+        .single_owner = this->single_owner,
+        .single_member = this->single_member,
+        .id_pairs = {},
+    };
     for (int i = 0; i < id_pairs.size(); i++)
     {
       int owner_id = id_pairs[i].first;
       int member_id = id_pairs[i].second;
-      if (p(owner->rows[owner_id], member->rows[member_id], rows[i]))
+      if (p(this->owner.rows[owner_id], this->owner.rows[member_id], this->rows[i]))
       {
-        result.rows.push_back(rows[i]);
-        result.id_pairs.push_back(id_pairs[i]);
+        result.rows.push_back(this->rows[i]);
+        result.id_pairs.push_back(this->id_pairs[i]);
       }
     }
-
     return result;
+  }
+
+private:
+  static void printVector(vector<string> vec)
+  {
+    for (string str : vec)
+    {
+      cout << str << " ";
+    }
+    cout << endl;
   }
 
 public:
