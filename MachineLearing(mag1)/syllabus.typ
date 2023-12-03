@@ -44,6 +44,16 @@ $ X arrow.long F arrow.long y $
 / Regression model: predicts continuous values.
 / Classification model: predicts categorical values.
 
+Tasks:
+1. Clustering
+2. Anomaly detection
+3. Dimensionality reduction
+4. Association rule learning
+
+Problems:
+1. Underfitting/overfitting
+2. Too few data/non representative data 
+
 == Unsupervised
 
 $ X arrow.long F arrow.long X' $
@@ -51,6 +61,67 @@ $ X arrow.long F arrow.long X' $
 == Reinforement learning
 
 The learning system, called agent can observe the environment, select and perform actions, and get rewards or penalties. It must learn then by itself what is the best strategy, called a policy to get the most reward over the time.
+
+= Four types of problems where it shines
+
+1. Problems fow which solution requires a lot of hand-tuning 
+2. Complex problems, for which there is no good solution exists
+3. Fluctuating environments - online models can adapt
+4. Getting insights about large amount of data.
+
+== Other differentiations
+
+Batch vs live.
+
+Instance-Based vs Model-Based learning.
+
+/ Instance-based: postponed computations, no training process - can produce output only in training dataset range.
+
+Algorithms:
+- K-neighbors regression(need to define neighborhood function)
+
+/ Model-Based learning: makes model to generalize data and predict new value by formula. Uses utility function to tweak the formula.
+
+Algorithms:
+- Linear regression
+
+= Main challenges 
+
+== Bad data
+
+1. Insufficient quantity of training data.
+To detect use model performance metrics - precision/recall and cross validation.
+
+2. Non representative training data.
+Representative dataset - accurely reflect structure and the diversity of the real-world scenario.
+
+To detect: use statistical analysis(check features distribution, outliners, tendencies etc.). Compare distribution of features with larger dataset.
+- For classification check classes distribution.
+
+3. Poor quality data(NULLS especially). Need to define how to treat outliners and NULLS.
+
+== Feature engineering
+1. Feature selection
+2. Feature extraction(e.g. compression)
+3. Creating new features
+
+== On text procesing. (the unreasonable effectiveness of data)
+The large amount of data with simple algorithms beats the small-middle amount of data with sophisticated algorithms.
+
+The translation is a hard problem, but amount of data produces very precise prediction.
+
+Actual problem of text processing is not to use statistics or ontology - but which language to use, how to feed info to it and how to run inference.
+
+The ontology and other structuring is not possible at this scale because the profit is not obvious and not profitable. So at large scale it's more efficient to use unsupervised algorithms on unlabeled data.
+
+== Cross validation
+
+Goal is to test model ability to predict new data by.(struggling with overfitting and selection bias)
+
+Validation performed with different portions of data to test and train model.
+
+== Selection bias
+Selecting individuals in such a way that proper randomization(representation) is not achieved.
 
 = Optimisation and loss function
 
@@ -261,11 +332,21 @@ Logistic examples:
 = Removing correlated features
 Before train model it may be worth to perform "dimensionality reduction" to save space, without loosing too much information
 
+
+= Selecting a performance measure for regression
+1. Mean absolute error
+$ "MAE" = (sum^(n)_(i-1)|e_i|)/n $
+
+Disregard difference between under,over estimation.
+
+2. Mean squared error
+$ "MSE" = (sum^(n)_(i-1)(e_i)^2)/n $
+
+3. Root mean squared error
+$ "RMSE" = sqrt((sum^(n)_(i-1)(e_i)^2)/n) $
+
 = Lib
 - https://www.statlect.com/
 - https://towardsdatascience.com/
 - https://towardsdatascience.com/logistic-regression-detailed-overview-46c4da4303bc
 - https://en.wikipedia.org/wiki/Logistic_regression
-- file:///Users/s.syrota/Downloads/Fundamentals%20of%20probability%20and%20statistics%20for%20engineers%20(T.%20T.%20Soong)%20(Z-Library).pdf
-- file:///Users/s.syrota/Downloads/Essential%20Math%20for%20Data%20Science%20(Fifth%20Early%20Release)%20(Thomas%20Nield)%20(Z-Library).pdf
-299 page
