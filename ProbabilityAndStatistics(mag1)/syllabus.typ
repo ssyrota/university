@@ -39,19 +39,13 @@ $ D(X) = M(X^2) - (M(X))^2 $
 $ sigma(X) = sqrt(D(X)) $
 
 == Функція розподілу ймовірностей дискретної величини
+Cumulative(distribution) function:
+
 $ F(x) = P(X < x) $
 P(X < x) - ймовірність, що випадкова величина X прийме значення строго менше ніж x.
 
+What if *X* is continuous?
 
-= Розподіл ймовірностей
-/ Distribution: 
+== Probability density
 
-== Нормальний розподіл
-
-
-= Посилання
-- http://mathprofi.ru/
-
-= Парадокси
-
-/ Ефект Віла Роджерса: коли окі переїхали до Каліфорнії рівень інтелекту виріс у двох штатах одразу.
+/ Def: probability per unit length. Since at one dot absolute likelihood is 0.

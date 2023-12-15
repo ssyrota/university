@@ -64,7 +64,7 @@ The learning system, called agent can observe the environment, select and perfor
 
 = Four types of problems where it shines
 
-1. Problems fow which solution requires a lot of hand-tuning 
+1. Problems for which solution requires a lot of hand-tuning 
 2. Complex problems, for which there is no good solution exists
 3. Fluctuating environments - online models can adapt
 4. Getting insights about large amount of data.
@@ -350,3 +350,4 @@ $ "RMSE" = sqrt((sum^(n)_(i-1)(e_i)^2)/n) $
 - https://towardsdatascience.com/
 - https://towardsdatascience.com/logistic-regression-detailed-overview-46c4da4303bc
 - https://en.wikipedia.org/wiki/Logistic_regression
+
