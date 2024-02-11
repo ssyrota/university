@@ -1,8 +1,8 @@
 package main
 
 import (
-	"distributed_systems_lab2/src/core/sql"
 	"distributed_systems_lab2/src/db"
+	"distributed_systems_lab2/src/repo/sql"
 	"distributed_systems_lab2/src/router"
 	"distributed_systems_lab2/src/router/middleware"
 
