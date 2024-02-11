@@ -10,6 +10,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+func NewCityFactory(db *db.SqlDB) *CityFactory {
+	return &CityFactory{db: db}
+}
+
 type CityFactory struct {
 	db *db.SqlDB
 }

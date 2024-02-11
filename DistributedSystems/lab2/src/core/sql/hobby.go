@@ -10,6 +10,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+func NewHobbiesFactory(db *db.SqlDB) *HobbiesFactory {
+	return &HobbiesFactory{db: db}
+}
+
 type HobbiesFactory struct {
 	db *db.SqlDB
 }

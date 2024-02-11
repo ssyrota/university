@@ -8,6 +8,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+func NewUsersFactory(db *db.SqlDB) *UsersFactory {
+	return &UsersFactory{db: db}
+}
+
 type UsersFactory struct {
 	db *db.SqlDB
 }
