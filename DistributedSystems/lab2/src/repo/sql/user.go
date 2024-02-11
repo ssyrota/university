@@ -17,23 +17,26 @@ type UsersFactory struct {
 }
 
 type user struct {
-	login    string `db:"login"`
-	password string `db:"password"`
+	Login    string `db:"login"`
+	Password string `db:"password"`
 }
 
 func (c *user) toCore(f *UsersFactory) *core.User {
 	return core.NewUser(func() (*core.Cv, error) {
 		return nil, nil
-	}, c.login, c.password)
+	}, c.Login, c.Password)
 }
 
 func (f *UsersFactory) Find(login string) (*core.User, error) {
-	var user user
+	var users []user
 	query, args := f.findUserQuery(login)
-	if err := f.db.SelectContext(ctx, &user, query, args); err != nil {
+	if err := f.db.SelectContext(ctx, &users, query, args...); err != nil {
 		return nil, errors.Wrap(err, "query failed")
 	}
-	return user.toCore(f), nil
+	if len(users) == 0 {
+		return nil, errors.New("user not found")
+	}
+	return users[0].toCore(f), nil
 }
 
 func (f *UsersFactory) findUserQuery(login string) (string, []any) {

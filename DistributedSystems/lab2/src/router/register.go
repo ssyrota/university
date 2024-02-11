@@ -8,5 +8,12 @@ import (
 
 func Register(group gin.IRouter, userFactory core.UsersFactory, cityFactory core.CityFactory, hobbiesFactory core.HobbiesFactory) {
 	userController := user{userFactory: userFactory}
-	group.GET("/cv", userController.Cv)
+	group.GET("/user/cv", userController.Cv)
+	group.GET("/user/hobbies", userController.Hobbies)
+
+	hobbiesController := hobbies{hobbiesFactory: hobbiesFactory}
+	group.GET("/hobbies", hobbiesController.AllInCvs)
+
+	citiesController := citties{cittiesFactory: cityFactory}
+	group.GET("/cities", citiesController.AllInCvs)
 }
