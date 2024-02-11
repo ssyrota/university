@@ -13,6 +13,7 @@ func Register(group gin.IRouter, userFactory core.UsersFactory, cityFactory core
 
 	hobbiesController := hobbies{hobbiesFactory: hobbiesFactory}
 	group.GET("/hobbies", hobbiesController.AllInCvs)
+	group.GET("/hobbies/by-city", hobbiesController.AllByCity)
 
 	citiesController := citties{cittiesFactory: cityFactory}
 	group.GET("/cities", citiesController.AllInCvs)

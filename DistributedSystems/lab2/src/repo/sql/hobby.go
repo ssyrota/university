@@ -29,9 +29,9 @@ func (c *hobby) toCore() core.Hobby {
 	return core.NewHobby(c.Name, c.Id)
 }
 
-func (f *HobbiesFactory) ByUsersInCity(city core.City) (*[]core.Hobby, error) {
+func (f *HobbiesFactory) ByUsersInCity(city string) (*[]core.Hobby, error) {
 	var hobbies []hobby
-	query, args := f.byUsersInCityQuery(city.ID())
+	query, args := f.byUsersInCityQuery(city)
 	if err := f.db.SelectContext(ctx, &hobbies, query, args...); err != nil {
 		return nil, errors.Wrap(err, "query failed")
 	}
@@ -39,9 +39,9 @@ func (f *HobbiesFactory) ByUsersInCity(city core.City) (*[]core.Hobby, error) {
 	return &res, nil
 }
 
-func (f *HobbiesFactory) byUsersInCityQuery(cityID uuid.UUID) (string, []any) {
+func (f *HobbiesFactory) byUsersInCityQuery(city string) (string, []any) {
 	query, args, _ := sqlx.Named(hobbiesByCityQueryT, map[string]any{
-		"city_id": cityID.String(),
+		"city": city,
 	})
 	return f.db.Rebind(query), args
 }
@@ -64,7 +64,7 @@ FROM
 WHERE EXISTS (
 	SELECT 1 from cvs_hobbies WHERE cvs_hobbies.cv_id IN (
 		SELECT id FROM cvs WHERE EXISTS (
-			SELECT 1 from jobs WHERE jobs.cv_id = cvs.id AND job.city_id=:city_id
+			SELECT 1 from jobs WHERE jobs.cv_id = cvs.id AND job.city_id=(SELECT id FROM cities WHERE name=:city)
 		)
 	) AND cvs_hobbies.hobby_id = hobbies.id
 )

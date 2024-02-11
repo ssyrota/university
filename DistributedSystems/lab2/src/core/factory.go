@@ -7,7 +7,7 @@ type UsersFactory interface {
 
 type HobbiesFactory interface {
 	ExistedInCvs() (*[]Hobby, error)
-	ByUsersInCity(city City) (*[]Hobby, error)
+	ByUsersInCity(city string) (*[]Hobby, error)
 }
 
 type CityFactory interface {
