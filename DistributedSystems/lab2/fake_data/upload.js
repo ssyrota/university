@@ -79,8 +79,8 @@ const uploadToPsql = async () => {
 };
 
 async function main() {
-  // uploadToMongo();
-  await uploadToPsql();
+  // await uploadToMongo();
+  // await uploadToPsql();
 }
 
 main().catch(console.error);

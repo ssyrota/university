@@ -76,9 +76,5 @@ SELECT
 	name
 FROM
 	hobbies
-WHERE EXISTS (
-	SELECT 1 FROM cvs WHERE EXISTS (
-		SELECT 1 from cvs_hobbies WHERE cvs_hobbies.cv_id = cvs.id AND cvs_hobbies.hobby_id = hobbies.id
-	)
-)
+WHERE id IN (SELECT hobby_id from cvs_hobbies WHERE cv_id IN (SELECT id from cvs))
 `
