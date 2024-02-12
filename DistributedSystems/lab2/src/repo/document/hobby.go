@@ -1,16 +1,19 @@
 package documented_repo
 
 import (
+	"context"
 	"distributed_systems_lab2/src/core"
 
 	"github.com/elliotchance/pie/v2"
+	"github.com/pkg/errors"
+	"github.com/tj/go/env"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func NewHobbiesFactory(db *mongo.Database) *HobbiesFactory {
-	return &HobbiesFactory{db: db.Collection("users_with_cvs")}
+	return &HobbiesFactory{db: db.Collection(env.Get("MONGO_COLLECTION"))}
 }
 
 type HobbiesFactory struct {
@@ -41,14 +44,14 @@ func (f *HobbiesFactory) ByUsersInCity(city string) (*[]core.Hobby, error) {
 		return nil, err
 	}
 	type res struct {
-		hobbies hobby `bson:"hobbies"`
+		Hobbies hobby `bson:"hobbies"`
 	}
 	var dbRes []res
 	if err := cursor.All(ctx, &dbRes); err != nil {
 		return nil, err
 	}
 	domainRes := pie.Map(dbRes, func(r res) core.Hobby {
-		return core.Hobby(r.hobbies.toDomain())
+		return core.Hobby(r.Hobbies.toDomain())
 	})
 	return &domainRes, nil
 }
@@ -66,7 +69,7 @@ func (f *HobbiesFactory) ExistedInCvs() (*[]core.Hobby, error) {
 			},
 		},
 		bson.D{{Key: "$unwind", Value: bson.D{{"path", "$hobbies"}}}},
-		bson.D{{Key: "$unwiValue: nd", Value: bson.D{{"path", "$hobbies"}}}},
+		bson.D{{Key: "$unwind", Value: bson.D{{"path", "$hobbies"}}}},
 		bson.D{
 			{"$group",
 				bson.D{
@@ -78,16 +81,16 @@ func (f *HobbiesFactory) ExistedInCvs() (*[]core.Hobby, error) {
 	}
 	cursor, err := f.db.Aggregate(ctx, pipeline)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "aggregation failed to start")
 	}
 	type res struct {
-		deduped []hobby `bson:"deduped"`
+		Deduped []hobby `bson:"deduped"`
 	}
-	var dbRes res
-	if err := cursor.Decode(dbRes); err != nil {
-		return nil, err
+	var dbRes []res
+	if err := cursor.All(context.Background(), &dbRes); err != nil {
+		return nil, errors.Wrap(err, "query failed")
 	}
-	domainRes := pie.Map(dbRes.deduped, func(r hobby) core.Hobby {
+	domainRes := pie.Map(dbRes[0].Deduped, func(r hobby) core.Hobby {
 		return r.toDomain()
 	})
 	return &domainRes, nil

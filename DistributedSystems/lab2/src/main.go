@@ -27,7 +27,7 @@ func main() {
 	}
 
 	{
-		documentedDb, err := db.NewDocumented(env.Get("MONGO_CONNECTION_STRING"), "users_with_cvs")
+		documentedDb, err := db.NewDocumented(env.Get("MONGO_CONNECTION_STRING"), env.Get("MONGO_DB"))
 		if err != nil {
 			panic(err)
 		}

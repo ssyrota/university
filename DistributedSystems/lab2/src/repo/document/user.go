@@ -6,12 +6,13 @@ import (
 
 	"github.com/elliotchance/pie/v2"
 	"github.com/pkg/errors"
+	"github.com/tj/go/env"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func NewUsersFactory(db *mongo.Database) *UsersFactory {
-	return &UsersFactory{db: db.Collection("users_with_cvs")}
+	return &UsersFactory{db: db.Collection(env.Get("MONGO_COLLECTION"))}
 }
 
 type UsersFactory struct {

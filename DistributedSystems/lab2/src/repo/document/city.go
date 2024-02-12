@@ -5,13 +5,14 @@ import (
 	"distributed_systems_lab2/src/core"
 
 	"github.com/elliotchance/pie/v2"
+	"github.com/tj/go/env"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func NewCityFactory(db *mongo.Database) *CityFactory {
-	return &CityFactory{db: db.Collection("users_with_cvs")}
+	return &CityFactory{db: db.Collection(env.Get("MONGO_COLLECTION"))}
 }
 
 type CityFactory struct {
