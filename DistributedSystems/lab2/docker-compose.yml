@@ -19,6 +19,8 @@ services:
       - GOOSE_DRIVER=postgres
       - GOOSE_DBSTRING=host=relational-db user=postgres password=not_so_secret dbname=postgres sslmode=disable
       - MONGO_CONNECTION_STRING=mongodb://mongodb:27017
+      - MONGO_DB=users_cvs
+      - MONGO_COLLECTION=users_cvs
     command: sleep infinity
 
   mongodb:
@@ -30,7 +32,7 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-      
+
   relational-db:
     image: postgres:16
     restart: always
@@ -46,7 +48,6 @@ services:
     volumes:
       - databases-db-data:/var/lib/postgresql/data/
 
-
   neo4j:
     image: neo4j:5.16.0-community-bullseye
     ports:
@@ -59,7 +60,6 @@ services:
     volumes:
       - neo4j-data:/data
       - neo4j-conf:/conf
-
 
 volumes:
   vscode-go-dev:

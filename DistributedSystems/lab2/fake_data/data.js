@@ -15,7 +15,7 @@ const makeData = () => ({
         name: faker.music.genre(),
       },
     ],
-    JobHistory: Array.from({ length: Math.floor(Math.random() * 10) }, () => ({
+    jobs: Array.from({ length: Math.floor(Math.random() * 10) }, () => ({
       id: faker.string.uuid(),
       falserom: faker.date.past().toISOString(),
       to: faker.date.future().toISOString(),
