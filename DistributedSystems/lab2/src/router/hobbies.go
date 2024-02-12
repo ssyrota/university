@@ -26,7 +26,7 @@ func (u *hobbies) AllInCvs(c *gin.Context) {
 }
 
 type allByCity struct {
-	City string `json:"city"`
+	City string `form:"city"`
 }
 
 func (u *hobbies) AllByCity(c *gin.Context) {

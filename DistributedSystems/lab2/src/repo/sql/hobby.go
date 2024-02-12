@@ -61,12 +61,13 @@ SELECT
 	name
 FROM
 	hobbies
-WHERE EXISTS (
-	SELECT 1 from cvs_hobbies WHERE cvs_hobbies.cv_id IN (
-		SELECT id FROM cvs WHERE EXISTS (
-			SELECT 1 from jobs WHERE jobs.cv_id = cvs.id AND job.city_id=(SELECT id FROM cities WHERE name=:city)
-		)
-	) AND cvs_hobbies.hobby_id = hobbies.id
+WHERE id IN (
+	SELECT hobby_id from cvs_hobbies WHERE cv_id IN (
+		SELECT id FROM cvs cv WHERE
+	cv.id IN (
+		SELECT cv_id FROM jobs job WHERE job.city_id IN (SELECT id FROM cities WHERE name=:city)
+		) 
+	)
 )
 `
 
