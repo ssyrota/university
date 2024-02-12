@@ -4,25 +4,25 @@ const makeData = () => ({
   login: faker.internet.userName(),
   password: faker.internet.password(),
   cv: {
-    Id: faker.string.uuid(),
-    Hobbies: [
+    id: faker.string.uuid(),
+    hobbies: [
       {
-        Id: faker.string.uuid(),
-        Name: faker.music.genre(),
+        id: faker.string.uuid(),
+        name: faker.music.genre(),
       },
       {
-        Id: faker.string.uuid(),
-        Name: faker.music.genre(),
+        id: faker.string.uuid(),
+        name: faker.music.genre(),
       },
     ],
     JobHistory: Array.from({ length: Math.floor(Math.random() * 10) }, () => ({
-      Id: faker.string.uuid(),
-      From: faker.date.past().toISOString(),
-      To: faker.date.future().toISOString(),
-      Company: faker.company.name(),
-      City: {
-        Id: faker.string.uuid(),
-        Name: faker.location.city(),
+      id: faker.string.uuid(),
+      falserom: faker.date.past().toISOString(),
+      to: faker.date.future().toISOString(),
+      company: faker.company.name(),
+      city: {
+        id: faker.string.uuid(),
+        name: faker.location.city(),
       },
     })),
   },
