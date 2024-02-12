@@ -21,6 +21,7 @@ type CityFactory struct {
 var ctx = context.Background()
 
 func (f *CityFactory) ExistedInCvs() (*[]core.City, error) {
+	// If you are reading this and want to reuse in a more performant way use nested indexes
 	pipeline := bson.A{
 		bson.D{{"$unwind", bson.D{{"path", "$cv.jobs"}}}},
 		bson.D{

@@ -21,6 +21,7 @@ var _ core.HobbiesFactory = new(HobbiesFactory)
 
 // Springdale
 func (f *HobbiesFactory) ByUsersInCity(city string) (*[]core.Hobby, error) {
+	// If you are reading this and want to reuse in a more performant way use nested indexes
 	pipeline := bson.A{
 		bson.D{{"$unwind", bson.D{{"path", "$cv.jobs"}}}},
 		bson.D{
@@ -53,6 +54,7 @@ func (f *HobbiesFactory) ByUsersInCity(city string) (*[]core.Hobby, error) {
 }
 
 func (f *HobbiesFactory) ExistedInCvs() (*[]core.Hobby, error) {
+	// If you are reading this and want to reuse in a more performant way use nested indexes
 	pipeline := bson.A{
 		bson.D{{Key: "$unwind", Value: bson.D{{"path", "$cv.jobs"}}}},
 		bson.D{
