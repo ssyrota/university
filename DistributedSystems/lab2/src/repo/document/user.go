@@ -50,8 +50,8 @@ func (f *UsersFactory) GroupByWorkedCompany() (map[string][]core.User, error) {
 		return nil, err
 	}
 	type res struct {
-		company string `bson:"_id"`
-		data    []user `bson:"data"`
+		Company string `bson:"_id"`
+		Data    []user `bson:"data"`
 	}
 	var dbRes []res
 	if err := cursor.All(ctx, &dbRes); err != nil {
@@ -59,7 +59,7 @@ func (f *UsersFactory) GroupByWorkedCompany() (map[string][]core.User, error) {
 	}
 	domainRes := make(map[string][]core.User)
 	for _, dbResItem := range dbRes {
-		domainRes[dbResItem.company] = pie.Map(dbResItem.data, func(u user) core.User {
+		domainRes[dbResItem.Company] = pie.Map(dbResItem.Data, func(u user) core.User {
 			return *u.toCore(f)
 		})
 	}

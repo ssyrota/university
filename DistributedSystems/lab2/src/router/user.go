@@ -57,3 +57,12 @@ func (u *user) Hobbies(c *gin.Context) {
 	}
 	c.JSON(200, hobbies)
 }
+
+func (u *user) ByCompany(c *gin.Context) {
+	users, err := u.userFactory.GroupByWorkedCompany()
+	if err != nil {
+		ginres.NewInternalServerError(c, err).Reply()
+		return
+	}
+	c.JSON(200, users)
+}

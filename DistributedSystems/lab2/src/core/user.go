@@ -14,7 +14,7 @@ func (u *User) Cv() (*Cv, error) {
 
 type User struct {
 	Login    string
-	Password Password
+	Password Password `json:"-"`
 	cv       LazyData[Cv]
 }
 
