@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func NewJob(from time.Time, to time.Time, company string, city City, id uuid.UUID) Job {
+func NewJob(id uuid.UUID, from time.Time, to time.Time, company string, city City) Job {
 	return Job{id, from, to, company, city}
 }
 

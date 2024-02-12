@@ -3,19 +3,34 @@ version: "3.8"
 services:
   dev-app:
     build: .
-    links:
-      - "relational-db:relational-db"
     ports:
       - 3001:3001
+    links:
+      - relational-db:relational-db
+      - mongodb:mongodb
+      - neo4j:neo4j
+    depends_on:
+      - relational-db
+      - mongodb
+      - neo4j
     volumes:
       - .:/app
     environment:
       - GOOSE_DRIVER=postgres
       - GOOSE_DBSTRING=host=relational-db user=postgres password=not_so_secret dbname=postgres sslmode=disable
-    profiles:
-      - dev
+      - MONGO_CONNECTION_STRING=mongodb://mongodb:27017
     command: sleep infinity
 
+  mongodb:
+    image: mongo:6-jammy
+    restart: always
+    logging:
+      driver: none
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      
   relational-db:
     image: postgres:16
     restart: always
@@ -51,3 +66,4 @@ volumes:
   databases-db-data:
   neo4j-data:
   neo4j-conf:
+  mongo-data:
