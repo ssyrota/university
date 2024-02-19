@@ -54,16 +54,18 @@ services:
       - 7474:7474
       - 7687:7687
     restart: always
+    environment:
+      - NEO4J_AUTH=none
     logging:
       driver: none
     command: neo4j
     volumes:
-      - neo4j-data:/data
-      - neo4j-conf:/conf
+      - neo4j-data1:/data
+      - neo4j-conf1:/conf
 
 volumes:
   vscode-go-dev:
   databases-db-data:
-  neo4j-data:
-  neo4j-conf:
+  neo4j-data1:
+  neo4j-conf1:
   mongo-data:
