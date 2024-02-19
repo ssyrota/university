@@ -1,4 +1,5 @@
 const { MongoClient } = require("mongodb");
+const { GraphUser } = require("./graph.js");
 
 const fs = require("fs");
 
@@ -87,60 +88,9 @@ const uploadToNeo4j = async () => {
 
   const fileContents = fs.readFileSync("data.json", "utf8");
   const users = JSON.parse(fileContents);
-
-  for (const user of users) {
-    // Create User node
-    await session.run(
-      `MERGE (u:User {login: $login, password: $password})`,
-      user
-    );
-
-    // Create CV node and relationship to User
-    await session.run(
-      `
-            MATCH (u:User {login: $login})
-            MERGE (c:CV {id: $cvId})
-            MERGE (u)-[:HAS_CV]->(c)
-        `,
-      { login: user.login, cvId: user.cv.id }
-    );
-
-    // Create and relate Hobbies
-    for (const hobby of user.cv.hobbies) {
-      await session.run(
-        `
-                MERGE (h:Hobby {id: $id, name: $name})
-                WITH h
-                MATCH (c:CV {id: $cvId})
-                MERGE (c)-[:HAS_HOBBY]->(h)
-            `,
-        { id: hobby.id, name: hobby.name, cvId: user.cv.id }
-      );
-    }
-
-    // Create and relate Jobs with Cities
-    for (const job of user.cv.jobs) {
-      await session.run(
-        `
-                MERGE (city:City {id: $cityId, name: $cityName})
-                MERGE (j:Job {id: $jobId})
-                ON CREATE SET j.from = $from, j.to = $to, j.company = $company
-                WITH j, city
-                MATCH (c:CV {id: $cvId})
-                MERGE (j)-[:LOCATED_IN]->(city)
-                MERGE (c)-[:HAS_JOB]->(j)
-            `,
-        {
-          cityId: job.city.id,
-          cityName: job.city.name,
-          jobId: job.id,
-          from: job.from,
-          to: job.to,
-          company: job.company,
-          cvId: user.cv.id,
-        }
-      );
-    }
+  for await (const user of users) {
+    const userNode = new GraphUser(session, user);
+    await userNode.save();
   }
 };
 

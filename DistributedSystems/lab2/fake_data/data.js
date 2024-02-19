@@ -17,9 +17,12 @@ const makeData = () => ({
     ],
     jobs: Array.from({ length: Math.floor(Math.random() * 10) }, () => ({
       id: faker.string.uuid(),
-      falserom: faker.date.past().toISOString(),
+      from: faker.date.past().toISOString(),
       to: faker.date.future().toISOString(),
-      company: faker.company.name(),
+      company: {
+        name: faker.company.name(),
+        id: faker.string.uuid(),
+      },
       city: {
         id: faker.string.uuid(),
         name: faker.location.city(),
