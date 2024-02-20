@@ -44,7 +44,8 @@ func main() {
 			panic(err)
 		}
 		city := graph_repo.NewCityFactory(neo4j)
-		router.Register(server.Group("/graph"), nil, city, nil)
+		user := graph_repo.NewUsersFactory(neo4j)
+		router.Register(server.Group("/graph"), user, city, nil)
 	}
 	server.Run(":3001")
 }
