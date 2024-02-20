@@ -21,7 +21,8 @@ services:
       - MONGO_CONNECTION_STRING=mongodb://mongodb:27017
       - MONGO_DB=users_cvs
       - MONGO_COLLECTION=users_cvs
-      - NEO4J_DATABASE=user_cvs
+      - NEO4J_DATABASE=neo4j
+      - NEO4J_CONN_STR="bolt://neo4j:7687"
     command: sleep infinity
 
   mongodb:

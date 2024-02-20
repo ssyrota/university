@@ -88,7 +88,10 @@ const uploadToNeo4j = async () => {
 
   const fileContents = fs.readFileSync("data.json", "utf8");
   const users = JSON.parse(fileContents);
+  let i = 0;
   for await (const user of users) {
+    i++;
+    console.log("Percent complete: ", (i / users.length) * 100, "%");
     const userNode = new GraphUser(session, user);
     await userNode.save();
   }

@@ -3,6 +3,7 @@ package main
 import (
 	"distributed_systems_lab2/src/db"
 	documented_repo "distributed_systems_lab2/src/repo/document"
+	graph_repo "distributed_systems_lab2/src/repo/graph"
 	"distributed_systems_lab2/src/repo/sql"
 	"distributed_systems_lab2/src/router"
 	"distributed_systems_lab2/src/router/middleware"
@@ -35,6 +36,15 @@ func main() {
 		city := documented_repo.NewCityFactory(documentedDb)
 		hobbies := documented_repo.NewHobbiesFactory(documentedDb)
 		router.Register(server.Group("/documented"), users, city, hobbies)
+	}
+
+	{
+		neo4j, err := db.ConnectToNeo4j()
+		if err != nil {
+			panic(err)
+		}
+		city := graph_repo.NewCityFactory(neo4j)
+		router.Register(server.Group("/graph"), nil, city, nil)
 	}
 	server.Run(":3001")
 }

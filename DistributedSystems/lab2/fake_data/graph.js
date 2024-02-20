@@ -80,8 +80,9 @@ class GraphCompany {
 
   async save() {
     const { id, name } = this.company;
-    await this.session.run("MERGE (c:Company {name: $name})", {
+    await this.session.run("MERGE (c:Company {name: $name, id:$id})", {
       name,
+      id,
     });
     return;
   }
@@ -95,8 +96,9 @@ class GraphCity {
 
   async save() {
     const { id, name } = this.city;
-    await this.session.run("MERGE (c:City {name: $name})", {
+    await this.session.run("MERGE (c:City {name: $name, id:$id})", {
       name,
+      id,
     });
     return;
   }
@@ -110,8 +112,9 @@ class GraphHobby {
 
   async save() {
     const { id, name } = this.hobby;
-    await this.session.run("MERGE (h:Hobby {name: $name})", {
+    await this.session.run("MERGE (h:Hobby {name: $name, id: $id})", {
       name,
+      id,
     });
     return;
   }
