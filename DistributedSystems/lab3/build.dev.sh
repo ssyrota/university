@@ -1,0 +1,1 @@
+go build -o /go/bin/app ./src/

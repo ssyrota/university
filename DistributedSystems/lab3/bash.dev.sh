@@ -1,0 +1,1 @@
+docker compose exec -ti dev-app /bin/bash

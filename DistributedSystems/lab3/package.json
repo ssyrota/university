@@ -1,0 +1,12 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@clickhouse/client": "^0.2.10",
+    "@depyronick/clickhouse-client": "^2.0.4",
+    "@faker-js/faker": "^8.4.1",
+    "node-pg": "^1.0.1",
+    "pg": "^8.11.3",
+    "pg-format": "^1.0.4",
+    "underscore": "^1.13.6"
+  }
+}
