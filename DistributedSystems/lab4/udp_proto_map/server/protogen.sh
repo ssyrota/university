@@ -1,0 +1,1 @@
+protoc --experimental_allow_proto3_optional -I=/app --go_out=/app/ /app/map.proto 

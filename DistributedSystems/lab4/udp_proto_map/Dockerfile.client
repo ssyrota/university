@@ -1,0 +1,5 @@
+FROM golang:1.22-bullseye as dev
+WORKDIR /app
+RUN apt-get update -y -qq
+RUN apt-get install netcat -y -qq
+CMD ["/go/bin/app"]

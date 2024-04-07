@@ -145,3 +145,9 @@ FROM sells
 INNER JOIN prices USING (product_id)
 WHERE ((sells.time >= '2023-02-01') AND (sells.time <= '2023-03-01')) AND (sells.product_id = '47298028-d0da-4946-a007-08016d55b47d')
 ```
+
+7. Display the top 10 purchases of products in pairs during period C (for example, butter, bread - 1000 times)
+Clickhouse
+```sql
+SELECT product_type, count(*) over (partition by user_id order by time desc) FROM sells
+```

@@ -1,0 +1,23 @@
+syntax = "proto3";
+package udp_proto_map;
+option go_package = "/map_proto";
+
+
+message MapGetRequest {
+  repeated string keys = 1;
+}
+message MapGetResponse {
+  repeated MapValue values = 1;
+}
+
+message MapSetRequest {
+  repeated MapValue values = 1;
+}
+message MapSetResponse {
+}
+
+
+message MapValue {
+  string key = 1;
+  optional string value = 2;
+}

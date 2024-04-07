@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  client:
+    build:
+      dockerfile: Dockerfile.client
+    ports:
+      - 3006:3006/udp
+    volumes:
+      - ./client:/app
+      - ./map.proto:/app/map.proto
+    command: sleep infinity
+
+  server:
+    build:
+      dockerfile: Dockerfile.server
+    ports:
+      - 3008:3008/udp
+    volumes:
+      - ./server:/app
+      - ./map.proto:/app/map.proto
+    command: sleep infinity
