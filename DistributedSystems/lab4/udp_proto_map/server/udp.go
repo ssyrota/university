@@ -18,10 +18,11 @@ func listenUdp(port int, handler func(data []byte) ([]byte, error)) {
 	}
 	for {
 		buf := make([]byte, 1024)
-		_, client, err := sock.ReadFrom(buf)
+		bytesCount, client, err := sock.ReadFrom(buf)
 		if err != nil {
 			log.Printf("oops, packet read failure: %s", err.Error())
 		}
+		buf = trim(buf, bytesCount)
 		sendBack := func(data []byte) {
 			_, err := sock.WriteTo(data, client)
 			if err != nil {
@@ -36,4 +37,8 @@ func listenUdp(port int, handler func(data []byte) ([]byte, error)) {
 			sendBack(res)
 		}()
 	}
+}
+
+func trim(data []byte, c int) []byte {
+	return data[:c]
 }

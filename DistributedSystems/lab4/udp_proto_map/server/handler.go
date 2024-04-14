@@ -20,11 +20,11 @@ type Handler struct {
 }
 
 func (h *Handler) Handle() ([]byte, error) {
-	data, err, ok := h.tryGet()
+	data, err, ok := h.trySet()
 	if ok {
 		return data, err
 	}
-	data, err, ok = h.trySet()
+	data, err, ok = h.tryGet()
 	if ok {
 		return data, err
 	}
@@ -33,8 +33,10 @@ func (h *Handler) Handle() ([]byte, error) {
 
 func (h *Handler) tryGet() ([]byte, error, bool) {
 	var get map_proto.MapGetRequest
-	if err := proto.Unmarshal(h.data, &get); err == nil {
+	err := proto.Unmarshal(h.data, &get)
+	if err == nil {
 		res := map_proto.MapGetResponse{Values: make([]*map_proto.MapValue, 0)}
+		log.Print("get request keys:", ma.Keys())
 		for _, k := range get.GetKeys() {
 			v, ok := ma.Get(k)
 			if !ok {
@@ -46,11 +48,13 @@ func (h *Handler) tryGet() ([]byte, error, bool) {
 		d, err := proto.Marshal(&res)
 		return d, err, true
 	}
+	log.Print(err.Error())
 	return nil, nil, false
 }
 func (h *Handler) trySet() ([]byte, error, bool) {
 	var set map_proto.MapSetRequest
 	if err := proto.Unmarshal(h.data, &set); err == nil {
+		log.Print("set", set.Values)
 		res := map_proto.MapSetResponse{}
 		for _, value := range set.Values {
 			ma.Set(value.GetKey(), value.GetValue())

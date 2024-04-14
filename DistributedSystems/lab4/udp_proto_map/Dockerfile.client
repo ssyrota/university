@@ -1,5 +1,5 @@
-FROM golang:1.22-bullseye as dev
+FROM node:20.11-bookworm
 WORKDIR /app
 RUN apt-get update -y -qq
-RUN apt-get install netcat -y -qq
-CMD ["/go/bin/app"]
+RUN apt-get install -y -qq protobuf-compiler
+CMD ["sleep"]

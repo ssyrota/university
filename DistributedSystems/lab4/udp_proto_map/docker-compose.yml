@@ -9,7 +9,7 @@ services:
     volumes:
       - ./client:/app
       - ./map.proto:/app/map.proto
-    command: sleep infinity
+    command: ./run.dev.sh
 
   server:
     build:
@@ -19,4 +19,4 @@ services:
     volumes:
       - ./server:/app
       - ./map.proto:/app/map.proto
-    command: sleep infinity
+    command: ./run.dev.sh
