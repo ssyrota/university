@@ -1,0 +1,9 @@
+FROM golang:1.22-bullseye as dev
+WORKDIR /app
+
+COPY ./server/go.mod .
+RUN go install github.com/cosmtrek/air@latest
+COPY ./server .
+RUN go env -w CGO_ENABLED=0
+RUN ./build.dev.sh
+CMD ["/go/bin/app"]
