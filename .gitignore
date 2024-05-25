@@ -10,3 +10,4 @@ diploma
 .idea
 build
 *.mp4
+.terraform
