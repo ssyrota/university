@@ -1,0 +1,1 @@
+docker run --rm -it --mount type=bind,source="$(pwd)",target=/app -w "/app" --entrypoint "/bin/bash" python:3.8.5

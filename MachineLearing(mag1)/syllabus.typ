@@ -244,68 +244,6 @@ Regularization formula L1(makes feature selection):
 $ L = 1/(2N) sum_(j=1)^(n)(y(x_i)-y_i)^2 + Lambda sum_(i=1)^(m) (|Theta|) arrow.long min_Theta $
 
 
-= Classification
-$y in {1,2,3,..,k}$
-
-/ Task: make a function, that separates known classes.
-
-#figure(
-  image("./img/classification.png", width: 70%),
-  caption: [
-    Classification visualization
-  ],
-)
-
-Accordingly to image, linear regression is not suitable for this type of task(especially right)
-
-Firstly, we will solve binary classification task{0, 1}. Model will have 1 output - probability of x is from class 1.
-
-== Logistic regression
-/ Logistic regression: type of regression that predicts a probability of an outcome given one or more independent variables. With a threshold returned probability can be mapped to a discrete value.
-
-#figure(
-  image("./img/logistic.png", width: 70%),
-  caption: [
-    Logistic regression
-  ],
-)
-
-=== Formula
-Logistic regression is a S-shaped curve:
-$ y = 1/(1+ e^(- sum_(i=1)^m Theta_i X_i + Theta_0)) $
-
-=== Loss function
-/ BCE(Binary cross entropy) loss function: $ cases(
-  - log(p_i) "," y_i = 1,
-  - log(1 - p_i) "," y_i=0
-) $
-$p_i$ - model output probability for i example. (class 1)
-
-$ "BCE" = - y_i log(p_i) - (1-y_i)log(1-p_i) $
-
-$ cases(
-  "TP" y_i"," p_i = {1"," 1} "BSE" = 0,
-  "TN" y_i"," p_i = {0"," 0} "BSE" = 0,
-  "FN" y_i"," p_i = {1"," 0} "BSE" -> inf,
-  "FP" y_i"," p_i = {0"," 1} "BSE" -> inf,
-) $
-
-Loss for gradient:
-$ L = - 1/(N) sum_(i=1)^(n)(y_i log(p_i) + (1-y_i)log(1-p_i)) arrow.long min $
-
-$ 
-(diff f) / (diff Theta_j) = - 1/(N) sum_(i=1)^(n)(y_i log(p_i) + (1-y_i)log(1-p_i))'
-$
-
-
-== Metrics
-To define success of model *metrics* are used. $A=(N_("correct")/N) 100%$
-
-/ Precision: TP/(TP+FP). How model is confident for class a.
-/ Recall: TF/(TF+FN). Which coverage for class a.
-
-
-
 = Regressions comparison
 #table(
   columns: (auto, auto, auto),
