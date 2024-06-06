@@ -11,3 +11,4 @@ diploma
 build
 *.mp4
 .terraform
+__pycache__
