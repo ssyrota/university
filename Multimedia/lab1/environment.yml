@@ -1,0 +1,25 @@
+name: lab1_multimedia
+channels:
+  - defaults
+  - apple
+  - conda-forge
+dependencies:
+  - python=3.11
+  - ipython_genutils
+  - notebook
+  - numpy>=1.16
+  - matplotlib>=3.1
+  - scipy
+  - pillow
+  - ipykernel
+  - libtiff
+  - scikit-learn
+  - librosa
+  - pandas
+  # keras
+  # - tensorflow=2.13
+  # python -m pip install tensorflow-macos
+  # python -m pip install tensorflow-metal
+  # micromamba install -c apple tensorflow-deps
+  # python -m pip install keras
+  # - tensorflow-metal=1.1.0
