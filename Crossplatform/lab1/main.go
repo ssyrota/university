@@ -13,6 +13,8 @@ import (
 // #include <stdio.h>
 import "C"
 
+var pinner = new(runtime.Pinner)
+
 func main() {
 	fmt.Printf("Hello from golang, platform: %s; arch: %s\n", runtime.GOOS, runtime.GOARCH)
 	C.hello()
@@ -52,12 +54,12 @@ func (ls *LinearSystem) Free() {
 	ls.free()
 }
 
-func (ls *LinearSystem) SolveGauss() [][]float64 {
-	matrix := C.make_AugmentedMatrix(ls.A, ls.b)
-	linearSystem := C.make_LinearEquationSystem(matrix)
-	augmentedMatrix := C.LinearEquationSystem_solve_gauss(linearSystem)
-	return ParseMatrix(augmentedMatrix.matrix)
-}
+// func (ls *LinearSystem) SolveGauss() ([][]float64, []float64) {
+// 	matrix := C.make_AugmentedMatrix(ls.A, ls.b)
+// 	linearSystem := C.make_LinearEquationSystem(matrix)
+// 	augmentedMatrix := C.LinearEquationSystem_solve_gauss(linearSystem)
+// 	return ParseMatrix(augmentedMatrix.matrix), ParseVector(augmentedMatrix.vector)
+// }
 
 func (ls *LinearSystem) SolveMatrix() []float64 {
 	matrix := C.make_AugmentedMatrix(ls.A, ls.b)
@@ -73,12 +75,14 @@ func (ls *LinearSystem) SolveMatrix() []float64 {
 func MakeVector(a []float64) (*C.Vector, func()) {
 	length := len(a)
 	cArr := make([]C.float, length)
+	pinner.Pin(&cArr)
 	for i, v := range a {
 		cArr[i] = C.float(v)
 	}
 	cVec := C.make_Vector(&cArr[0], C.int(length))
 	return cVec, func() {
 		C.free(unsafe.Pointer(cVec))
+		pinner.Unpin()
 	}
 }
 

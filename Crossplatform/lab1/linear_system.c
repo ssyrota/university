@@ -68,6 +68,16 @@ Matrix* make_EmptyMatrix(int rows, int cols) {
   return matrix;
 }
 
+Matrix* Matrix_clone(Matrix *matrix) {
+  Matrix *clone = make_EmptyMatrix(matrix->rows, matrix->cols);
+  for (int i = 0; i < clone->rows; i++) {
+    Vector *recent_vector = clone->row_vectors[i];
+    clone->row_vectors[i] = Vector_clone(matrix->row_vectors[i]);
+    free(recent_vector);
+  }
+  return clone;
+}
+
 number Matrix_determinant(Matrix *matrix) {
     if (matrix->rows != matrix->cols) {
       return 0;
@@ -234,5 +244,10 @@ Vector* LinearEquationSystem_solve_matrix(LinearEquationSystem *system) {
 }
 
 AugmentedMatrix* LinearEquationSystem_solve_gauss(LinearEquationSystem *system) {
-  return system->parameters;
+  Matrix *resultMatrix = Matrix_clone(system->parameters->matrix);
+  Vector *resultVector = Vector_clone(system->parameters->b);
+  
+  
+  AugmentedMatrix *result = make_AugmentedMatrix(resultMatrix, resultVector);
+  return result;
 }
