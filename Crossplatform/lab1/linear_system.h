@@ -1,15 +1,17 @@
 #ifndef LINEAR_SYSTEM_H
 #define LINEAR_SYSTEM_H
 
+typedef float number;
+
 typedef struct Vector {
-  int *a;
+  number *a;
   int length;
 } Vector;
 
-Vector* make_Vector(int *a, int length);
+Vector* make_Vector(number *a, int length);
 
 typedef struct Matrix {
-  Vector **a;
+  Vector **row_vectors;
   int rows;
   int cols;
 } Matrix;
@@ -31,7 +33,7 @@ typedef struct LinearEquationSystem {
 
 LinearEquationSystem* make_LinearEquationSystem(AugmentedMatrix *parameters);
 
-AugmentedMatrix* LinearEquationSystem_solve_matrix(LinearEquationSystem *system);
+Vector* LinearEquationSystem_solve_matrix(LinearEquationSystem *system);
 AugmentedMatrix* LinearEquationSystem_solve_gauss(LinearEquationSystem *system);
 
 void hello();
