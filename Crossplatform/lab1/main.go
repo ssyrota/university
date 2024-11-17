@@ -22,7 +22,7 @@ func main() {
 		{4, 2, 1},
 		{9, 3, 1},
 	}, []float64{0, 1, 3})
-	defer ls.Free()
+	defer ls1.Free()
 	C.print_vector(ls1.b)
 	C.print_matrix(ls1.A)
 	fmt.Println("SolveMatrix: ", ls1.SolveMatrix())
