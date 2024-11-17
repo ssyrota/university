@@ -40,5 +40,5 @@ AugmentedMatrix* LinearEquationSystem_solve_gauss(LinearEquationSystem system) {
 }
 
 void hello() {
-  printf("Hello, World!\n");
+  printf("Hello from C!\n");
 }
