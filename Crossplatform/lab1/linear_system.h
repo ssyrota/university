@@ -6,22 +6,22 @@ typedef struct Vector {
   int length;
 } Vector;
 
-Vector make_Vector(int *a, int length);
+Vector* make_Vector(int *a, int length);
 
 typedef struct Matrix {
-  int **a;
+  Vector **a;
   int rows;
   int cols;
 } Matrix;
 
-Matrix make_Matrix(int **a, int rows, int cols);
+Matrix* make_Matrix(Vector **a, int rows, int cols);
 
 typedef struct AugmentedMatrix {
   Matrix *matrix;
   Vector *b;
 } AugmentedMatrix;
 
-AugmentedMatrix make_AugmentedMatrix(Matrix *matrix, Vector *b);
+AugmentedMatrix* make_AugmentedMatrix(Matrix *matrix, Vector *b);
 
 
 typedef struct LinearEquationSystem {
@@ -29,10 +29,12 @@ typedef struct LinearEquationSystem {
 } LinearEquationSystem;
 
 
-LinearEquationSystem make_LinearEquationSystem(AugmentedMatrix *parameters);
+LinearEquationSystem* make_LinearEquationSystem(AugmentedMatrix *parameters);
 
-AugmentedMatrix* LinearEquationSystem_solve_matrix(LinearEquationSystem system);
-AugmentedMatrix* LinearEquationSystem_solve_gauss(LinearEquationSystem system);
+AugmentedMatrix* LinearEquationSystem_solve_matrix(LinearEquationSystem *system);
+AugmentedMatrix* LinearEquationSystem_solve_gauss(LinearEquationSystem *system);
 
 void hello();
+void print_vector(Vector *vector);
+void print_matrix(Matrix *matrix);
 #endif
