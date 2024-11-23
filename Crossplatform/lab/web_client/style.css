@@ -21,7 +21,7 @@ body {
 
 .app-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 4vw;
   flex: 1;
   padding-left: 4vw;
