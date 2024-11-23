@@ -13,9 +13,9 @@ The example output located in the end of report.
 
 ### Library
 The basic library is implemented in C in `linear_system.c` and binary compiled to platforms:
-- `darwin-arm64`
-- `linux-arm64`
-- `linux-amd64`
+- `darwin_arm64`
+- `linux_arm64`
+- `linux_amd64`
 
 Library binaries compiled to `./bin` directory in format `./bin/${platform}_liblinear_system.so` and created each time when `test.sh` script is running.
 

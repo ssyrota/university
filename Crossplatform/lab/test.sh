@@ -19,6 +19,8 @@ fi
 if [ "$platform" == "darwin_arm64" ]; then
   echo "----TESTING FOR DARWIN ARM64----"
   cd server;
+  export GOARCH=arm64;
+  export CGO_ENABLED=1;
   ./test.sh;
   cd ..;
 fi
