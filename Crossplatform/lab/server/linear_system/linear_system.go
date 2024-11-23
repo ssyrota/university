@@ -1,75 +1,46 @@
-package main
+package linear_system
 
-import (
-	"fmt"
-	"runtime"
-	"unsafe"
-)
-
-// #cgo CFLAGS: -I.
-// #cgo LDFLAGS: -L. -llinear_system
+// #cgo CFLAGS: -I../../c_library
+// #cgo darwin,arm64 LDFLAGS: -L../../c_library/bin -ldarwin_arm64_linear_system
+// #cgo linux,amd64 LDFLAGS: -L../../c_library/bin -llinux_amd64_linear_system
+// #cgo linux,arm64 LDFLAGS: -L../../c_library/bin -llinux_arm64_linear_system
 // #include "linear_system.h"
 // #include <stdlib.h>
 // #include <stdio.h>
 import "C"
 
+import (
+	"runtime"
+	"unsafe"
+)
+
 var pinner = new(runtime.Pinner)
 
-func main() {
-	fmt.Printf("Hello from golang, platform: %s; arch: %s\n", runtime.GOOS, runtime.GOARCH)
-	C.hello()
-
-	ls1 := NewLinearSystem([][]float64{
-		{1, 1, 1},
-		{4, 2, 1},
-		{9, 3, 1},
-	}, []float64{0, 1, 3})
-	defer ls1.Free()
-	C.print_vector(ls1.b)
-	C.print_matrix(ls1.A)
-	fmt.Println("SolveMatrix: ", ls1.SolveMatrix())
-
-}
-
 func NewLinearSystem(a [][]float64, b []float64) *LinearSystem {
-	matrix, freeMatrix := MakeMatrix(a)
-	vector, freeVector := MakeVector(b)
 	return &LinearSystem{
-		A: matrix,
-		b: vector,
-		free: func() {
-			freeMatrix()
-			freeVector()
-		},
+		A: a,
+		B: b,
 	}
 }
 
 type LinearSystem struct {
-	A    *C.Matrix
-	b    *C.Vector
-	free func()
+	A [][]float64 `json:"a"`
+	B []float64   `json:"b"`
 }
 
-func (ls *LinearSystem) Free() {
-	ls.free()
-}
+func (ls *LinearSystem) SolveMatrix() Solution {
+	matrixA, freeMatrixA := MakeMatrix(ls.A)
+	vectorB, freeVectorB := MakeVector(ls.B)
+	defer freeMatrixA()
+	defer freeVectorB()
 
-// func (ls *LinearSystem) SolveGauss() ([][]float64, []float64) {
-// 	matrix := C.make_AugmentedMatrix(ls.A, ls.b)
-// 	linearSystem := C.make_LinearEquationSystem(matrix)
-// 	augmentedMatrix := C.LinearEquationSystem_solve_gauss(linearSystem)
-// 	return ParseMatrix(augmentedMatrix.matrix), ParseVector(augmentedMatrix.vector)
-// }
-
-func (ls *LinearSystem) SolveMatrix() []float64 {
-	matrix := C.make_AugmentedMatrix(ls.A, ls.b)
+	matrix := C.make_AugmentedMatrix(matrixA, vectorB)
 	linearSystem := C.make_LinearEquationSystem(matrix)
 	vector := C.LinearEquationSystem_solve_matrix(linearSystem)
 	if vector == nil {
-		fmt.Println("Linear system not solvable by matrix method")
-		return nil
+		return NewErrorSolution("matrix is singular")
 	}
-	return ParseVector(vector)
+	return NewSolutionFromVector(ParseVector(vector))
 }
 
 func MakeVector(a []float64) (*C.Vector, func()) {
