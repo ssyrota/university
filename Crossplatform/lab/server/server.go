@@ -15,11 +15,20 @@ type Server struct {
 
 func (s Server) Listen() error {
 	http.HandleFunc("/solve", SolvePost)
-	log.Print("Starting server on port " + s.port)
-	log.Println("Endpoints: /solve")
+
+	fs := http.FileServer(http.Dir("../web_client"))
+	http.Handle("/", fs)
+
+	log.Println(`
+[INFO] Starting server on port ` + s.port + `
+[INFO] Endpoints: /solve
+[INFO] Website: ./index.html
+[INFO] Open in browser: http://localhost:` + s.port + `/index.html`,
+	)
+
 	err := http.ListenAndServe(":"+s.port, nil)
 	if err != nil {
-		log.Println("Server closed: ", err.Error())
+		log.Println("[ERROR] Server closed: ", err.Error())
 	}
 	return nil
 }

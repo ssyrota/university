@@ -1,22 +1,21 @@
 #!/bin/bash
 source ./detect_platform.sh;
 
+echo "Building library...";
+cd ./c_library;
+./build.sh $platform;
+cd ..;
+
+
 platform=$1;
 if [ -z "$platform" ]; then
   echo "NOTE: To run on different platform: $0 <platform>, available platforms: darwin_arm64, linux_arm64, linux_amd64";
   echo "";
   echo "Defaulting to detected platform";
   platform=$(detect_platform);
+  echo "Running tests on platform: $platform";
 fi
 
-echo "Running on platform: $platform";
-
-echo "Building library...";
-cd ./c_library;
-./build.sh $platform;
-cd ..;
-
-echo "Testing server...";
 if [ "$platform" == "darwin_arm64" ]; then
   echo "----TESTING FOR DARWIN ARM64----"
   cd server;

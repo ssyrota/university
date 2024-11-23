@@ -1,0 +1,68 @@
+# Start of Selection
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear System Solver</title>
+  <script src="client.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1 class="display-1">Linear System Solver</h1>
+
+  <div class="app-container">
+    <div id="input-container" class="input-container">
+      <h3 class="matrix-title">Input Matrix</h3>
+      <div class="controls">
+        <button id="add-row">Add Row</button>
+        <button id="remove-row">Remove Row</button>
+        <button id="add-column">Add Column</button>
+        <button id="remove-column">Remove Column</button>
+      </div>
+      <table id="input-matrix">
+        <thead>
+          <tr>
+            <th>Equation</th>
+            <th>x₁</th>
+            <th>x₂</th>
+            <th>= b</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><input type="number" class="a" data-row="1" data-col="1" /></td>
+            <td><input type="number" class="a" data-row="1" data-col="2" /></td>
+            <td><input type="number" class="b" data-row="1" /></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><input type="number" class="a" data-row="2" data-col="1" /></td>
+            <td><input type="number" class="a" data-row="2" data-col="2" /></td>
+            <td><input type="number" class="b" data-row="2" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="output-container" class="output-container">
+      <h3 class="matrix-title">Output Matrix</h3>
+      <table id="output-matrix">
+        <thead>
+          <tr>
+            <th>x₁</th>
+            <th>x₂</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="number" id="x1" readonly /></td>
+            <td><input type="number" id="x2" readonly /></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="error-message" style="color: red;"></div>
+    </div>
+  </div>
+</body>
+</html>
