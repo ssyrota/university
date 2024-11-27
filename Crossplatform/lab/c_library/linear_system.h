@@ -36,6 +36,8 @@ LinearEquationSystem* make_LinearEquationSystem(AugmentedMatrix *parameters);
 Vector* LinearEquationSystem_solve_matrix(LinearEquationSystem *system);
 AugmentedMatrix* LinearEquationSystem_solve_gauss(LinearEquationSystem *system);
 
+number Matrix_determinant(Matrix *matrix);
+
 void hello();
 void print_vector(Vector *vector);
 void print_matrix(Matrix *matrix);

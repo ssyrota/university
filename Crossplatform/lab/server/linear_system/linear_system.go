@@ -43,6 +43,13 @@ func (ls *LinearSystem) SolveMatrix() Solution {
 	return NewSolutionFromVector(ParseVector(vector))
 }
 
+func (ls *LinearSystem) Determinant() float64 {
+	matrixA, freeMatrixA := MakeMatrix(ls.A)
+	defer freeMatrixA()
+	cfloat := C.Matrix_determinant(matrixA)
+	return float64(cfloat)
+}
+
 func MakeVector(a []float64) (*C.Vector, func()) {
 	length := len(a)
 	cArr := make([]C.float, length)

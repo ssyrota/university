@@ -15,13 +15,14 @@ type Server struct {
 
 func (s Server) Listen() error {
 	http.HandleFunc("/solve", SolvePost)
+	http.HandleFunc("/det", DetPost)
 
 	fs := http.FileServer(http.Dir("../web_client"))
 	http.Handle("/", fs)
 
 	log.Println(`
 [INFO] Starting server on port ` + s.port + `
-[INFO] Endpoints: /solve
+[INFO] Endpoints: /solve, /det
 [INFO] Website: ./index.html
 [INFO] Open in browser: http://localhost:` + s.port + `/index.html`,
 	)
