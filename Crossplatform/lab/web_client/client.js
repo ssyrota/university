@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 const inputMatrix = document.getElementById("input-matrix");
 const outputMatrix = document.getElementById("output-matrix");
 const determinantOutput = document.getElementById("determinant-output");
@@ -14,7 +15,52 @@ function debounce(func, delay) {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => func.apply(this, args), delay);
   };
+=======
+import { api } from "./api.js";
+
+const errorMessage = document.getElementById("error-message");
+
+class Matrix {
+  constructor(id) {
+    this.matrix = document.getElementById(id);
+  }
 }
+
+
+class InputMatrix {
+  constructor(outputMatrix) {
+    this.inputMatrix = new Matrix("input-matrix");
+    this.outputMatrix = outputMatrix;
+    this.initObservers();
+  }
+
+  initObservers(){
+    const addRowBtn = document.getElementById("add-row");
+    const removeRowBtn = document.getElementById("remove-row");
+    const addColBtn = document.getElementById("add-column");
+    const removeColBtn = document.getElementById("remove-column");
+    addRowBtn.addEventListener('click', this.onAddRow);
+    removeRowBtn.addEventListener('click', this.onRemoveRow);
+    addColBtn.addEventListener('click', this.onAddColumn);
+    removeColBtn.addEventListener('click', this.onRemoveColumn);
+
+  }
+
+  onAddRow() {}
+  onRemoveRow() {}
+  onAddColumn() {}
+  onRemoveColumn() {}
+}
+
+class OutputMatrix {
+  constructor() {
+    this.outputMatrix = new Matrix("output-matrix");
+  }
+>>>>>>> Stashed changes
+}
+const outputMatrix = new OutputMatrix()
+const inputMatrix = new InputMatrix(outputMatrix)
+
 
 function getInputData() {
   const rows = inputMatrix.querySelectorAll("tbody tr");
@@ -50,6 +96,7 @@ function updateOutput(data) {
   }
 }
 
+<<<<<<< Updated upstream
 function updateDeterminant(data) {
   if (data.error) {
     errorMessage.textContent = data.error;
@@ -96,6 +143,9 @@ inputMatrix.addEventListener("input", () => {
   solve();
   computeDeterminant();
 });
+=======
+inputMatrix.addEventListener('input', solve);
+>>>>>>> Stashed changes
 
 function addRow() {
   const tbody = inputMatrix.querySelector("tbody");
@@ -197,8 +247,11 @@ function removeColumn() {
     ); // Remove last td
   }
 }
+<<<<<<< Updated upstream
 
 addRowBtn.addEventListener("click", addRow);
 removeRowBtn.addEventListener("click", removeRow);
 addColBtn.addEventListener("click", addColumn);
 removeColBtn.addEventListener("click", removeColumn);
+=======
+>>>>>>> Stashed changes
