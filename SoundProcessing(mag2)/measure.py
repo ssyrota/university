@@ -18,14 +18,31 @@ class SpeachRecognitionMeasure:
         replacements = []
         insertions = []
         deletions = []
+
+        ref_compared = []
+        hyp_compared = []
+        TRUELY_RECOGNIZED_TOKEN = "*"
+        EMPTY_TOKEN = "''"
         for tag, i1, i2, j1, j2 in diff.get_opcodes():
             if tag == 'replace':
-                replacements.append((ref[i1:i2], hyp[j1:j2]))
+                ref_part = ref[i1:i2]
+                hyp_part = hyp[j1:j2]
+                replacements.append((ref_part, hyp_part))
+                ref_compared.append(ref_part)
+                hyp_compared.append(hyp_part)
             elif tag == 'insert':
                 insertions.append(hyp[j1:j2])
+
+                ref_compared.append(EMPTY_TOKEN)
+                hyp_compared.append(hyp[j1:j2])
             elif tag == 'delete':
                 deletions.append(ref[i1:i2])
-        return {'replacements': replacements, 'insertions': insertions, 'deletions': deletions}
+                ref_compared.append(ref[i1:i2])
+                hyp_compared.append(EMPTY_TOKEN)
+            elif tag == 'equal':
+                ref_compared.append(ref[i1:i2])
+                hyp_compared.append(TRUELY_RECOGNIZED_TOKEN)
+        return {'replacements': replacements, 'insertions': insertions, 'deletions': deletions, 'ref_compared': ref_compared, 'hyp_compared': hyp_compared}
 
     tokenizer = nltk.SpaceTokenizer()
     allowed_chars = ["а", "б", "в", "г", "ґ", "д", "е", "є", "ж", "з", "и", "і", "ї", "й", "к", "л",
@@ -53,8 +70,6 @@ class SpeachRecognitionMeasure:
         return cleaned_text
 
     def clear_word(self, word: str) -> str:
-        if word.startswith("-"):
-            word = word[1:]
         if all([i in self.allowed_chars for i in word]):
             return word
         return ""
