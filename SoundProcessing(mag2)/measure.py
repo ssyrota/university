@@ -22,7 +22,7 @@ class SpeachRecognitionMeasure:
         ref_compared = []
         hyp_compared = []
         TRUELY_RECOGNIZED_TOKEN = "*"
-        EMPTY_TOKEN = "''"
+        EMPTY_TOKEN = "'"
         for tag, i1, i2, j1, j2 in diff.get_opcodes():
             if tag == 'replace':
                 ref_part = ref[i1:i2]
@@ -32,17 +32,30 @@ class SpeachRecognitionMeasure:
                 hyp_compared.append(hyp_part)
             elif tag == 'insert':
                 insertions.append(hyp[j1:j2])
-
-                ref_compared.append(EMPTY_TOKEN)
+                ref_compared.append(EMPTY_TOKEN*len(hyp[j1:j2]))
                 hyp_compared.append(hyp[j1:j2])
             elif tag == 'delete':
                 deletions.append(ref[i1:i2])
                 ref_compared.append(ref[i1:i2])
-                hyp_compared.append(EMPTY_TOKEN)
+                print("deletions: ", ref[i1:i2])
+                hyp_compared.append(EMPTY_TOKEN*len(ref[i1:i2]))
             elif tag == 'equal':
                 ref_compared.append(ref[i1:i2])
-                hyp_compared.append(TRUELY_RECOGNIZED_TOKEN)
+                hyp_compared.append(TRUELY_RECOGNIZED_TOKEN * len(ref[i1:i2]))
+
+        ref_compared = self._flatten(ref_compared)
+        hyp_compared = self._flatten(hyp_compared)
+
+        if len(ref_compared) != len(hyp_compared):
+            print("ref_compared: ", ref_compared)
+            print("hyp_compared: ", hyp_compared)
+            raise ValueError(
+                f"ref_compared and hyp_compared have different lengths: ref_compared: {len(ref_compared)} != hyp_compared: {len(hyp_compared)}")
+
         return {'replacements': replacements, 'insertions': insertions, 'deletions': deletions, 'ref_compared': ref_compared, 'hyp_compared': hyp_compared}
+
+    def _flatten(self, list_of_lists):
+        return [item for sublist in list_of_lists for item in sublist]
 
     tokenizer = nltk.SpaceTokenizer()
     allowed_chars = ["а", "б", "в", "г", "ґ", "д", "е", "є", "ж", "з", "и", "і", "ї", "й", "к", "л",
@@ -75,9 +88,12 @@ class SpeachRecognitionMeasure:
         return ""
 
 
-ref = 'Привіт світ, а що означає привіт для великих мовних моделей ?'
-hyp = 'Привіт світ, що означає пивіт для великих мовних моделей, знаєш ?'
+ref = 'Привіт світ, а що означає привіт для великих мовних моделей?'
+hyp = 'Привіт світ, що означає пивіт для дуже великих мовних моделей, знаєш?'
 
 measure = SpeachRecognitionMeasure(ref, hyp)
+print("-------WER-------")
 print(measure.wer())
+print('\n\n')
+print("-------CER-------")
 print(measure.cer())
