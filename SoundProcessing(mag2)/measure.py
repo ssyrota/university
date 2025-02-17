@@ -87,13 +87,23 @@ class SpeachRecognitionMeasure:
             return word
         return ""
 
+    def markdown_wer(self):
+        wer = self.wer()
+        ref = wer['ref_compared']
+        hyp = wer['hyp_compared']
+        return f"""
+        | ref | hyp |
+        | --- | --- |
+        | {ref} | {hyp} |
+        """
+
 
 ref = 'Привіт світ, а що означає привіт для великих мовних моделей?'
 hyp = 'Привіт світ, що означає пивіт для дуже великих мовних моделей, знаєш?'
 
 measure = SpeachRecognitionMeasure(ref, hyp)
 print("-------WER-------")
-print(measure.wer())
+print(measure.markdown_wer())
 print('\n\n')
 print("-------CER-------")
 print(measure.cer())
