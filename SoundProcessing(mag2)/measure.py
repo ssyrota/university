@@ -8,9 +8,17 @@ class SpeachRecognitionMeasure:
         self.hyp = self._preprocess(hyp)
 
     def wer(self):
+        compared_words = self._compare_words()
+        return (len(compared_words['replacements']) + len(compared_words['insertions']) + len(compared_words['deletions']))/len(self.ref.split())
+
+    def _compare_words(self):
         return self._diff(self.ref.split(), self.hyp.split())
 
     def cer(self):
+        compared_chars = self._compare_chars()
+        return (len(compared_chars['replacements']) + len(compared_chars['insertions']) + len(compared_chars['deletions']))/len(self.ref)
+
+    def _compare_chars(self):
         return self._diff(self.ref, self.hyp)
 
     def _diff(self, ref, hyp):
@@ -22,7 +30,8 @@ class SpeachRecognitionMeasure:
         ref_compared = []
         hyp_compared = []
         TRUELY_RECOGNIZED_TOKEN = "*"
-        EMPTY_TOKEN = "'"
+        INSERTION_TOKEN = "+"
+        DELETION_TOKEN = "-"
         for tag, i1, i2, j1, j2 in diff.get_opcodes():
             if tag == 'replace':
                 ref_part = ref[i1:i2]
@@ -32,13 +41,13 @@ class SpeachRecognitionMeasure:
                 hyp_compared.append(hyp_part)
             elif tag == 'insert':
                 insertions.append(hyp[j1:j2])
-                ref_compared.append(EMPTY_TOKEN*len(hyp[j1:j2]))
+                ref_compared.append(INSERTION_TOKEN*len(hyp[j1:j2]))
                 hyp_compared.append(hyp[j1:j2])
             elif tag == 'delete':
                 deletions.append(ref[i1:i2])
                 ref_compared.append(ref[i1:i2])
                 print("deletions: ", ref[i1:i2])
-                hyp_compared.append(EMPTY_TOKEN*len(ref[i1:i2]))
+                hyp_compared.append(DELETION_TOKEN*len(ref[i1:i2]))
             elif tag == 'equal':
                 ref_compared.append(ref[i1:i2])
                 hyp_compared.append(TRUELY_RECOGNIZED_TOKEN * len(ref[i1:i2]))
@@ -89,21 +98,35 @@ class SpeachRecognitionMeasure:
 
     def markdown_wer(self):
         wer = self.wer()
-        ref = wer['ref_compared']
-        hyp = wer['hyp_compared']
-        return f"""
-        | ref | hyp |
-        | --- | --- |
-        | {ref} | {hyp} |
-        """
+        compared_words = self._compare_words()
+        ref = compared_words['ref_compared']
+        hyp = compared_words['hyp_compared']
+        return self._markdown_report("WER", wer, ref, hyp)
+
+    def markdown_cer(self):
+        cer = self.cer()
+        compared_chars = self._compare_chars()
+        ref = compared_chars['ref_compared']
+        hyp = compared_chars['hyp_compared']
+        return self._markdown_report("CER", cer, ref, hyp)
+
+    def _markdown_report(self, metric_name: str, metric_value: float, ref, hyp):
+        header = f"| ref | hyp | {metric_name}: {metric_value} |"
+        separator = "| --- | --- | --- |"
+        rows = [f"| {ref} | {hyp} | |" for ref, hyp in zip(ref, hyp)]
+        return "\n".join([header, separator, *rows])
+
+    def to_file(self, filename: str):
+        with open(filename, 'w') as f:
+            f.write("# WER\n\n")
+            f.write(self.markdown_wer())
+            f.write("\n\n")
+            f.write("# CER\n\n")
+            f.write(self.markdown_cer())
 
 
 ref = 'Привіт світ, а що означає привіт для великих мовних моделей?'
 hyp = 'Привіт світ, що означає пивіт для дуже великих мовних моделей, знаєш?'
 
 measure = SpeachRecognitionMeasure(ref, hyp)
-print("-------WER-------")
-print(measure.markdown_wer())
-print('\n\n')
-print("-------CER-------")
-print(measure.cer())
+measure.to_file('report.md')
