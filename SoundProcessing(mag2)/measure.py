@@ -46,7 +46,6 @@ class SpeachRecognitionMeasure:
             elif tag == 'delete':
                 deletions.append(ref[i1:i2])
                 ref_compared.append(ref[i1:i2])
-                print("deletions: ", ref[i1:i2])
                 hyp_compared.append(DELETION_TOKEN*len(ref[i1:i2]))
             elif tag == 'equal':
                 ref_compared.append(ref[i1:i2])
@@ -118,11 +117,15 @@ class SpeachRecognitionMeasure:
 
     def to_file(self, filename: str):
         with open(filename, 'w') as f:
-            f.write("# WER\n\n")
-            f.write(self.markdown_wer())
-            f.write("\n\n")
-            f.write("# CER\n\n")
-            f.write(self.markdown_cer())
+            report_str = f"""# WER
+
+{self.markdown_wer()}
+
+# CER
+
+{self.markdown_cer()}
+"""
+            f.write(report_str)
 
 
 ref = 'Привіт світ, а що означає привіт для великих мовних моделей?'
