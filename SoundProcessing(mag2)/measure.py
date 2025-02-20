@@ -1,5 +1,6 @@
 import difflib
 import nltk
+import pandas as pd
 
 
 class SpeachRecognitionMeasure:
@@ -9,14 +10,22 @@ class SpeachRecognitionMeasure:
 
     def wer(self):
         compared_words = self._compare_words()
-        return (len(compared_words['replacements']) + len(compared_words['insertions']) + len(compared_words['deletions']))/len(self.ref.split())
-
-    def _compare_words(self):
-        return self._diff(self.ref.split(), self.hyp.split())
+        replacements = self._flatten(
+            [i[0] for i in compared_words['replacements']])
+        insertions = self._flatten([i for i in compared_words['insertions']])
+        deletions = self._flatten([i for i in compared_words['deletions']])
+        return (len(replacements) + len(insertions) + len(deletions))/len(self.ref.split())
 
     def cer(self):
         compared_chars = self._compare_chars()
-        return (len(compared_chars['replacements']) + len(compared_chars['insertions']) + len(compared_chars['deletions']))/len(self.ref)
+        replacements = self._flatten(
+            [i[0] for i in compared_chars['replacements']])
+        insertions = self._flatten([i for i in compared_chars['insertions']])
+        deletions = self._flatten([i for i in compared_chars['deletions']])
+        return (len(replacements) + len(insertions) + len(deletions))/len(self.ref)
+
+    def _compare_words(self):
+        return self._diff(self.ref.split(), self.hyp.split())
 
     def _compare_chars(self):
         return self._diff(self.ref, self.hyp)
@@ -33,9 +42,32 @@ class SpeachRecognitionMeasure:
         INSERTION_TOKEN = "+"
         DELETION_TOKEN = "-"
         for tag, i1, i2, j1, j2 in diff.get_opcodes():
+            print("tag: ", tag)
+            print("i1: ", i1)
+            print("i2: ", i2)
+            print("j1: ", j1)
+            print("j2: ", j2)
             if tag == 'replace':
                 ref_part = ref[i1:i2]
                 hyp_part = hyp[j1:j2]
+
+                if len(hyp_part) < len(ref_part):
+                    missing = len(ref_part) - len(hyp_part)
+                    if isinstance(hyp_part, list):
+                        hyp_part = hyp_part + \
+                            [DELETION_TOKEN for _ in range(missing)]
+                    else:
+                        hyp_part = hyp_part + \
+                            DELETION_TOKEN * missing
+                if len(ref_part) < len(hyp_part):
+                    missing = len(hyp_part) - len(ref_part)
+                    if isinstance(ref_part, list):
+                        ref_part = ref_part + \
+                            [DELETION_TOKEN for _ in range(missing)]
+                    else:
+                        ref_part = ref_part + \
+                            DELETION_TOKEN * missing
+
                 replacements.append((ref_part, hyp_part))
                 ref_compared.append(ref_part)
                 hyp_compared.append(hyp_part)
@@ -67,11 +99,11 @@ class SpeachRecognitionMeasure:
 
     tokenizer = nltk.SpaceTokenizer()
     allowed_chars = ["а", "б", "в", "г", "ґ", "д", "е", "є", "ж", "з", "и", "і", "ї", "й", "к", "л",
-                     "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ь", "ю", "я", "-", "’"]
+                     "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ь", "ю", "я", "’"]
 
     def _preprocess(self, text: str) -> str:
         cleaned_text = text.lower().replace("'", "’").strip().replace(
-            "?", ".").replace("!", ".").replace(",", "")
+            "?", ".").replace("!", ".").replace(",", "").replace(".", "")
 
         cleaned_text = cleaned_text.split(".")
         out_text = []
@@ -95,6 +127,35 @@ class SpeachRecognitionMeasure:
             return word
         return ""
 
+    def csv_to_file(self, wer_filename: str, cer_filename: str):
+        print("WER")
+        with open(wer_filename, 'w') as f:
+            f.write(self.csv_wer())
+        print("CER")
+        with open(cer_filename, 'w') as f:
+            f.write(self.csv_cer())
+
+    def csv_cer(self):
+        cer = self.cer()
+        compared_chars = self._compare_chars()
+        df = pd.DataFrame({
+            'ref': compared_chars['ref_compared'],
+            'hyp': compared_chars['hyp_compared'],
+            'cer': cer
+        })
+        csv_content = df.to_csv(index=False).strip()
+        return csv_content
+
+    def csv_wer(self):
+        wer = self.wer()
+        compared_words = self._compare_words()
+        df = pd.DataFrame({
+            'ref': compared_words['ref_compared'],
+            'hyp': compared_words['hyp_compared'],
+            'wer': wer
+        })
+        return df.to_csv(index=False).strip()
+
     def markdown_wer(self):
         wer = self.wer()
         compared_words = self._compare_words()
@@ -115,7 +176,7 @@ class SpeachRecognitionMeasure:
         rows = [f"| {ref} | {hyp} | |" for ref, hyp in zip(ref, hyp)]
         return "\n".join([header, separator, *rows])
 
-    def to_file(self, filename: str):
+    def md_to_file(self, filename: str):
         with open(filename, 'w') as f:
             report_str = f"""# WER
 
@@ -128,8 +189,11 @@ class SpeachRecognitionMeasure:
             f.write(report_str)
 
 
-ref = 'Привіт світ, а що означає привіт для великих мовних моделей?'
-hyp = 'Привіт світ, що означає пивіт для дуже великих мовних моделей, знаєш?'
+ref = """Сидить батько кінець стола, На руки схилився, Не дивиться на світ Божий: Тяжко зажурився. Коло його стара мати Сидить на ослоні, За сльозами ледве-ледве Вимовляє доні: «Що весілля, доню моя? А де ж твоя пара? Де світилки з друженьками, Старости, бояре? В Московщині, доню моя! Іди ж їх шукати, Та не кажи добрим людям, Що є в тебе мати. Проклятий час-годинонька, Що ти народилась! Якби знала, до схід сонця Була б утопила... Здалась тоді б ти гадині, Тепер — москалеві... Доню моя, доню моя, Цвіте мій рожевий! Як ягодку, як пташечку, Кохала, ростила На лишенько... Доню моя, Що ти наробила?.. Оддячила!.. Іди ж, шукай У Москві свекрухи. Не слухала моїх річей, То її послухай"""
+hyp_wav2_vec = """сидить батько кінець стола на руки схилився не дивиться на світбоже тяжко зажурився коло його стара мати сидить на ослоні за сльозами ледве ледве вимовляє доні що весілля доню моє а де ж твоя пара де світлинки з друженьками старости бо яри в московщині доню моє іди ж їх шукати та не кажи добрим людям що є в тебе мат проклятий час годинонька що ти народилась якби знала до схід сонця була б утопила здалась тобі б ти гадині тепер москалеві доню моє доню моє цвітам ій рожевий як ягодку як пташичку кохала ростила на лишенько доню моє що ти наробила отдячила ідиж шукай у москві свекрухи не слухала моїх річей то її послухай"""
+hyp_deep_speech = """сидить батько кінець столу на руки схилився не дивиться на світ божий тяжко зажурився коло його стара мати сидить на ослоні оловоносних моноклональних"""
 
-measure = SpeachRecognitionMeasure(ref, hyp)
-measure.to_file('report.md')
+measure = SpeachRecognitionMeasure(ref, hyp_deep_speech)
+measure.md_to_file('report.md')
+
+measure.csv_to_file('wer.csv', 'cer.csv')
